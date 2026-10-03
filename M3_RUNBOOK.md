@@ -20,9 +20,10 @@ This run is pinned to upstream commit
 - Public archive size: 308,382,645,571 bytes (about 287.2 GiB)
 
 The upstream data module constructs all three splits even when `train=False`,
-so all 14 user0 files are required. Selective extraction saves disk space but
-does **not** save bandwidth: the entire compressed archive must pass through
-the staging machine because the publisher provides one gzip-compressed tarball.
+so all 14 user0 files are required. GNU tar can stop the stream once every
+requested member has appeared. In the observed run this happened at 15.8% of
+the archive and produced 4.4 GB of data; the exact stopping point depends on
+archive member order.
 
 ## Prepared commands
 
@@ -71,3 +72,21 @@ environment setup, the full 308 GB stream, evaluation, and a cleanup check.
 4. The console log and Hydra configuration remain in the result directory.
 5. All paid compute is terminated and verified absent after artifacts are
    copied out.
+
+## Observed run — 2026-10-03
+
+| Metric | Observed | Reference | Difference |
+|---|---:|---:|---:|
+| Validation CER | 60.082565% | 60.07% | +0.012565 pp |
+| Test CER | 61.509636% | 61.48% | +0.029636 pp |
+
+The run used the pinned generic checkpoint on upstream `user0`, greedy CTC
+decoding, and one RTX 4090. Exact captured metrics and runtime provenance are in
+[`results/m3-user0-generic-greedy.json`](results/m3-user0-generic-greedy.json).
+The metrics were transcribed from the completed console output before teardown;
+the ephemeral raw console log was not copied from the Pod and is not retained.
+
+Selective tar extraction intentionally closes its input pipe after all listed
+members are found. Curl consequently returns `CURLE_WRITE_ERROR` (23). The Pod
+wrapper accepts 23 only when tar returned zero and then validates every required
+file before evaluation; other curl and tar failures remain fatal.

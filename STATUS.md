@@ -84,16 +84,9 @@ The Pod's listed price was `$0.49/hour`. It existed for under six minutes, so
 the rate-based compute estimate is under `$0.05`; Runpod billing had not yet
 posted the final charge when this status was written.
 
-## Next acceptance test
+## M3 — One-user generic baseline
 
-M3 is complete when the released generic checkpoint is evaluated on one test
-user with a documented command and captured character-error-rate output. Before
-renting another GPU, determine the smallest required checkpoint and HDF5 files
-and make their transfer reproducible.
-
-### M3 preparation
-
-**Status:** local preparation complete (2026-10-03); paid run not started
+**Status:** complete (2026-10-03)
 
 - Selected `user0` as the first reproducibility target.
 - Expected greedy baseline: 60.07% validation CER and 61.48% test CER.
@@ -103,4 +96,27 @@ and make their transfer reproducible.
   byte dataset itself was not downloaded.
 - Added guarded environment, data-staging, input-validation, and evaluation
   scripts; see [`M3_RUNBOOK.md`](M3_RUNBOOK.md).
-- No Runpod resource was created during this preparation.
+- Selective streaming stopped after 15.8% of the 308 GB archive, once all 14
+  requested files had been found. The extracted dataset occupied 4.4 GB.
+- Reproduced `user0` greedy-decoder metrics on an RTX 4090:
+  - validation CER: **60.082565%** (reference 60.07%; +0.012565 pp)
+  - test CER: **61.509636%** (reference 61.48%; +0.029636 pp)
+- Structured evidence: [`results/m3-user0-generic-greedy.json`](results/m3-user0-generic-greedy.json)
+- The successful Pod (`jj5nmpysd7btkl`, Secure Cloud, `US-IL-1`) ran for
+  1,351 seconds at `$0.74/hour`, for a rate-based estimate of `$0.2777`.
+- A slower A40 attempt (`0we5bztyhpwqfu`, `EU-SE-1`) was stopped after 251
+  seconds at `$0.49/hour`, estimated at `$0.0342`. Total estimated M3 compute
+  was **$0.3119**; Runpod's billing records had not posted when checked.
+- Both Pods were terminated, and the subsequent Pod list was empty.
+
+The initial one-shot wrapper treated curl exit 23 as failure when selective
+`tar` intentionally closed the pipe after finding every requested file. The
+wrapper now accepts that status only when tar succeeds, then verifies all 14
+files are present and non-empty before evaluation.
+
+## Next acceptance test
+
+M4 starts by making the selective staging path reusable for additional users,
+then reproducing the generic baseline on a small multi-user subset before the
+full eight-user sweep. Persistent storage should be considered before another
+archive stream so the downloaded sessions can be reused.

@@ -13,12 +13,14 @@ budgets and adaptation methods.
 
 - Research question and experiment plan: documented in [`project-plan.md`](project-plan.md)
 - Working checklist and application timeline: [`GUIDE.md`](GUIDE.md)
-- One-user baseline harness: prepared; adaptation methods are not implemented
-- Dataset and checkpoints: not downloaded
-- Baseline reproduction: not started
+- One-user baseline harness: implemented and validated; adaptation methods are not implemented
+- Dataset and checkpoints: used ephemerally for M3; not retained locally
+- Baseline reproduction: `user0` generic greedy baseline matched within 0.03
+  percentage points; seven more generic users and the personalized sweep remain
 - Local preflight, upstream audit, and GPU environment smoke test: complete and
   recorded in [`STATUS.md`](STATUS.md)
 - One-user baseline preparation: [`M3_RUNBOOK.md`](M3_RUNBOOK.md)
+- Captured one-user metrics: [`results/m3-user0-generic-greedy.json`](results/m3-user0-generic-greedy.json)
 
 ## Small-milestone sequence
 
