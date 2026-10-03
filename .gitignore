@@ -1,6 +1,9 @@
 *.aux
 *.log
 *.out
+*.py[cod]
+__pycache__/
+.venv/
 .DS_Store
 artifacts/
 data/

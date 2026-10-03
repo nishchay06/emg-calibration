@@ -1,0 +1,76 @@
+{
+  "archive_prefix": "emg2qwerty-data-2021-08/",
+  "split_totals": {
+    "test": 16,
+    "train": 68,
+    "val": 16
+  },
+  "total_unique_sessions": 100,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "users": {
+    "user0": {
+      "counts": {
+        "test": 2,
+        "train": 10,
+        "val": 2
+      },
+      "total": 14
+    },
+    "user1": {
+      "counts": {
+        "test": 2,
+        "train": 9,
+        "val": 2
+      },
+      "total": 13
+    },
+    "user2": {
+      "counts": {
+        "test": 2,
+        "train": 9,
+        "val": 2
+      },
+      "total": 13
+    },
+    "user3": {
+      "counts": {
+        "test": 2,
+        "train": 8,
+        "val": 2
+      },
+      "total": 12
+    },
+    "user4": {
+      "counts": {
+        "test": 2,
+        "train": 8,
+        "val": 2
+      },
+      "total": 12
+    },
+    "user5": {
+      "counts": {
+        "test": 2,
+        "train": 8,
+        "val": 2
+      },
+      "total": 12
+    },
+    "user6": {
+      "counts": {
+        "test": 2,
+        "train": 8,
+        "val": 2
+      },
+      "total": 12
+    },
+    "user7": {
+      "counts": {
+        "test": 2,
+        "train": 8,
+        "val": 2
+      },
+      "total": 12
+    }
+  }
+}

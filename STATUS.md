@@ -120,3 +120,15 @@ M4 starts by making the selective staging path reusable for additional users,
 then reproducing the generic baseline on a small multi-user subset before the
 full eight-user sweep. Persistent storage should be considered before another
 archive stream so the downloaded sessions can be reused.
+
+### M4 preparation
+
+**Status:** in progress (2026-10-03); no paid resources created
+
+- Audited upstream `user0` through `user7` configs at the pinned commit.
+- Generated manifests for 100 unique sessions: 68 train, 16 validation, and
+  16 test.
+- Added deterministic regeneration with a read-only `--check` mode and local
+  parser tests.
+- Next: generalize selective staging and greedy evaluation from one user to an
+  explicit user list, while retaining input and disk-space guards.
