@@ -141,3 +141,25 @@ The first-subset greedy references from upstream
 5. The all-user sweep is not started until the three-user subset passes.
 6. Every paid Pod and unused persistent volume is explicitly deleted and then
    verified absent.
+
+## Observed three-user gate
+
+The gate passed on 2026-10-03 using the pinned upstream commit and generic
+checkpoint on a Secure Cloud RTX 4090 in `US-IL-1`.
+
+| User | Validation CER | Reference | Test CER | Reference | Accepted |
+|---|---:|---:|---:|---:|---|
+| `user0` | 60.082565% | 60.07% | 61.509636% | 61.48% | yes |
+| `user1` | 55.591190% | 55.59% | 59.945858% | 59.96% | yes |
+| `user2` | 47.390659% | 47.38% | 48.010944% | 48.00% | yes |
+
+Selective staging found all 40 sessions after streaming 16.9% of the source
+archive; the extracted data occupied 13 GB. The successful Pod ran for 1,927
+seconds at `$0.74/hour`, an estimated `$0.3961` in compute. The total observed
+Runpod balance decrease for this milestone was `$0.4607`, including short
+failed transfer attempts and temporary storage.
+
+Raw logs and Hydra configurations were copied locally before cleanup. The
+checked-in results are listed by
+[`results/m4-three-user-gate-summary.json`](results/m4-three-user-gate-summary.json).
+Post-cleanup read-back returned zero Pods and zero network volumes.

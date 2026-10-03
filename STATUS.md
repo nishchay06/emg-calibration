@@ -121,9 +121,9 @@ then reproducing the generic baseline on a small multi-user subset before the
 full eight-user sweep. Persistent storage should be considered before another
 archive stream so the downloaded sessions can be reused.
 
-### M4 preparation
+### M4 multi-user generic baseline
 
-**Status:** in progress (2026-10-03); no paid resources created
+**Status:** in progress (2026-10-03); three-user gate passed
 
 - Audited upstream `user0` through `user7` configs at the pinned commit.
 - Generated manifests for 100 unique sessions: 68 train, 16 validation, and
@@ -143,5 +143,30 @@ archive stream so the downloaded sessions can be reused.
 - Added an explicit M4 acceptance guard: each validation and test CER must be
   within 0.10 percentage points of its pinned reference. A failed result remains
   captured as evidence and stops the sweep before the next user.
-- Next: verify the live Runpod balance and automatic-termination mechanism as
-  the final paid-compute gate.
+- Staged all 40 required `user0`-`user2` sessions. Selective extraction stopped
+  after 16.9% of the archive and produced 13 GB of validated HDF5 data.
+- Reproduced all six required validation/test CER values within the 0.10-point
+  acceptance threshold:
+  - `user0`: validation 60.082565% (+0.012565 pp), test 61.509636%
+    (+0.029636 pp)
+  - `user1`: validation 55.591190% (+0.001190 pp), test 59.945858%
+    (-0.014142 pp)
+  - `user2`: validation 47.390659% (+0.010659 pp), test 48.010944%
+    (+0.010944 pp)
+- The successful Secure Cloud RTX 4090 Pod (`etdelq2c8rhwbr`, `US-IL-1`)
+  ran for 1,927 seconds at `$0.74/hour`, for a rate-based compute estimate of
+  `$0.3961`.
+- The observed Runpod balance decrease for M4 provisioning, including short
+  failed EU CPU/GPU transfer attempts and temporary storage, was `$0.4607`.
+- The CPU attempt in `EU-RO-1` transferred the archive at about 2.0 MB/s. A
+  subsequent EU RTX 4090 single-stream probe reached 29.96 MB/s. Both were
+  stopped without running evaluations. The successful run reused the M3-proven
+  `US-IL-1` location rather than changing the data or evaluation procedure.
+- Raw console logs and Hydra configurations were copied to the ignored local
+  `artifacts/m4-runpod-2026-10-03/` directory before cleanup.
+- Structured evidence is checked in under `results/m4-*.json`, with aggregate
+  provenance in
+  [`results/m4-three-user-gate-summary.json`](results/m4-three-user-gate-summary.json).
+- All Pods and both temporary network volumes were deleted; live read-back
+  returned zero Pods, zero network volumes, and `$0/hour` active spend.
+- Next: review the three-user evidence, then plan the `user3`-`user7` expansion.

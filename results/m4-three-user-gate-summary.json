@@ -1,0 +1,44 @@
+{
+  "acceptance": {
+    "maximum_absolute_CER_delta_percentage_points": 0.1,
+    "passed": true,
+    "users_passed": 3,
+    "users_required": 3
+  },
+  "checkpoint_sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81",
+  "cleanup": {
+    "active_network_volumes_after_cleanup": 0,
+    "active_pods_after_cleanup": 0,
+    "verified": true
+  },
+  "cost": {
+    "observed_balance_delta_usd": 0.4607,
+    "successful_pod_compute_estimate_usd": 0.3961
+  },
+  "dataset": {
+    "archive_streamed_percent": 16.9,
+    "extracted_size_human": "13G",
+    "session_files": 40
+  },
+  "results": [
+    "results/m4-user0-generic-greedy.json",
+    "results/m4-user1-generic-greedy.json",
+    "results/m4-user2-generic-greedy.json"
+  ],
+  "run_date_utc": "2026-10-03",
+  "runtime": {
+    "data_center": "US-IL-1",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "pod_id": "etdelq2c8rhwbr",
+    "price_usd_per_hour": 0.74,
+    "provider": "Runpod",
+    "uptime_seconds": 1927
+  },
+  "schema_version": 1,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "users": [
+    "user0",
+    "user1",
+    "user2"
+  ]
+}

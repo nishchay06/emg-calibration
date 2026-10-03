@@ -16,17 +16,19 @@ new methods.
 
 ## Current result
 
-The first generic, greedy-decoder baseline has been reproduced on upstream
-`user0`:
+The first three-user generic, greedy-decoder gate passed. Every reproduced
+validation and test CER is within 0.10 percentage points of its pinned upstream
+reference:
 
-| Split | Reproduced CER | Upstream reference | Difference |
-|---|---:|---:|---:|
-| Validation | 60.082565% | 60.07% | +0.012565 pp |
-| Test | 61.509636% | 61.48% | +0.029636 pp |
+| User | Validation CER | Difference | Test CER | Difference |
+|---|---:|---:|---:|---:|
+| `user0` | 60.082565% | +0.012565 pp | 61.509636% | +0.029636 pp |
+| `user1` | 55.591190% | +0.001190 pp | 59.945858% | -0.014142 pp |
+| `user2` | 47.390659% | +0.010659 pp | 48.010944% | +0.010944 pp |
 
-The structured record is in
-[`results/m3-user0-generic-greedy.json`](results/m3-user0-generic-greedy.json).
-The remaining seven generic users and the personalized baselines are pending.
+Structured records are in [`results/`](results/), including the
+[`three-user gate summary`](results/m4-three-user-gate-summary.json). The
+remaining five generic users and the personalized baselines are pending.
 
 No-cost M4 preparation now includes deterministic, pinned manifests for all
 eight held-out users: 100 unique sessions (68 train, 16 validation, 16 test).
@@ -112,8 +114,8 @@ See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
 
 ## Roadmap
 
-1. Generalize selective staging and evaluation to `user0` through `user7`.
-2. Reproduce all generic and released personalized baselines.
+1. Reproduce the remaining generic baselines for `user3` through `user7`.
+2. Reproduce the released personalized baselines.
 3. Add seeded contiguous calibration windows at 1, 2, 5, and 10 minutes.
 4. Compare full, final-layer-only, normalization-only, and low-rank adaptation.
 5. Report per-user curves, updated parameter counts, and adaptation time.
