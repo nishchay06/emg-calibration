@@ -42,7 +42,7 @@ without downloading the 308 GB archive.
 - Audited commit: `3200d91eeb952cbed1f278e47d0cc56928334fd1`
 - Default branch: `main`
 - Repository status: archived upstream
-- Upstream license: CC-BY-NC-4.0; check its terms before redistributing code,
+- Upstream license: CC BY-NC-SA 4.0; check its terms before redistributing code,
   checkpoints, or derived artifacts.
 - Required environment: Python 3.10.13, PyTorch 2.3.0, CUDA-oriented conda
   environment, and KenLM for the beam-search language model.

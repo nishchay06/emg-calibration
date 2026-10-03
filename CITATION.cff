@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite this repository and the original emg2qwerty work."
+title: "Data-Efficient Personalization of sEMG Typing Decoders"
+type: software
+authors:
+  - family-names: Mago
+    given-names: Nishchay
+repository-code: "https://github.com/nishchay06/emg-calibration"
+license: CC-BY-NC-SA-4.0
