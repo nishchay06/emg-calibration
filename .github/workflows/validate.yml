@@ -16,5 +16,14 @@ jobs:
         run: bash -n scripts/*.sh
       - name: Validate structured results
         run: python -m json.tool results/m3-user0-generic-greedy.json >/dev/null
-      - name: Validate user0 manifest
-        run: test "$(wc -l < manifests/user0-sessions.txt)" -eq 14
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Check out pinned upstream source
+        uses: actions/checkout@v4
+        with:
+          repository: facebookresearch/emg2qwerty
+          ref: 3200d91eeb952cbed1f278e47d0cc56928334fd1
+          path: upstream/emg2qwerty
+          lfs: false
+      - name: Verify generated test-user manifests
+        run: ./scripts/generate_test_user_manifests.py upstream/emg2qwerty --check

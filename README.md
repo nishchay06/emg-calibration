@@ -28,6 +28,10 @@ The structured record is in
 [`results/m3-user0-generic-greedy.json`](results/m3-user0-generic-greedy.json).
 The remaining seven generic users and the personalized baselines are pending.
 
+No-cost M4 preparation now includes deterministic, pinned manifests for all
+eight held-out users: 100 unique sessions (68 train, 16 validation, 16 test).
+See [`manifests/README.md`](manifests/README.md) for regeneration and validation.
+
 ## Reproduce the one-user baseline
 
 The scripts expect Linux, Python 3.10, and a CUDA-capable machine. Dataset and
