@@ -81,6 +81,44 @@ Use a distinct output directory for each user. The evaluator verifies the
 upstream commit, checkpoint digest, complete per-user manifest, and output-path
 nonexistence before invoking the official test path.
 
+After a run completes, convert its console output into a small structured
+artifact while preserving the raw log:
+
+```bash
+./scripts/capture_generic_result.py \
+  user0 \
+  /workspace/results/user0-generic-greedy/console.log \
+  /workspace/results/user0-generic-greedy/result.json
+```
+
+The capture command requires all five validation and test metrics, refuses to
+overwrite an existing result, and calculates CER differences from the pinned
+references in [`references/generic-greedy.json`](references/generic-greedy.json).
+It records whether each absolute CER difference is at most **0.10 percentage
+points**. A failed comparison is still written to `result.json` as evidence,
+then the command exits nonzero.
+
+## Three-user sweep
+
+Preview the complete evaluation plan without checking inputs, creating output
+directories, or starting an evaluation:
+
+```bash
+./scripts/evaluate_generic_sweep.sh \
+  --dry-run \
+  /workspace/emg2qwerty \
+  /workspace/data \
+  /workspace/emg2qwerty/models/generic.ckpt \
+  /workspace/results/generic-greedy \
+  user0 user1 user2
+```
+
+After staging and input verification, replace `--dry-run` with `--run`. The
+sweep evaluates users sequentially, gives each user a separate output
+directory, captures `result.json` immediately after each successful run, and
+stops on the first execution, capture, or CER-acceptance failure. It performs a
+full overwrite preflight before creating the output root.
+
 The first-subset greedy references from upstream
 `scripts/experimental_results.py` are:
 
@@ -92,10 +130,36 @@ The first-subset greedy references from upstream
 
 ## Acceptance gate
 
-1. `user0`, `user1`, and `user2` validation/test runs complete without training.
-2. Each observed CER is recorded and compared with its upstream per-user value.
-3. Raw console logs and Hydra configs are copied out before ephemeral compute is
+1. The three-user sweep dry-run resolves three distinct output directories
+   without creating them.
+2. `user0`, `user1`, and `user2` validation/test runs complete without training.
+3. Each observed CER is captured in `result.json`; both validation and test
+   must be within 0.10 percentage points of their pinned upstream per-user
+   values. The sweep stops after recording the first failed comparison.
+4. Raw console logs and Hydra configs are copied out before ephemeral compute is
    terminated.
-4. The all-user sweep is not started until the three-user subset passes.
-5. Every paid Pod and unused persistent volume is explicitly deleted and then
+5. The all-user sweep is not started until the three-user subset passes.
+6. Every paid Pod and unused persistent volume is explicitly deleted and then
    verified absent.
+
+## Observed three-user gate
+
+The gate passed on 2026-10-03 using the pinned upstream commit and generic
+checkpoint on a Secure Cloud RTX 4090 in `US-IL-1`.
+
+| User | Validation CER | Reference | Test CER | Reference | Accepted |
+|---|---:|---:|---:|---:|---|
+| `user0` | 60.082565% | 60.07% | 61.509636% | 61.48% | yes |
+| `user1` | 55.591190% | 55.59% | 59.945858% | 59.96% | yes |
+| `user2` | 47.390659% | 47.38% | 48.010944% | 48.00% | yes |
+
+Selective staging found all 40 sessions after streaming 16.9% of the source
+archive; the extracted data occupied 13 GB. The successful Pod ran for 1,927
+seconds at `$0.74/hour`, an estimated `$0.3961` in compute. The total observed
+Runpod balance decrease for this milestone was `$0.4607`, including short
+failed transfer attempts and temporary storage.
+
+Raw logs and Hydra configurations were copied locally before cleanup. The
+checked-in results are listed by
+[`results/m4-three-user-gate-summary.json`](results/m4-three-user-gate-summary.json).
+Post-cleanup read-back returned zero Pods and zero network volumes.

@@ -15,7 +15,11 @@ jobs:
       - name: Validate shell syntax
         run: bash -n scripts/*.sh
       - name: Validate structured results
-        run: python -m json.tool results/m3-user0-generic-greedy.json >/dev/null
+        run: |
+          for result in results/*.json; do
+            python -m json.tool "$result" >/dev/null
+          done
+          python -m json.tool references/generic-greedy.json >/dev/null
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
       - name: Test command-line guards and dry runs
