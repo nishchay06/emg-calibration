@@ -83,7 +83,9 @@ The paid form uses the same user list and requires the 308 GB acknowledgement:
 ```
 
 For the first three-user gate, preview the sequential evaluation and automatic
-result capture without running anything:
+result capture without running anything. The paid sweep stops after recording
+the first validation or test CER more than 0.10 percentage points from its
+pinned reference:
 
 ```bash
 ./scripts/evaluate_generic_sweep.sh \

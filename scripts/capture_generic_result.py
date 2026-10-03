@@ -16,6 +16,8 @@ from typing import Any
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_REFERENCE_PATH = PROJECT_DIR / "references" / "generic-greedy.json"
 METRICS = ("loss", "CER", "IER", "DER", "SER")
+MAX_CER_DELTA_PERCENTAGE_POINTS = 0.10
+FLOAT_COMPARISON_TOLERANCE = 1e-12
 NUMBER_PATTERN = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
 QUOTED_METRIC_PATTERN = re.compile(
     rf"['\"](?P<split>val|test)/(?P<metric>loss|CER|IER|DER|SER)['\"]"
@@ -30,6 +32,17 @@ TABLE_METRIC_PATTERN = re.compile(
 
 class CaptureError(ValueError):
     """Raised when a log or reference file is not a complete valid input."""
+
+
+def cer_delta_is_accepted(delta: float) -> bool:
+    """Return whether a signed CER delta satisfies the pinned M4 tolerance."""
+    absolute_delta = abs(delta)
+    return absolute_delta < MAX_CER_DELTA_PERCENTAGE_POINTS or math.isclose(
+        absolute_delta,
+        MAX_CER_DELTA_PERCENTAGE_POINTS,
+        rel_tol=0.0,
+        abs_tol=FLOAT_COMPARISON_TOLERANCE,
+    )
 
 
 def parse_metrics(console_text: str) -> dict[str, dict[str, float]]:
@@ -102,6 +115,10 @@ def build_result(
     reference = load_reference(reference_path, user)
     validation_cer = parsed["val"]["CER"]
     test_cer = parsed["test"]["CER"]
+    validation_delta = validation_cer - reference["validation_CER"]
+    test_delta = test_cer - reference["test_CER"]
+    validation_accepted = cer_delta_is_accepted(validation_delta)
+    test_accepted = cer_delta_is_accepted(test_delta)
 
     return {
         "schema_version": 1,
@@ -120,8 +137,16 @@ def build_result(
             "test": reference["test_CER"],
         },
         "CER_delta_percentage_points": {
-            "validation": validation_cer - reference["validation_CER"],
-            "test": test_cer - reference["test_CER"],
+            "validation": validation_delta,
+            "test": test_delta,
+        },
+        "acceptance": {
+            "maximum_absolute_CER_delta_percentage_points": (
+                MAX_CER_DELTA_PERCENTAGE_POINTS
+            ),
+            "validation": validation_accepted,
+            "test": test_accepted,
+            "passed": validation_accepted and test_accepted,
         },
         "reference_source": {
             "repository": reference["source"]["repository"],
@@ -167,6 +192,23 @@ def main() -> int:
         f"test CER={result['metrics']['test']['CER']:.6f}%"
     )
     print(f"Wrote {args.output_json}")
+    if not result["acceptance"]["passed"]:
+        failed_splits = [
+            split
+            for split in ("validation", "test")
+            if not result["acceptance"][split]
+        ]
+        failure_details = ", ".join(
+            f"{split} |delta|="
+            f"{abs(result['CER_delta_percentage_points'][split]):.6f} pp"
+            for split in failed_splits
+        )
+        print(
+            f"Acceptance failed for {args.user}: {failure_details}; "
+            f"required <= {MAX_CER_DELTA_PERCENTAGE_POINTS:.2f} pp.",
+            file=sys.stderr,
+        )
+        return 1
     return 0
 
 

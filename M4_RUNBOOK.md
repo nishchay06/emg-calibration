@@ -94,6 +94,9 @@ artifact while preserving the raw log:
 The capture command requires all five validation and test metrics, refuses to
 overwrite an existing result, and calculates CER differences from the pinned
 references in [`references/generic-greedy.json`](references/generic-greedy.json).
+It records whether each absolute CER difference is at most **0.10 percentage
+points**. A failed comparison is still written to `result.json` as evidence,
+then the command exits nonzero.
 
 ## Three-user sweep
 
@@ -113,8 +116,8 @@ directories, or starting an evaluation:
 After staging and input verification, replace `--dry-run` with `--run`. The
 sweep evaluates users sequentially, gives each user a separate output
 directory, captures `result.json` immediately after each successful run, and
-stops on the first failure. It performs a full overwrite preflight before
-creating the output root.
+stops on the first execution, capture, or CER-acceptance failure. It performs a
+full overwrite preflight before creating the output root.
 
 The first-subset greedy references from upstream
 `scripts/experimental_results.py` are:
@@ -130,8 +133,9 @@ The first-subset greedy references from upstream
 1. The three-user sweep dry-run resolves three distinct output directories
    without creating them.
 2. `user0`, `user1`, and `user2` validation/test runs complete without training.
-3. Each observed CER is captured in `result.json` and compared with its pinned
-   upstream per-user value.
+3. Each observed CER is captured in `result.json`; both validation and test
+   must be within 0.10 percentage points of their pinned upstream per-user
+   values. The sweep stops after recording the first failed comparison.
 4. Raw console logs and Hydra configs are copied out before ephemeral compute is
    terminated.
 5. The all-user sweep is not started until the three-user subset passes.

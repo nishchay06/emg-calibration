@@ -138,4 +138,10 @@ archive stream so the downloaded sessions can be reused.
   completed Lightning console log into a structured, reference-compared result.
 - Added a guarded sequential sweep with a mutation-free dry-run, per-user output
   isolation, complete overwrite preflight, and automatic result capture.
-- Next: validate the three-user dry-run as the final paid-compute gate.
+- Verified the three-user staging and evaluation dry-runs: 40 unique sessions,
+  a 23 GiB minimum, and distinct sequential outputs for `user0` through `user2`.
+- Added an explicit M4 acceptance guard: each validation and test CER must be
+  within 0.10 percentage points of its pinned reference. A failed result remains
+  captured as evidence and stops the sweep before the next user.
+- Next: verify the live Runpod balance and automatic-termination mechanism as
+  the final paid-compute gate.
