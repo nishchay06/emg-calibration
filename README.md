@@ -39,4 +39,3 @@ that another person can inspect.
 - [`project-plan.md`](project-plan.md) — research question, hypotheses, setup, and risks
 - [`GUIDE.md`](GUIDE.md) — living checklist for the research project and applications
 - [`research-statement.md`](research-statement.md) — older statement to retarget after results exist
-- [`Nishchay_Resume.tex`](Nishchay_Resume.tex) — resume source
