@@ -81,6 +81,20 @@ Use a distinct output directory for each user. The evaluator verifies the
 upstream commit, checkpoint digest, complete per-user manifest, and output-path
 nonexistence before invoking the official test path.
 
+After a run completes, convert its console output into a small structured
+artifact while preserving the raw log:
+
+```bash
+./scripts/capture_generic_result.py \
+  user0 \
+  /workspace/results/user0-generic-greedy/console.log \
+  /workspace/results/user0-generic-greedy/result.json
+```
+
+The capture command requires all five validation and test metrics, refuses to
+overwrite an existing result, and calculates CER differences from the pinned
+references in [`references/generic-greedy.json`](references/generic-greedy.json).
+
 The first-subset greedy references from upstream
 `scripts/experimental_results.py` are:
 
@@ -93,7 +107,8 @@ The first-subset greedy references from upstream
 ## Acceptance gate
 
 1. `user0`, `user1`, and `user2` validation/test runs complete without training.
-2. Each observed CER is recorded and compared with its upstream per-user value.
+2. Each observed CER is captured in `result.json` and compared with its pinned
+   upstream per-user value.
 3. Raw console logs and Hydra configs are copied out before ephemeral compute is
    terminated.
 4. The all-user sweep is not started until the three-user subset passes.

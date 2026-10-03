@@ -1,0 +1,47 @@
+{
+  "checkpoint": {
+    "filename": "generic.ckpt",
+    "sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81"
+  },
+  "decoder": "ctc_greedy",
+  "schema_version": 1,
+  "source": {
+    "path": "scripts/experimental_results.py",
+    "repository": "facebookresearch/emg2qwerty",
+    "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1"
+  },
+  "users": {
+    "user0": {
+      "test_CER": 61.48,
+      "validation_CER": 60.07
+    },
+    "user1": {
+      "test_CER": 59.96,
+      "validation_CER": 55.59
+    },
+    "user2": {
+      "test_CER": 48.0,
+      "validation_CER": 47.38
+    },
+    "user3": {
+      "test_CER": 54.69,
+      "validation_CER": 59.03
+    },
+    "user4": {
+      "test_CER": 58.24,
+      "validation_CER": 58.93
+    },
+    "user5": {
+      "test_CER": 53.86,
+      "validation_CER": 56.01
+    },
+    "user6": {
+      "test_CER": 54.66,
+      "validation_CER": 58.08
+    },
+    "user7": {
+      "test_CER": 52.17,
+      "validation_CER": 49.45
+    }
+  }
+}

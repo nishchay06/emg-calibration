@@ -134,5 +134,7 @@ archive stream so the downloaded sessions can be reused.
   added a mutation-free dry-run plan.
 - Generalized generic greedy evaluation to `user0` through `user7`; the old
   `user0` commands remain as compatibility wrappers.
-- Next: add a sweep/result-capture command, then use a three-user dry run as the
+- Added checked-in generic greedy references and automatic conversion of a
+  completed Lightning console log into a structured, reference-compared result.
+- Next: add the multi-user sweep command, then use a three-user dry run as the
   final paid-compute gate.
