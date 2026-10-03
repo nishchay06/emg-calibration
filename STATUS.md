@@ -130,5 +130,9 @@ archive stream so the downloaded sessions can be reused.
   16 test.
 - Added deterministic regeneration with a read-only `--check` mode and local
   parser tests.
-- Next: generalize selective staging and greedy evaluation from one user to an
-  explicit user list, while retaining input and disk-space guards.
+- Generalized selective staging to an explicit, duplicate-free user list and
+  added a mutation-free dry-run plan.
+- Generalized generic greedy evaluation to `user0` through `user7`; the old
+  `user0` commands remain as compatibility wrappers.
+- Next: add a sweep/result-capture command, then use a three-user dry run as the
+  final paid-compute gate.

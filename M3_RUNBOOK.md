@@ -44,6 +44,9 @@ Dataset staging is intentionally guarded because it streams 308 GB:
 ./scripts/stage_user0_data.sh --ack-stream-308gb /workspace/data
 ```
 
+The `user0` staging and evaluation commands are compatibility wrappers around
+the multi-user M4 scripts; the original M3 invocation remains reproducible.
+
 Then run the baseline:
 
 ```bash
