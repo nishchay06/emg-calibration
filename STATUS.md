@@ -1,0 +1,106 @@
+# Project status
+
+**Checked:** 2026-10-03
+
+## M0 — Local preflight
+
+The first preflight was intentionally read-only. No dataset, model checkpoint,
+or external repository was downloaded.
+
+| Check | Result |
+|---|---|
+| Working tree | Clean before this status file was added |
+| Python | Available, but installed versions are 3.14 (Homebrew) and 3.13 (Conda base); upstream requires 3.10.13 |
+| PyTorch | Not installed in either checked interpreter |
+| Git LFS | Not installed |
+| LaTeX compiler | Not installed (`pdflatex`) |
+| Pandoc | Available |
+| Local NVIDIA GPU | Not detected (`nvidia-smi` missing) |
+| Free disk on Desktop volume | 22 GiB |
+
+### Consequences
+
+- The full benchmark cannot be staged locally on this machine yet: the plan
+  estimates roughly 25–35 GB for the eight test users, in addition to the
+  released checkpoints and working space.
+- The next step is an upstream code audit and environment inspection, not a
+  dataset download.
+- Baseline training/evaluation will likely need a personal GPU machine or a
+  rented GPU environment. Work accounts and work hardware remain out of scope.
+
+## Next acceptance test
+
+M1 is complete when we can identify the upstream commit, official evaluation
+entry point, required checkpoint files, and the smallest test invocation—
+without downloading the 308 GB archive.
+
+## M1 — Upstream audit
+
+**Status:** complete (2026-10-03)
+
+- Upstream repository: [`facebookresearch/emg2qwerty`](https://github.com/facebookresearch/emg2qwerty)
+- Audited commit: `3200d91eeb952cbed1f278e47d0cc56928334fd1`
+- Default branch: `main`
+- Repository status: archived upstream
+- Upstream license: CC-BY-NC-4.0; check its terms before redistributing code,
+  checkpoints, or derived artifacts.
+- Required environment: Python 3.10.13, PyTorch 2.3.0, CUDA-oriented conda
+  environment, and KenLM for the beam-search language model.
+- Released checkpoints: `models/generic.ckpt` and the personalized checkpoint
+  directories; checkpoint files are managed with Git LFS.
+- Official evaluation entry point: `python -m emg2qwerty.train` with
+  `train=False`, a checkpoint, a user config, and either `ctc_greedy` or
+  `ctc_beam` decoding.
+- Relevant upstream script: `scripts/experimental_results.py`.
+
+The smallest useful run still requires both a released checkpoint and at least
+one user's HDF5 session data, so we should not attempt it on this Mac before a
+GPU/storage environment is chosen. The next acceptance test is M2: create the
+environment and verify imports without downloading the full dataset.
+
+## M2 — Runpod environment smoke test
+
+**Status:** complete (2026-10-03)
+
+- Tested upstream commit: `3200d91eeb952cbed1f278e47d0cc56928334fd1`
+- Runpod Pod: `5di8ucuwf2ug8o` (`emg-smoke-test`), Secure Cloud in
+  `EU-SE-1`
+- GPU: one NVIDIA A40; CUDA was available and a CUDA tensor operation passed
+- Base image: `runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04`
+- Verified runtime: Python 3.10, PyTorch `2.3.0+cu121`, Torchaudio
+  `2.3.0+cu121`, and PyTorch Lightning `1.8.6`
+- Verified imports: the `emg2qwerty` package plus `charset`, `data`, `metrics`,
+  `modules`, and `transforms`
+- Result marker: `SMOKE_PASS 2026-10-03T08:12:07Z`
+- No dataset, checkpoint, or persistent volume was downloaded or created
+- The Pod was terminated after the test, and the subsequent Pod list was empty
+
+The first import attempt exposed `unidecode` as a required runtime dependency;
+adding `unidecode==1.3.8` made the corrected run pass. Updating this ephemeral
+Pod also replaced its container disk, so future repeatable runs should use a
+script or custom image rather than relying on manual in-container state.
+
+The Pod's listed price was `$0.49/hour`. It existed for under six minutes, so
+the rate-based compute estimate is under `$0.05`; Runpod billing had not yet
+posted the final charge when this status was written.
+
+## Next acceptance test
+
+M3 is complete when the released generic checkpoint is evaluated on one test
+user with a documented command and captured character-error-rate output. Before
+renting another GPU, determine the smallest required checkpoint and HDF5 files
+and make their transfer reproducible.
+
+### M3 preparation
+
+**Status:** local preparation complete (2026-10-03); paid run not started
+
+- Selected `user0` as the first reproducibility target.
+- Expected greedy baseline: 60.07% validation CER and 61.48% test CER.
+- Identified 14 required session files: 10 train, 2 validation, and 2 test.
+- Recorded the generic checkpoint's 63,587,626-byte size and SHA-256 digest.
+- Verified the archive prefix with an 8 MiB range request; the 308,382,645,571-
+  byte dataset itself was not downloaded.
+- Added guarded environment, data-staging, input-validation, and evaluation
+  scripts; see [`M3_RUNBOOK.md`](M3_RUNBOOK.md).
+- No Runpod resource was created during this preparation.
