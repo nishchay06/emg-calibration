@@ -95,6 +95,27 @@ The capture command requires all five validation and test metrics, refuses to
 overwrite an existing result, and calculates CER differences from the pinned
 references in [`references/generic-greedy.json`](references/generic-greedy.json).
 
+## Three-user sweep
+
+Preview the complete evaluation plan without checking inputs, creating output
+directories, or starting an evaluation:
+
+```bash
+./scripts/evaluate_generic_sweep.sh \
+  --dry-run \
+  /workspace/emg2qwerty \
+  /workspace/data \
+  /workspace/emg2qwerty/models/generic.ckpt \
+  /workspace/results/generic-greedy \
+  user0 user1 user2
+```
+
+After staging and input verification, replace `--dry-run` with `--run`. The
+sweep evaluates users sequentially, gives each user a separate output
+directory, captures `result.json` immediately after each successful run, and
+stops on the first failure. It performs a full overwrite preflight before
+creating the output root.
+
 The first-subset greedy references from upstream
 `scripts/experimental_results.py` are:
 
@@ -106,11 +127,13 @@ The first-subset greedy references from upstream
 
 ## Acceptance gate
 
-1. `user0`, `user1`, and `user2` validation/test runs complete without training.
-2. Each observed CER is captured in `result.json` and compared with its pinned
+1. The three-user sweep dry-run resolves three distinct output directories
+   without creating them.
+2. `user0`, `user1`, and `user2` validation/test runs complete without training.
+3. Each observed CER is captured in `result.json` and compared with its pinned
    upstream per-user value.
-3. Raw console logs and Hydra configs are copied out before ephemeral compute is
+4. Raw console logs and Hydra configs are copied out before ephemeral compute is
    terminated.
-4. The all-user sweep is not started until the three-user subset passes.
-5. Every paid Pod and unused persistent volume is explicitly deleted and then
+5. The all-user sweep is not started until the three-user subset passes.
+6. Every paid Pod and unused persistent volume is explicitly deleted and then
    verified absent.

@@ -82,6 +82,19 @@ The paid form uses the same user list and requires the 308 GB acknowledgement:
   /workspace/results/user1-generic-greedy
 ```
 
+For the first three-user gate, preview the sequential evaluation and automatic
+result capture without running anything:
+
+```bash
+./scripts/evaluate_generic_sweep.sh \
+  --dry-run \
+  /workspace/emg2qwerty \
+  /workspace/data \
+  /workspace/emg2qwerty/models/generic.ckpt \
+  /workspace/results/generic-greedy \
+  user0 user1 user2
+```
+
 See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
 
 ## Repository layout

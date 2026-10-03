@@ -33,6 +33,11 @@ expect_exit 2 "${project_dir}/scripts/stage_test_users_data.sh" \
 expect_exit 2 "${project_dir}/scripts/evaluate_generic_greedy.sh" \
     user8 /unused /unused /unused /unused
 expect_exit 2 "${project_dir}/scripts/evaluate_user0_greedy.sh"
+expect_exit 2 "${project_dir}/scripts/evaluate_generic_sweep.sh"
+expect_exit 2 "${project_dir}/scripts/evaluate_generic_sweep.sh" \
+    --dry-run /unused /unused /unused /unused user8
+expect_exit 2 "${project_dir}/scripts/evaluate_generic_sweep.sh" \
+    --dry-run /unused /unused /unused /unused user0 user0
 
 mkdir "${temporary_dir}/not-upstream" "${temporary_dir}/data"
 touch "${temporary_dir}/checkpoint"
@@ -64,5 +69,31 @@ all_user_plan="$(
 )"
 [[ "${all_user_plan}" == *"Required sessions: 100"* ]]
 [[ "${all_user_plan}" == *"Minimum free space: 48 GiB"* ]]
+
+sweep_output_root="${temporary_dir}/dry-run-output"
+three_user_sweep_plan="$(
+    "${project_dir}/scripts/evaluate_generic_sweep.sh" \
+        --dry-run \
+        /workspace/emg2qwerty \
+        /workspace/data \
+        /workspace/emg2qwerty/models/generic.ckpt \
+        "${sweep_output_root}" \
+        user0 user1 user2
+)"
+[[ "${three_user_sweep_plan}" == *"Selected users: user0,user1,user2"* ]]
+[[ "${three_user_sweep_plan}" == *"Evaluation count: 3"* ]]
+[[ "${three_user_sweep_plan}" == *"[3/3] user2 -> ${sweep_output_root}/user2-generic-greedy"* ]]
+[[ "${three_user_sweep_plan}" == *"Dry run only; no directories were created"* ]]
+[[ ! -e "${sweep_output_root}" ]]
+
+missing_input_output_root="${temporary_dir}/missing-input-output"
+expect_exit 1 "${project_dir}/scripts/evaluate_generic_sweep.sh" \
+    --run \
+    "${temporary_dir}/missing-upstream" \
+    "${temporary_dir}/missing-data" \
+    "${temporary_dir}/missing-checkpoint" \
+    "${missing_input_output_root}" \
+    user0 user1
+[[ ! -e "${missing_input_output_root}" ]]
 
 echo "CLI guard tests passed"

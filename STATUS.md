@@ -136,5 +136,6 @@ archive stream so the downloaded sessions can be reused.
   `user0` commands remain as compatibility wrappers.
 - Added checked-in generic greedy references and automatic conversion of a
   completed Lightning console log into a structured, reference-compared result.
-- Next: add the multi-user sweep command, then use a three-user dry run as the
-  final paid-compute gate.
+- Added a guarded sequential sweep with a mutation-free dry-run, per-user output
+  isolation, complete overwrite preflight, and automatic result capture.
+- Next: validate the three-user dry-run as the final paid-compute gate.
