@@ -175,5 +175,21 @@ archive stream so the downloaded sessions can be reused.
 - Made the archive-stream timeout explicitly configurable and validated so the
   all-user run can use a four-hour termination guard; the original two-hour
   default remains unchanged.
-- Next: approve a costed storage/compute proposal, then stage all eight users
-  and evaluate `user3` through `user7` sequentially.
+- A 2026-10-04 all-user staging attempt on a Secure Cloud L4 in `EU-RO-1`
+  failed the transfer-rate gate. Two measured windows reached 1,641,654 and
+  1,668,363 bytes/second, versus the required 28,000,000 bytes/second. The
+  stream was intentionally stopped after 11 minutes 42 seconds at 0.4% of the
+  archive; tar consequently exited 2 and left only unvalidated partial data.
+- The failed L4 Pod (`uevnc74dw12z7b`) was deleted after its raw logs were
+  copied to ignored `artifacts/m4-runpod-2026-10-04/`. The 60 GB Standard
+  network volume (`6jpri33smy`) remains in `EU-RO-1` at `$0.006/hour` pending
+  the next staging decision. The observed balance decrease from preflight
+  through cleanup was `$0.1580947138`.
+- Read-only follow-up confirmed that the upstream archive is served from AWS
+  `us-east-1` and supports byte-range requests. The NEMAR per-file copy uses a
+  converted BDF/TSV representation rather than the upstream HDF5 inputs, so it
+  is not an acceptable substitute for baseline reproduction.
+- Next: approve a revised, guarded `US-IL-1` proposal that downloads the
+  original archive in parallel to temporary Pod disk, selectively extracts the
+  pinned HDF5 sessions to a colocated network volume, then evaluates `user3`
+  through `user7` sequentially.

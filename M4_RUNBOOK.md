@@ -186,3 +186,38 @@ Raw logs and Hydra configurations were copied locally before cleanup. The
 checked-in results are listed by
 [`results/m4-three-user-gate-summary.json`](results/m4-three-user-gate-summary.json).
 Post-cleanup read-back returned zero Pods and zero network volumes.
+
+## Observed all-user staging attempt
+
+The first post-gate all-user staging attempt ran on 2026-10-04 using a Secure
+Cloud L4 in `EU-RO-1`. It deliberately stopped before evaluation because the
+source-archive transfer did not meet the agreed cost gate:
+
+| Measurement | Observed | Required |
+|---|---:|---:|
+| First rate window | 1,641,654 bytes/s | 28,000,000 bytes/s |
+| Additional 61-second window | 1,668,363 bytes/s | 28,000,000 bytes/s |
+| Archive progress at stop | 0.4% | n/a |
+| Staging runtime | 11m42s | n/a |
+
+The stream was intentionally terminated, so GNU tar exited 2 and
+`/workspace/data.partial` remained unvalidated. This is transfer-failure
+evidence, not a completed dataset. The Pod (`uevnc74dw12z7b`) was deleted after
+copying raw logs to ignored `artifacts/m4-runpod-2026-10-04/`. The associated
+60 GB Standard volume (`6jpri33smy`) remains in `EU-RO-1` pending an explicit
+cleanup or migration decision.
+
+Read-only investigation established that the original 308,382,645,571-byte
+object is hosted in AWS `us-east-1` and accepts byte-range requests. A local
+64 MiB range probe reached 7,190,777 bytes/s, while the previously successful
+`US-IL-1` RTX 4090 stream reached 29.96 MB/s. Public alternatives found during
+the audit do not preserve the required input path: the Hugging Face entry has
+no dataset files, and NEMAR distributes a converted BDF/TSV representation
+rather than the upstream HDF5 sessions.
+
+The next paid proposal should therefore retain the original archive and pinned
+manifests, use `US-IL-1`, download the complete archive with parallel HTTP
+range requests to temporary Pod disk, verify its exact byte size, and extract
+only the required HDF5 members to a colocated network volume. Do not provision
+this revised path until its live price, runtime guard, storage lifecycle, and
+hard cost ceiling are approved.
