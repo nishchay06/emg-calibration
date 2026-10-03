@@ -1,0 +1,101 @@
+# M4 runbook — multi-user baseline preparation
+
+## Goal
+
+Reproduce generic greedy-decoder baselines on a small held-out-user subset,
+then expand to all eight users only after the subset matches upstream values.
+No paid resource is provisioned by the commands in the planning section.
+
+All inputs remain pinned to upstream commit
+`3200d91eeb952cbed1f278e47d0cc56928334fd1`.
+
+## Inventory
+
+The eight official held-out-user configs require 100 unique sessions:
+
+- 68 training sessions
+- 16 validation sessions
+- 16 test sessions
+
+Counts and provenance are recorded in
+[`manifests/test-users.json`](manifests/test-users.json). Regeneration and
+validation are documented in [`manifests/README.md`](manifests/README.md).
+
+## No-cost planning
+
+Plan the first three-user subset without creating a directory or starting a
+download:
+
+```bash
+./scripts/stage_test_users_data.sh \
+  --dry-run /workspace/data user0 user1 user2
+```
+
+Expected plan:
+
+```text
+Selected users: user0,user1,user2
+Required sessions: 40
+Minimum free space: 23 GiB
+Source archive: 308382645571 bytes
+Dry run only; no directories were created and no data was downloaded.
+```
+
+Plan all eight users with the explicit list:
+
+```bash
+./scripts/stage_test_users_data.sh \
+  --dry-run /workspace/data \
+  user0 user1 user2 user3 user4 user5 user6 user7
+```
+
+That plan resolves 100 sessions and requires at least 48 GiB free space.
+
+## Paid staging command
+
+Run this only after live compute and storage prices have been checked and a
+hard spending ceiling has been agreed:
+
+```bash
+./scripts/stage_test_users_data.sh \
+  --ack-stream-308gb /workspace/data user0 user1 user2
+```
+
+The script requires GNU tar and GNU timeout. It builds a unique manifest,
+streams the public archive until every requested member is found, accepts curl
+exit 23 only when tar completed successfully, validates every non-empty HDF5
+file, and refuses to overwrite an existing destination.
+
+## Per-user evaluation
+
+```bash
+EMG_ACCELERATOR=gpu ./scripts/evaluate_generic_greedy.sh \
+  user0 \
+  /workspace/emg2qwerty \
+  /workspace/data \
+  /workspace/emg2qwerty/models/generic.ckpt \
+  /workspace/results/user0-generic-greedy
+```
+
+Use a distinct output directory for each user. The evaluator verifies the
+upstream commit, checkpoint digest, complete per-user manifest, and output-path
+nonexistence before invoking the official test path.
+
+The first-subset greedy references from upstream
+`scripts/experimental_results.py` are:
+
+| User | Validation CER | Test CER |
+|---|---:|---:|
+| `user0` | 60.07% | 61.48% |
+| `user1` | 55.59% | 59.96% |
+| `user2` | 47.38% | 48.00% |
+
+## Acceptance gate
+
+1. `user0`, `user1`, and `user2` validation/test runs complete without training.
+2. Each observed CER is recorded and compared with its upstream per-user value.
+3. Raw console logs and Hydra configs are copied out before ephemeral compute is
+   terminated.
+4. The all-user sweep is not started until the three-user subset passes.
+5. Every paid Pod and unused persistent volume is explicitly deleted and then
+   verified absent.

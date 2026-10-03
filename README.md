@@ -57,6 +57,33 @@ they are not committed here.
 criteria, observed run, and cost evidence. [`STATUS.md`](STATUS.md) records each
 completed milestone and known limitation.
 
+## Plan a multi-user baseline
+
+Multi-user staging requires an explicit user list. Dry-run mode validates the
+selection and prints session/storage requirements without creating directories
+or downloading data:
+
+```bash
+./scripts/stage_test_users_data.sh \
+  --dry-run /workspace/data user0 user1 user2
+```
+
+The paid form uses the same user list and requires the 308 GB acknowledgement:
+
+```bash
+./scripts/stage_test_users_data.sh \
+  --ack-stream-308gb /workspace/data user0 user1 user2
+
+./scripts/evaluate_generic_greedy.sh \
+  user1 \
+  /workspace/emg2qwerty \
+  /workspace/data \
+  /workspace/emg2qwerty/models/generic.ckpt \
+  /workspace/results/user1-generic-greedy
+```
+
+See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
+
 ## Repository layout
 
 | Path | Purpose |
