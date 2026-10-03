@@ -2,3 +2,7 @@
 *.log
 *.out
 .DS_Store
+artifacts/
+data/
+logs/
+upstream/

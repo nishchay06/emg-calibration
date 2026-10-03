@@ -1,0 +1,17 @@
+diff --git a/emg2qwerty/decoder.py b/emg2qwerty/decoder.py
+--- a/emg2qwerty/decoder.py
++++ b/emg2qwerty/decoder.py
+@@ -17,2 +17,5 @@
+-import kenlm
++try:
++    import kenlm
++except ModuleNotFoundError:
++    kenlm = None
+ import numpy as np
+@@ -424,2 +427,6 @@ class CTCBeamDecoder(Decoder):
+         if self.lm_path is not None:
++            if kenlm is None:
++                raise ModuleNotFoundError(
++                    "KenLM is required when a language model path is configured"
++                )
+             self.lm = kenlm.Model(self.lm_path)
