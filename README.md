@@ -11,10 +11,11 @@ benchmark and pins all upstream-dependent work to commit
 
 The long-term experiment compares full and parameter-efficient adaptation at
 1, 2, 5, 10, 30, and 60 minutes plus full per-user calibration data. The
-released generic and personalized checkpoints have been reproduced; the next
-gate is reproducing the upstream full-data fine-tuning procedure ourselves.
-The pinned training audit and local harness are in
-[`M5B_RUNBOOK.md`](M5B_RUNBOOK.md); no trained M5b CER is claimed yet.
+released generic and personalized checkpoints have been reproduced. Our own
+full-data fine-tuning also passed the two-user upstream reproduction gate. The
+next milestone is a local calibration-budget sampler; CER-versus-minutes curves
+and head/norm/LoRA comparisons remain future work. See
+[`M5B_RUNBOOK.md`](M5B_RUNBOOK.md) for the recipe and training evidence.
 
 ## Current result
 
@@ -50,7 +51,25 @@ points of their pinned references.
 These are sample standard deviations across users. See the
 [`M5 all-user summary`](results/m5-all-user-personalized-greedy-summary.json)
 and [`M5_RUNBOOK.md`](M5_RUNBOOK.md) for per-user results, checkpoint
-identities, raw-evidence provenance, and cost/cleanup records.
+identities, raw-evidence provenance, and qualified experiment costs.
+
+### Own full-data fine-tuning (M5b)
+
+Both runs completed 150 epochs with the upstream recipe, generic initialization,
+seed 1501 and greedy decoding. Test CER passed the 1.0 pp reference tolerance:
+
+| User | Test CER | Reference | Difference | Training/evaluation |
+|---|---:|---:|---:|---:|
+| `user0` | 21.209850% | 20.570% | +0.639850 pp | 34.44 min |
+| `user5` | 6.130137% | 5.811% | +0.319137 pp | 27.93 min |
+
+See the [`M5b summary`](results/m5b-full-upstream-summary.json) for checkpoint
+provenance and per-user records. An earlier user5 attempt stopped for runtime
+rather than accuracy; its failed attempt and diagnostic measurements remain
+published. Full-data reproduction selects the best validation checkpoint;
+calibration-budget experiments will use fixed steps and final-checkpoint
+selection to avoid spending uncounted validation labels. These are one-seed
+reproduction results, not the completed calibration study.
 
 No-cost M4 preparation now includes deterministic, pinned manifests for all
 eight held-out users: 100 unique sessions (68 train, 16 validation, 16 test).
@@ -138,7 +157,7 @@ See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
 
 | Path | Purpose |
 |---|---|
-| `scripts/` | Environment, staging, evaluation, and one-shot Pod workflows |
+| `scripts/` | Environment, staging, evaluation, adaptation and bounded diagnostics |
 | `manifests/` | Exact upstream archive members required by an experiment |
 | `patches/` | Narrow compatibility changes applied to pinned upstream code |
 | `requirements/` | Reproducibility dependency pins |
@@ -147,7 +166,7 @@ See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
 
 ## Roadmap
 
-1. Reproduce the upstream full-data fine-tuning procedure for two users.
+1. Completed: reproduce upstream full-data fine-tuning for two users.
 2. Add seeded contiguous calibration windows from 1 to 60 minutes plus full.
 3. Compare full, final-layer-only, normalization-only, and low-rank adaptation.
 4. Report per-user curves, trainable parameter counts, adaptation time, and cost.
@@ -162,3 +181,11 @@ The repository is licensed under
 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), matching
 the upstream project's license. See [`LICENSE`](LICENSE). If you use this work,
 please also cite the original emg2qwerty paper and repository.
+
+## Contributing and evidence
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for local validation commands and
+change-review conventions. Publish numerical results, failed experiments,
+recipe/version pins and hashes. Account balances, access coordinates and live
+session records stay in ignored local files. Raw archives are retained locally;
+published hashes identify them but do not provide public download access.

@@ -47,12 +47,22 @@
     {
       "ignored_archive": "artifacts/m5-runpod-2026-10-04.tar.gz",
       "sha256": "43f557a24e96b2bcd692d33264b902f544860860fb49cadd4adbd03b43c20e64",
-      "users": ["user0", "user1", "user2"]
+      "users": [
+        "user0",
+        "user1",
+        "user2"
+      ]
     },
     {
       "ignored_archive": "artifacts/m5-runpod-2026-10-04-expansion.tar.gz",
       "sha256": "7bf5868783af3186f8affbe7a6815fe09cdb310dc592d15379d32f50a8fca4f3",
-      "users": ["user3", "user4", "user5", "user6", "user7"]
+      "users": [
+        "user3",
+        "user4",
+        "user5",
+        "user6",
+        "user7"
+      ]
     }
   ],
   "checkpoints": {
@@ -60,27 +70,8 @@
     "total_bytes": 1017579936,
     "verification": "filename, byte size, and full SHA-256"
   },
-  "cleanup": {
-    "active_endpoints_after_cleanup": 0,
-    "active_pods_after_cleanup": 0,
-    "cleanup_verified_at_utc": "2026-10-04T11:06:16Z",
-    "current_spend_usd_per_hour": 0.039,
-    "retained_network_volume": {
-      "data_center": "US-IL-1",
-      "id": "ni0dpvtday",
-      "size_gb": 400,
-      "type": "STANDARD",
-      "usd_per_hour": 0.0388888903
-    },
-    "verified": true
-  },
   "cost": {
-    "expansion_balance_after_usd": 10.4833738603,
-    "expansion_balance_before_usd": 10.6257153788,
-    "expansion_observed_balance_delta_usd": 0.1423415185,
-    "observed_balance_delta_across_two_runs_usd": 0.2382317722,
-    "pod_billing_status": "not yet posted at final expansion audit",
-    "three_user_observed_balance_delta_usd": 0.0958902537
+    "pod_billing_status": "not yet posted at final expansion audit"
   },
   "results": [
     "results/m5-user0-personalized-finetuned-greedy.json",
@@ -107,16 +98,19 @@
     "gpu": "NVIDIA GeForce RTX 4090",
     "gpu_price_usd_per_hour": 0.74,
     "image": "runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04",
-    "pod_ids": ["osxf0akjj1suup", "ttd4el9vlaqfq7"],
     "provider": "Runpod",
-    "pytorch": "2.3.0+cu121",
-    "termination_guard": {
-      "native_server_side_available": false,
-      "pods_deleted_after_local_evidence_verification": true,
-      "runs_actively_supervised": true
-    }
+    "pytorch": "2.3.0+cu121"
   },
   "schema_version": 1,
   "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
-  "users": ["user0", "user1", "user2", "user3", "user4", "user5", "user6", "user7"]
+  "users": [
+    "user0",
+    "user1",
+    "user2",
+    "user3",
+    "user4",
+    "user5",
+    "user6",
+    "user7"
+  ]
 }

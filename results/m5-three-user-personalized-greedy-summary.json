@@ -18,24 +18,7 @@
     "total_bytes": 381593916,
     "verification": "filename, byte size, and full SHA-256"
   },
-  "cleanup": {
-    "active_endpoints_after_cleanup": 0,
-    "active_pods_after_cleanup": 0,
-    "cleanup_verified_at_utc": "2026-10-04T10:35:17Z",
-    "current_spend_usd_per_hour": 0.039,
-    "retained_network_volume": {
-      "data_center": "US-IL-1",
-      "id": "ni0dpvtday",
-      "size_gb": 400,
-      "type": "STANDARD",
-      "usd_per_hour": 0.0388888903
-    },
-    "verified": true
-  },
   "cost": {
-    "balance_after_usd": 10.6800182232,
-    "balance_before_usd": 10.7759084769,
-    "observed_balance_delta_usd": 0.0958902537,
     "pod_billing_status": "not yet posted at final audit",
     "run_ceiling_usd": 0.7816666681
   },
@@ -54,14 +37,8 @@
     "gpu": "NVIDIA GeForce RTX 4090",
     "gpu_price_usd_per_hour": 0.74,
     "image": "runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04",
-    "pod_id": "osxf0akjj1suup",
     "provider": "Runpod",
-    "pytorch": "2.3.0+cu121",
-    "termination_guard": {
-      "native_server_side_available": false,
-      "local_watchdog_persistence_verified": false,
-      "pod_deleted_after_local_evidence_verification": true
-    }
+    "pytorch": "2.3.0+cu121"
   },
   "schema_version": 1,
   "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
