@@ -51,6 +51,20 @@ Plan all eight users with the explicit list:
 
 That plan resolves 100 sessions and requires at least 48 GiB free space.
 
+The remaining `user3` through `user7` subset resolves 60 sessions and requires
+at least 33 GiB free space. The successful three-user run streamed at 29.96
+MB/s, so a worst-case traversal of the full 308,382,645,571-byte archive would
+take about 2 hours 52 minutes. The staging command therefore accepts a validated
+`EMG_STAGE_TIMEOUT_SECONDS` override while retaining the original two-hour
+default. Preview the four-hour guard without downloading data:
+
+```bash
+EMG_STAGE_TIMEOUT_SECONDS=14400 \
+  ./scripts/stage_test_users_data.sh \
+  --dry-run /workspace/data \
+  user0 user1 user2 user3 user4 user5 user6 user7
+```
+
 ## Paid staging command
 
 Run this only after live compute and storage prices have been checked and a
@@ -59,6 +73,15 @@ hard spending ceiling has been agreed:
 ```bash
 ./scripts/stage_test_users_data.sh \
   --ack-stream-308gb /workspace/data user0 user1 user2
+```
+
+For the post-gate all-user staging run, use the explicit four-hour guard:
+
+```bash
+EMG_STAGE_TIMEOUT_SECONDS=14400 \
+  ./scripts/stage_test_users_data.sh \
+  --ack-stream-308gb /workspace/data \
+  user0 user1 user2 user3 user4 user5 user6 user7
 ```
 
 The script requires GNU tar and GNU timeout. It builds a unique manifest,

@@ -169,4 +169,11 @@ archive stream so the downloaded sessions can be reused.
   [`results/m4-three-user-gate-summary.json`](results/m4-three-user-gate-summary.json).
 - All Pods and both temporary network volumes were deleted; live read-back
   returned zero Pods, zero network volumes, and `$0/hour` active spend.
-- Next: review the three-user evidence, then plan the `user3`-`user7` expansion.
+- Verified the no-cost `user3`-`user7` expansion plan: 60 session files and a
+  33 GiB minimum. Restaging all eight users for reuse resolves 100 files and a
+  48 GiB minimum.
+- Made the archive-stream timeout explicitly configurable and validated so the
+  all-user run can use a four-hour termination guard; the original two-hour
+  default remains unchanged.
+- Next: approve a costed storage/compute proposal, then stage all eight users
+  and evaluate `user3` through `user7` sequentially.
