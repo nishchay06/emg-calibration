@@ -39,20 +39,21 @@ Caveat: the citation list may be incomplete, and the broader EMG gesture literat
 
 Per-user values are in `scripts/experimental_results.py` in the repo. Variation across users is large (fine-tuned no-LM ranges from 5.8 to 20.6), so report per-user curves, not just means.
 
-### Reproduction progress (2026-10-03)
+### Reproduction progress (2026-10-04)
 
-The first zero-shot sanity check is complete. On `user0`, the released generic
-checkpoint with greedy CTC produced **60.082565% validation CER** and
-**61.509636% test CER**, compared with the upstream per-user references of
-60.07% and 61.48%. The gaps are +0.012565 and +0.029636 percentage points,
-respectively. This validates the pinned environment, checkpoint, selective data
-staging, and evaluation path for one user; the remaining seven-user and
-personalized baselines are still pending.
+The zero-shot generic baseline is complete for all eight held-out users. Every
+greedy-decoder validation and test CER is within 0.10 percentage points of its
+pinned upstream per-user reference. This validates the pinned environment,
+checkpoint, complete-archive CRC32 verification, deterministic 100-session
+staging, sequential evaluation, and structured result capture. Per-user
+records and aggregate provenance are checked in under `results/`. The released
+personalized baselines remain pending and are the next gate before new
+adaptation experiments.
 
 ### Data and compute
 
-- The full dataset is a single **308 GB** tarball. Only the 8 benchmark test users are needed (100 sessions total: train/val/test per `config/user/user{0..7}.yaml`, roughly 9% of sessions, likely ~25–35 GB).
-- Plan: stream the tarball and extract only those sessions (`curl … | tar -xz` with a file list), so disk use stays small even though the whole file passes through the network once.
+- The full dataset is a single **308 GB** tarball. The 8 benchmark test users require 100 sessions total (68 train, 16 validation, 16 test), which occupy 27 GB after selective extraction.
+- The reproducible staging path scans the preserved archive with pinned parallel gzip decoding, verifies the complete gzip CRC32, and extracts only manifest-selected HDF5 sessions.
 - Released checkpoints (`models/generic.ckpt`, `models/personalized-finetuned/user*.ckpt`) come via git-lfs, so no generic-model training is needed.
 - Use **personal** hardware and accounts only (no work laptop GPU, cloud desktop or work AWS accounts).
 

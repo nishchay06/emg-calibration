@@ -1,6 +1,6 @@
 # Project status
 
-**Checked:** 2026-10-03
+**Checked:** 2026-10-04
 
 ## M0 — Local preflight
 
@@ -123,7 +123,7 @@ archive stream so the downloaded sessions can be reused.
 
 ### M4 multi-user generic baseline
 
-**Status:** in progress (2026-10-03); three-user gate passed
+**Status:** complete (2026-10-04); all eight generic greedy baselines passed
 
 - Audited upstream `user0` through `user7` configs at the pinned commit.
 - Generated manifests for 100 unique sessions: 68 train, 16 validation, and
@@ -201,15 +201,14 @@ archive stream so the downloaded sessions can be reused.
   to six hours, so evaluation never started and no new CER result was claimed.
 - The archive was preserved at its exact 308,382,645,571-byte size on the
   400 GB Standard `US-IL-1` volume `ni0dpvtday`. Successful range writes and
-  exact size are recorded, but a complete source digest was not obtained; the
-  next extraction must therefore traverse the full gzip stream and validate
-  its CRC32 before accepting staged data.
+  exact size were recorded without a complete source digest. The subsequent
+  accepted extraction therefore traversed the complete gzip stream and
+  validated its CRC32 before accepting staged data.
 - The retained archive path is
-  `/workspace/archive/emg2qwerty-data-2021-08.tar.gz`. The volume also contains
-  the deliberately unaccepted `/workspace/data.partial` from the stopped
-  single-core extraction and an empty `.source.sha256` placeholder. Inspect
-  and remove those two failed-attempt artifacts before the next staging run;
-  neither is verification evidence.
+  `/workspace/archive/emg2qwerty-data-2021-08.tar.gz`. The deliberately
+  unaccepted five-file `/workspace/data.partial` tree and empty
+  `.source.sha256` placeholder were inspected and removed before the accepted
+  staging run.
 - Runpod billing reports `$2.3493767390` for Pod `kykgn9f9oaq52q`, including
   `$2.1873397008` GPU and `$0.1620370382` temporary-disk charges. Volume billing
   through the read-only audit was `$0.2508333419`; the retained volume continues
@@ -217,9 +216,39 @@ archive stream so the downloaded sessions can be reused.
 - Replaced single-threaded local-archive decompression with pinned
   `rapidgzip==0.16.0`, automatic parallelism, and explicit CRC32 verification.
   Local synthetic tests prove successful selection, missing-member rejection,
-  truncated-archive rejection, and invalid-configuration rejection. The
-  production archive remains unverified until the next attached-compute run.
-- Next: attach the retained volume to guarded `US-IL-1` compute, measure
-  parallel decompression early, require a complete CRC-verified traversal and
-  exactly 100 staged HDF5 files, then evaluate `user3` through `user7`
-  sequentially.
+  truncated-archive rejection, and invalid-configuration rejection.
+- The production run on Secure RTX 4090 Pod `t2a5o7zxoqp098` in `US-IL-1`
+  passed its ten-minute staging gate at 471,770,106 bytes/second against a
+  50,000,000-byte/second minimum. The complete archive traversal reported
+  `rapidgzip=0` and `tar=0`, and exactly 100 nonempty HDF5 files occupied 27 GB.
+- Sequential `user3` through `user7` evaluation completed and every validation
+  and test CER passed the 0.10-percentage-point acceptance threshold:
+  - `user3`: validation 59.027016% (-0.002984 pp), test 54.689388%
+    (-0.000612 pp)
+  - `user4`: validation 58.939510% (+0.009510 pp), test 58.236763%
+    (-0.003237 pp)
+  - `user5`: validation 56.035351% (+0.025351 pp), test 53.847031%
+    (-0.012969 pp)
+  - `user6`: validation 58.067543% (-0.012457 pp), test 54.661217%
+    (+0.001217 pp)
+  - `user7`: validation 49.451645% (+0.001645 pp), test 52.170109%
+    (+0.000109 pp)
+- Across all eight held-out users, test CER is 55.383868% mean with 4.383906
+  sample standard deviation, reproducing the upstream 55.38% ± 4.38 aggregate.
+- Raw logs, Hydra configurations, the environment freeze, and staging evidence
+  were copied locally and verified under ignored `artifacts/`. Structured
+  evidence is checked in under `results/m4-user{3..7}-generic-greedy.json` and
+  [`results/m4-all-user-generic-greedy-summary.json`](results/m4-all-user-generic-greedy-summary.json).
+- The Pod was deleted after evidence verification. CLI and Runpod MCP read-back
+  found zero Pods and zero endpoints. The 400 GB Standard volume remains by
+  design at `$0.0388888903/hour`; current account spend is `$0.039/hour`.
+- Balance decreased from `$11.3544687955` to `$10.9720392992`, an observed
+  `$0.3824294963`. The itemized Pod billing row had not posted at the final
+  audit, so this is recorded as a balance delta rather than a finalized charge.
+
+## Next acceptance test
+
+M5 begins with a no-cost audit of the released personalized checkpoints and
+official evaluation path. Do not start calibration-budget or novel adaptation
+experiments until the personalized baseline reproduction plan and acceptance
+criteria are documented and the relevant released baselines are reproduced.

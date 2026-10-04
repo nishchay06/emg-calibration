@@ -229,8 +229,8 @@ The stream was intentionally terminated, so GNU tar exited 2 and
 `/workspace/data.partial` remained unvalidated. This is transfer-failure
 evidence, not a completed dataset. The Pod (`uevnc74dw12z7b`) was deleted after
 copying raw logs to ignored `artifacts/m4-runpod-2026-10-04/`. The associated
-60 GB Standard volume (`6jpri33smy`) remains in `EU-RO-1` pending an explicit
-cleanup or migration decision.
+60 GB Standard volume (`6jpri33smy`) was later deleted after the
+evidence-preservation check.
 
 Read-only investigation established that the original 308,382,645,571-byte
 object is hosted in AWS `us-east-1` and accepts byte-range requests. A local
@@ -240,12 +240,8 @@ the audit do not preserve the required input path: the Hugging Face entry has
 no dataset files, and NEMAR distributes a converted BDF/TSV representation
 rather than the upstream HDF5 sessions.
 
-The next paid proposal should therefore retain the original archive and pinned
-manifests, use `US-IL-1`, download the complete archive with parallel HTTP
-range requests to temporary Pod disk, verify its exact byte size, and extract
-only the required HDF5 members to a colocated network volume. Do not provision
-this revised path until its live price, runtime guard, storage lifecycle, and
-hard cost ceiling are approved.
+That finding motivated the approved `US-IL-1` parallel-range download and
+colocated-volume preservation attempt documented below.
 
 ## Observed US-IL-1 archive-preservation attempt
 
@@ -287,6 +283,52 @@ The local-archive implementation now pins `rapidgzip==0.16.0` and streams
 `rapidgzip --verify -P 0` into tar. It intentionally scans the complete stream
 instead of using tar's early-exit `--occurrence=1` behavior. Synthetic tests
 cover successful selected-member extraction, missing members, a truncated gzip
-trailer, and invalid parallelism. This is local evidence only; benchmark the
-preserved production archive under a paid time and cost guard before assuming
-its throughput.
+trailer, and invalid parallelism. These synthetic checks established the
+preconditions for the guarded production run below.
+
+## Observed all-user completion
+
+The guarded production rerun completed on 2026-10-04 using Secure RTX 4090 Pod
+`t2a5o7zxoqp098` in `US-IL-1`. It attached the retained 400 GB Standard volume,
+used the pinned PyTorch image and a 20 GB ephemeral container disk, and armed an
+absolute 2h50m self-termination guard before staging.
+
+The ten-minute decoder gate measured 283,533,834,240 bytes consumed by tar in
+601 seconds, or 471,770,106 bytes/second, against the required 50,000,000
+bytes/second. The full archive traversal then completed with `rapidgzip=0` and
+`tar=0`, which verifies the gzip CRC32 and selective tar extraction. Exactly
+100 nonempty HDF5 files were accepted at `/workspace/data`, occupying 27 GB.
+
+The preserved upstream checkout and checkpoint were reverified before use:
+
+- upstream commit: `3200d91eeb952cbed1f278e47d0cc56928334fd1`
+- checkpoint SHA-256:
+  `338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81`
+- runtime smoke marker: `GREEDY_DECODER_OK` with PyTorch and Torchaudio
+  `2.3.0+cu121`
+
+The sequential `user3`-`user7` sweep passed every 0.10-point CER check:
+
+| User | Validation CER | Reference | Test CER | Reference | Accepted |
+|---|---:|---:|---:|---:|---|
+| `user3` | 59.027016% | 59.03% | 54.689388% | 54.69% | yes |
+| `user4` | 58.939510% | 58.93% | 58.236763% | 58.24% | yes |
+| `user5` | 56.035351% | 56.01% | 53.847031% | 53.86% | yes |
+| `user6` | 58.067543% | 58.08% | 54.661217% | 54.66% | yes |
+| `user7` | 49.451645% | 49.45% | 52.170109% | 52.17% | yes |
+
+The eight-user test CER aggregate is 55.383868% mean with 4.383906 sample
+standard deviation, reproducing the upstream 55.38% ± 4.38 result.
+
+The local evidence archive has SHA-256
+`05449a3a6b6a1cf724066c185fdd2c836b748ebd9a14fd02d28488eedffc70a1`
+and contains all five raw console logs, Hydra configuration triplets,
+structured results, the environment freeze, and staging logs. The Pod was
+deleted after local verification. CLI and Runpod MCP read-back found zero Pods
+and zero endpoints. The reusable 400 GB volume `ni0dpvtday` remains in
+`US-IL-1` at `$0.0388888903/hour`.
+
+The observed balance decrease for this guarded run was `$0.3824294963`, from
+`$11.3544687955` to `$10.9720392992`, below the `$2.25` ceiling. Itemized Pod
+billing had not posted at the final audit; treat the balance delta as the
+current cost evidence and update it only when a matching billing row appears.
