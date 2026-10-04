@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "passed": true,
+  "acceptance": "Both users completed 150 epochs and test CER is within 1.0 percentage point of upstream reference.",
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "method": "full",
+  "budget_minutes": "full",
+  "selection": "upstream",
+  "seed": 1501,
+  "users": {
+    "user0": {
+      "evidence": "results/m5b-user0-full-upstream.json",
+      "test_CER": 21.209850311279297,
+      "reference_test_CER": 20.57,
+      "delta_percentage_points": 0.6398503112792966,
+      "training_evaluation_minutes": 34.43808028261798,
+      "last_checkpoint_epoch": 149,
+      "passed": true
+    },
+    "user5": {
+      "evidence": "results/m5b-user5-full-upstream.json",
+      "test_CER": 6.130136966705322,
+      "reference_test_CER": 5.811,
+      "delta_percentage_points": 0.3191369667053223,
+      "training_evaluation_minutes": 27.930650632161026,
+      "last_checkpoint_epoch": 149,
+      "passed": true
+    }
+  },
+  "next_milestone": "M6: local calibration-budget sampler and fixed-step training protocol; no GPU needed",
+  "no_calibration_budget_experiments_executed": true,
+  "cost_evidence": {
+    "user0": "results/m5b-user0-full-upstream.json",
+    "user5": "results/m5b-user5-full-upstream.json",
+    "interrupted_user5": "results/m5b-user5-interrupted-upstream.json",
+    "diagnostic": "results/m5b-performance-diagnostic-20261005.json",
+    "caveat": "Itemized prior charges and provisional new-session estimates are distinct; retained storage and tax are excluded."
+  }
+}

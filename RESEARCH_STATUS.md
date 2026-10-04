@@ -13,7 +13,8 @@ session records stay outside version control.
   users, with the same 0.10 pp per-split tolerance.
 - M5b: pinned adaptation harness and CPU checkpoint-restoration smoke passed.
   User0 full-data reproduction passed: 150 epochs, test CER 21.209850%,
-  +0.639850 pp from reference, 34.44 minutes. User5 is the remaining gate.
+  +0.639850 pp from reference, 34.44 minutes. User5 also passed: 150 epochs,
+  test CER 6.130137%, +0.319137 pp from reference, 27.93 minutes.
 
 ## Evidence policy
 
@@ -44,3 +45,17 @@ The historical slowdown was not reproduced. User5 warmed training computation
 was 79.08 ms/batch; loader wait varied. CPU quota/thread and stage measurements
 are in `results/m5b-performance-diagnostic-20261005.json`. The exact original
 cause remains unresolved. Short-batch projections are scenarios, not bounds.
+
+## M5b completion and next gate
+
+Both full-data runs passed the 1.0 pp test CER tolerance; selected and last
+checkpoints were preserved and independently verified. All 150 epochs are
+recorded for both users. `results/m5b-full-upstream-summary.json` consolidates
+metrics and runtime. The full runs use upstream validation checkpoint selection
+for reproduction; this must not be used for calibration-budget experiments.
+
+Next: M6's local deterministic calibration-window sampler, exact sample counts,
+training-only windows, no validation/test overlap, and full-training-set identity.
+Budget experiments use fixed optimizer steps and final-checkpoint evaluation;
+hyperparameters are tuned only on user0/user1, then frozen. No calibration-minute
+curve or head/norm/LoRA result is claimed yet.

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "user": "user5",
+  "budget_minutes": "full",
+  "method": "full",
+  "selection": "upstream",
+  "seed": 1501,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "initial_checkpoint": {
+    "path": "/workspace/emg2qwerty/models/generic.ckpt",
+    "sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81"
+  },
+  "command": [
+    "/usr/bin/python",
+    "-m",
+    "emg2qwerty.train",
+    "user=user5",
+    "train=True",
+    "decoder=ctc_greedy",
+    "checkpoint=\"/workspace/emg2qwerty/models/generic.ckpt\"",
+    "dataset.root=\"/workspace/data\"",
+    "seed=1501",
+    "batch_size=32",
+    "num_workers=4",
+    "trainer.max_epochs=150",
+    "trainer.accelerator=gpu",
+    "trainer.devices=1",
+    "hydra.run.dir=\"/workspace/results/m5b/user5-full-20261005\"",
+    "hydra.job.chdir=True"
+  ],
+  "cwd": "/workspace/emg2qwerty-m5b-20261004",
+  "output_directory": "/workspace/results/m5b/user5-full-20261005",
+  "acceptance": {
+    "maximum_absolute_delta_percentage_points": 1.0,
+    "passed": true,
+    "test_CER_delta_percentage_points": 0.3191369667053223,
+    "test_CER_reference": 5.811,
+    "validation_is_diagnostic_only": true
+  },
+  "last_checkpoint": {
+    "epoch": 149,
+    "global_step": 11850
+  },
+  "trained_checkpoint": {
+    "epoch": 124,
+    "filename": "epoch=124-step=9875.ckpt",
+    "global_step": 9875,
+    "sha256": "d03910ad8c1f0eebec7e34f2397545f7d4e7986544688ba5811f5a6ebc410177",
+    "size_bytes": 63609322
+  },
+  "parameters": {
+    "total": 5293315,
+    "trainable": 5293315
+  },
+  "runtime": {
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "packages": {
+      "hydra-core": "1.3.2",
+      "lightning-bolts": "0.7.0",
+      "omegaconf": "2.3.0",
+      "pip": "24.0",
+      "pytorch-lightning": "1.8.6",
+      "setuptools": "69.5.1",
+      "torchaudio": "2.3.0",
+      "torchmetrics": "0.11.4",
+      "torchvision": "0.18.0"
+    },
+    "python": "3.10.12",
+    "pytorch": "2.3.0+cu121"
+  },
+  "started_at_utc": "2026-10-04T20:47:38.566398+00:00",
+  "completed_at_utc": "2026-10-04T21:15:34.405464+00:00",
+  "wall_clock_seconds": 1675.8390379296616,
+  "training_executed": true,
+  "process_exit_code": 0,
+  "resume": "disabled; fresh output required",
+  "metrics": {
+    "test": {
+      "CER": 6.130136966705322,
+      "DER": 0.913241982460022,
+      "IER": 0.6849315166473389,
+      "SER": 4.531963348388672,
+      "loss": 0.42472803592681885
+    },
+    "validation": {
+      "CER": 7.137263774871826,
+      "DER": 1.3983666896820068,
+      "IER": 1.1298803091049194,
+      "SER": 4.6090168952941895,
+      "loss": 0.5250163674354553
+    }
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "image": "runpod/pytorch@sha256:75bf115d87ee3813f8026fed3e11bae3bf68bfd789a9566878735245b723ef8b",
+    "container_disk_gb": 20,
+    "driver": "570.195.03",
+    "gpu_memory_mib": 24564
+  },
+  "evidence": {
+    "local_raw_directory": "artifacts/m5b-user5-full-20261005/verified-evidence/results/m5b/user5-full-20261005",
+    "archive": "artifacts/m5b-user5-full-20261005/user5-full-20261005-evidence.tgz",
+    "archive_sha256": "1d7ef0a28b63cfa6e12c087aef37e096cf11b9effebe056865f85069e4328112",
+    "archive_size_bytes": 117907371,
+    "file_checksums_verified": 21,
+    "independently_verified_log_metrics": true,
+    "independently_verified_best_checkpoint_sha256": true,
+    "independently_loaded_last_checkpoint_epoch": 149,
+    "independently_loaded_last_checkpoint_global_step": 11850,
+    "independently_loaded_selected_checkpoint_epoch": 124,
+    "both_checkpoint_weights_finite": true,
+    "completed_epochs_from_log": 150,
+    "progress_bar_epoch_seconds": {
+      "min": 10,
+      "median": 10.0,
+      "max": 15
+    },
+    "local_unit_tests_passed_before_provisioning": 34,
+    "raw_archive_availability": "Retained locally; dataset/checkpoints are not redistributed by this repository."
+  },
+  "limitations": [
+    "One seed for upstream full-data reproduction; no calibration-budget experiments executed.",
+    "Validation-selected checkpoints reproduce upstream; future budget runs require fixed-step final-checkpoint evaluation."
+  ],
+  "cost": {
+    "status": "provisional; itemized billing remains empty/pending, not zero",
+    "estimated_gpu_charge_usd_through_deletion_readback": 0.4568965555555555,
+    "session_minutes_through_deletion_readback": 37.04566666666666,
+    "compute_rate_usd_per_hour": 0.74,
+    "final_attributed_pod_charge_usd": null,
+    "caveat": "Balance snapshots include retained storage and delayed settlement. The GPU estimate is not a final attributed bill; tax and container disk are excluded."
+  }
+}
