@@ -30,6 +30,11 @@ expect_exit 2 "${project_dir}/scripts/stage_test_users_data.sh" \
     --dry-run /unused user8
 expect_exit 2 "${project_dir}/scripts/stage_test_users_data.sh" \
     --dry-run /unused user0 user0
+expect_exit 2 "${project_dir}/scripts/stage_test_users_data.sh" \
+    --archive-file /unused /unused
+expect_exit 2 env EMG_STAGE_TIMEOUT_SECONDS=invalid \
+    "${project_dir}/scripts/stage_test_users_data.sh" \
+    --dry-run /unused user0
 expect_exit 2 "${project_dir}/scripts/evaluate_generic_greedy.sh" \
     user8 /unused /unused /unused /unused
 expect_exit 2 "${project_dir}/scripts/evaluate_user0_greedy.sh"
@@ -69,6 +74,30 @@ all_user_plan="$(
 )"
 [[ "${all_user_plan}" == *"Required sessions: 100"* ]]
 [[ "${all_user_plan}" == *"Minimum free space: 48 GiB"* ]]
+[[ "${all_user_plan}" == *"Stream timeout: 7200 seconds"* ]]
+
+long_stream_plan="$(
+    EMG_STAGE_TIMEOUT_SECONDS=14400 \
+        "${project_dir}/scripts/stage_test_users_data.sh" \
+        --dry-run /unused user3 user4 user5 user6 user7
+)"
+[[ "${long_stream_plan}" == *"Required sessions: 60"* ]]
+[[ "${long_stream_plan}" == *"Minimum free space: 33 GiB"* ]]
+[[ "${long_stream_plan}" == *"Stream timeout: 14400 seconds"* ]]
+
+archive_destination="${temporary_dir}/archive-data"
+expect_exit 1 "${project_dir}/scripts/stage_test_users_data.sh" \
+    --archive-file "${temporary_dir}/missing.tar.gz" \
+    "${archive_destination}" user0
+[[ "$(cat "${temporary_dir}/stderr")" == *"Archive file does not exist"* ]]
+[[ ! -e "${archive_destination}" ]]
+
+touch "${temporary_dir}/wrong-size.tar.gz"
+expect_exit 1 "${project_dir}/scripts/stage_test_users_data.sh" \
+    --archive-file "${temporary_dir}/wrong-size.tar.gz" \
+    "${archive_destination}" user0
+[[ "$(cat "${temporary_dir}/stderr")" == *"expected 308382645571"* ]]
+[[ ! -e "${archive_destination}" ]]
 
 sweep_output_root="${temporary_dir}/dry-run-output"
 three_user_sweep_plan="$(

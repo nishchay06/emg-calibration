@@ -1,0 +1,46 @@
+{
+  "CER_delta_percentage_points": {
+    "test": -0.0006117248535133513,
+    "validation": -0.002984313964844887
+  },
+  "acceptance": {
+    "maximum_absolute_CER_delta_percentage_points": 0.1,
+    "passed": true,
+    "test": true,
+    "validation": true
+  },
+  "captured_at_utc": "2026-10-04T05:11:17.524559Z",
+  "checkpoint": {
+    "filename": "generic.ckpt",
+    "sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81"
+  },
+  "decoder": "ctc_greedy",
+  "metrics": {
+    "test": {
+      "CER": 54.689388275146484,
+      "DER": 0.4507971405982971,
+      "IER": 21.06652069091797,
+      "SER": 33.17207336425781,
+      "loss": 2.4244179725646973
+    },
+    "validation": {
+      "CER": 59.027015686035156,
+      "DER": 0.5271250009536743,
+      "IER": 23.522951126098633,
+      "SER": 34.9769401550293,
+      "loss": 2.6917331218719482
+    }
+  },
+  "reference_CER": {
+    "test": 54.69,
+    "validation": 59.03
+  },
+  "reference_source": {
+    "path": "scripts/experimental_results.py",
+    "repository": "facebookresearch/emg2qwerty"
+  },
+  "schema_version": 1,
+  "source_log": "console.log",
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "user": "user3"
+}

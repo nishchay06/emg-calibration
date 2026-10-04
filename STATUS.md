@@ -1,6 +1,6 @@
 # Project status
 
-**Checked:** 2026-10-03
+**Checked:** 2026-10-04
 
 ## M0 — Local preflight
 
@@ -123,7 +123,7 @@ archive stream so the downloaded sessions can be reused.
 
 ### M4 multi-user generic baseline
 
-**Status:** in progress (2026-10-03); three-user gate passed
+**Status:** complete (2026-10-04); all eight generic greedy baselines passed
 
 - Audited upstream `user0` through `user7` configs at the pinned commit.
 - Generated manifests for 100 unique sessions: 68 train, 16 validation, and
@@ -169,4 +169,86 @@ archive stream so the downloaded sessions can be reused.
   [`results/m4-three-user-gate-summary.json`](results/m4-three-user-gate-summary.json).
 - All Pods and both temporary network volumes were deleted; live read-back
   returned zero Pods, zero network volumes, and `$0/hour` active spend.
-- Next: review the three-user evidence, then plan the `user3`-`user7` expansion.
+- Verified the no-cost `user3`-`user7` expansion plan: 60 session files and a
+  33 GiB minimum. Restaging all eight users for reuse resolves 100 files and a
+  48 GiB minimum.
+- Made the archive-stream timeout explicitly configurable and validated so the
+  all-user run can use a four-hour termination guard; the original two-hour
+  default remains unchanged.
+- A 2026-10-04 all-user staging attempt on a Secure Cloud L4 in `EU-RO-1`
+  failed the transfer-rate gate. Two measured windows reached 1,641,654 and
+  1,668,363 bytes/second, versus the required 28,000,000 bytes/second. The
+  stream was intentionally stopped after 11 minutes 42 seconds at 0.4% of the
+  archive; tar consequently exited 2 and left only unvalidated partial data.
+- The failed L4 Pod (`uevnc74dw12z7b`) was deleted after its raw logs were
+  copied to ignored `artifacts/m4-runpod-2026-10-04/`. Its 60 GB Standard
+  network volume (`6jpri33smy`) was subsequently deleted. The observed balance
+  decrease from preflight through the original cleanup was `$0.1580947138`.
+- Read-only follow-up confirmed that the upstream archive is served from AWS
+  `us-east-1` and supports byte-range requests. The NEMAR per-file copy uses a
+  converted BDF/TSV representation rather than the upstream HDF5 inputs, so it
+  is not an acceptable substitute for baseline reproduction.
+- Added and tested an `--archive-file` staging mode. It requires the full local
+  archive to match the pinned 308,382,645,571-byte size, then applies the same
+  deterministic manifest extraction and HDF5 validation as the streaming path.
+- A guarded Secure RTX 4090 attempt in `US-IL-1` downloaded the complete
+  archive with 16 HTTP range connections. The corrected ten-minute gate was
+  59.8 MB/s and the completed aria2 transfer averaged 51 MiB/s. Exact archive
+  size validation passed.
+- The subsequent all-user extraction did not finish. GNU tar delegated gzip
+  decoding to a single `gzip -d` process; after 1,680 seconds it had read only
+  25,225,068,544 compressed bytes. The projected full traversal was about five
+  to six hours, so evaluation never started and no new CER result was claimed.
+- The archive was preserved at its exact 308,382,645,571-byte size on the
+  400 GB Standard `US-IL-1` volume `ni0dpvtday`. Successful range writes and
+  exact size were recorded without a complete source digest. The subsequent
+  accepted extraction therefore traversed the complete gzip stream and
+  validated its CRC32 before accepting staged data.
+- The retained archive path is
+  `/workspace/archive/emg2qwerty-data-2021-08.tar.gz`. The deliberately
+  unaccepted five-file `/workspace/data.partial` tree and empty
+  `.source.sha256` placeholder were inspected and removed before the accepted
+  staging run.
+- Runpod billing reports `$2.3493767390` for Pod `kykgn9f9oaq52q`, including
+  `$2.1873397008` GPU and `$0.1620370382` temporary-disk charges. Volume billing
+  through the read-only audit was `$0.2508333419`; the retained volume continues
+  at `$0.0388888903/hour`. Read-back found zero Pods and zero endpoints.
+- Replaced single-threaded local-archive decompression with pinned
+  `rapidgzip==0.16.0`, automatic parallelism, and explicit CRC32 verification.
+  Local synthetic tests prove successful selection, missing-member rejection,
+  truncated-archive rejection, and invalid-configuration rejection.
+- The production run on Secure RTX 4090 Pod `t2a5o7zxoqp098` in `US-IL-1`
+  passed its ten-minute staging gate at 471,770,106 bytes/second against a
+  50,000,000-byte/second minimum. The complete archive traversal reported
+  `rapidgzip=0` and `tar=0`, and exactly 100 nonempty HDF5 files occupied 27 GB.
+- Sequential `user3` through `user7` evaluation completed and every validation
+  and test CER passed the 0.10-percentage-point acceptance threshold:
+  - `user3`: validation 59.027016% (-0.002984 pp), test 54.689388%
+    (-0.000612 pp)
+  - `user4`: validation 58.939510% (+0.009510 pp), test 58.236763%
+    (-0.003237 pp)
+  - `user5`: validation 56.035351% (+0.025351 pp), test 53.847031%
+    (-0.012969 pp)
+  - `user6`: validation 58.067543% (-0.012457 pp), test 54.661217%
+    (+0.001217 pp)
+  - `user7`: validation 49.451645% (+0.001645 pp), test 52.170109%
+    (+0.000109 pp)
+- Across all eight held-out users, test CER is 55.383868% mean with 4.383906
+  sample standard deviation, reproducing the upstream 55.38% ± 4.38 aggregate.
+- Raw logs, Hydra configurations, the environment freeze, and staging evidence
+  were copied locally and verified under ignored `artifacts/`. Structured
+  evidence is checked in under `results/m4-user{3..7}-generic-greedy.json` and
+  [`results/m4-all-user-generic-greedy-summary.json`](results/m4-all-user-generic-greedy-summary.json).
+- The Pod was deleted after evidence verification. CLI and Runpod MCP read-back
+  found zero Pods and zero endpoints. The 400 GB Standard volume remains by
+  design at `$0.0388888903/hour`; current account spend is `$0.039/hour`.
+- Balance decreased from `$11.3544687955` to `$10.9720392992`, an observed
+  `$0.3824294963`. The itemized Pod billing row had not posted at the final
+  audit, so this is recorded as a balance delta rather than a finalized charge.
+
+## Next acceptance test
+
+M5 begins with a no-cost audit of the released personalized checkpoints and
+official evaluation path. Do not start calibration-budget or novel adaptation
+experiments until the personalized baseline reproduction plan and acceptance
+criteria are documented and the relevant released baselines are reproduced.

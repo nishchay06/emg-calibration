@@ -5,10 +5,14 @@ ARCHIVE_URL="https://fb-ctrl-oss.s3.amazonaws.com/emg2qwerty/emg2qwerty-data-202
 ARCHIVE_BYTES="308382645571"
 ACKNOWLEDGEMENT="--ack-stream-308gb"
 DRY_RUN="--dry-run"
+ARCHIVE_FILE_MODE="--archive-file"
+STREAM_TIMEOUT_SECONDS="${EMG_STAGE_TIMEOUT_SECONDS:-7200}"
 
 usage() {
     echo "Usage: $0 {${ACKNOWLEDGEMENT}|${DRY_RUN}} DESTINATION_DIRECTORY USER [USER ...]" >&2
+    echo "       $0 ${ARCHIVE_FILE_MODE} ARCHIVE_FILE DESTINATION_DIRECTORY USER [USER ...]" >&2
     echo "USER must be an explicit, unique value from user0 through user7." >&2
+    echo "Set EMG_STAGE_TIMEOUT_SECONDS to a positive integer to override the 7200-second stream guard." >&2
 }
 
 if (( $# < 3 )); then
@@ -17,11 +21,29 @@ if (( $# < 3 )); then
 fi
 
 mode="$1"
-destination="$2"
-shift 2
+archive_file=""
+case "${mode}" in
+    "${ACKNOWLEDGEMENT}"|"${DRY_RUN}")
+        destination="$2"
+        shift 2
+        ;;
+    "${ARCHIVE_FILE_MODE}")
+        if (( $# < 4 )); then
+            usage
+            exit 2
+        fi
+        archive_file="$2"
+        destination="$3"
+        shift 3
+        ;;
+    *)
+        usage
+        exit 2
+        ;;
+esac
 
-if [[ "${mode}" != "${ACKNOWLEDGEMENT}" && "${mode}" != "${DRY_RUN}" ]]; then
-    usage
+if [[ "${mode}" != "${ARCHIVE_FILE_MODE}" && ! "${STREAM_TIMEOUT_SECONDS}" =~ ^[1-9][0-9]*$ ]]; then
+    echo "EMG_STAGE_TIMEOUT_SECONDS must be a positive integer; got '${STREAM_TIMEOUT_SECONDS}'." >&2
     exit 2
 fi
 
@@ -64,28 +86,47 @@ echo "Selected users: ${selected_csv}"
 echo "Required sessions: ${expected_count}"
 echo "Minimum free space: ${minimum_free_gib} GiB"
 echo "Source archive: ${ARCHIVE_BYTES} bytes"
+if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]]; then
+    echo "Archive file: ${archive_file}"
+else
+    echo "Stream timeout: ${STREAM_TIMEOUT_SECONDS} seconds"
+fi
 
 if [[ "${mode}" == "${DRY_RUN}" ]]; then
     echo "Dry run only; no directories were created and no data was downloaded."
     exit 0
 fi
 
-if ! command -v curl >/dev/null 2>&1; then
-    echo "curl is required." >&2
-    exit 1
+if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]]; then
+    if [[ ! -f "${archive_file}" ]]; then
+        echo "Archive file does not exist or is not a regular file: ${archive_file}" >&2
+        exit 1
+    fi
+    archive_file_bytes="$(wc -c < "${archive_file}" | tr -d ' ')"
+    if [[ "${archive_file_bytes}" != "${ARCHIVE_BYTES}" ]]; then
+        echo "Archive file has ${archive_file_bytes} bytes; expected ${ARCHIVE_BYTES}: ${archive_file}" >&2
+        exit 1
+    fi
+    echo "Archive file size validated: ${archive_file_bytes} bytes."
 fi
 if ! command -v tar >/dev/null 2>&1; then
     echo "tar is required." >&2
-    exit 1
-fi
-if ! command -v timeout >/dev/null 2>&1; then
-    echo "GNU timeout is required." >&2
     exit 1
 fi
 tar_version="$(tar --version 2>&1 || true)"
 if [[ "${tar_version}" != *"GNU tar"* ]]; then
     echo "GNU tar is required for selective early exit with --occurrence." >&2
     exit 1
+fi
+if [[ "${mode}" == "${ACKNOWLEDGEMENT}" ]]; then
+    if ! command -v curl >/dev/null 2>&1; then
+        echo "curl is required." >&2
+        exit 1
+    fi
+    if ! command -v timeout >/dev/null 2>&1; then
+        echo "GNU timeout is required." >&2
+        exit 1
+    fi
 fi
 
 destination_parent="$(dirname "${destination}")"
@@ -126,25 +167,44 @@ if [[ "${unique_count}" != "${expected_count}" ]]; then
 fi
 
 mkdir "${partial}"
-echo "Streaming until GNU tar finds all ${expected_count} requested members."
-set +e
-timeout 7200 curl --fail --location --progress-bar "${ARCHIVE_URL}" |
-    tar -xzf - -C "${partial}" --strip-components=1 \
-        --occurrence=1 -T "${selection_manifest}"
-stream_status=("${PIPESTATUS[@]}")
-set -e
-curl_status="${stream_status[0]}"
-tar_status="${stream_status[1]}"
+if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]]; then
+    echo "Reading and verifying the complete local archive while extracting ${expected_count} requested members."
+    set +e
+    "${script_dir}/extract_selected_archive.sh" \
+        "${archive_file}" "${selection_manifest}" "${partial}"
+    archive_status="$?"
+    set -e
+    tar_status="0"
+    curl_status="0"
+else
+    echo "Streaming until GNU tar finds all ${expected_count} requested members."
+    set +e
+    timeout "${STREAM_TIMEOUT_SECONDS}" curl --fail --location --progress-bar "${ARCHIVE_URL}" |
+        tar -xzf - -C "${partial}" --strip-components=1 \
+            --occurrence=1 -T "${selection_manifest}"
+    stream_status=("${PIPESTATUS[@]}")
+    set -e
+    curl_status="${stream_status[0]}"
+    tar_status="${stream_status[1]}"
+fi
 
+if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]] && (( archive_status != 0 )); then
+    echo "Verified local-archive extraction failed: exit ${archive_status}. Partial data remains at ${partial}." >&2
+    exit "${archive_status}"
+fi
 if (( tar_status != 0 )); then
     echo "Selective extraction failed: tar exit ${tar_status}. Partial data remains at ${partial}." >&2
     exit "${tar_status}"
 fi
-if (( curl_status != 0 && curl_status != 23 )); then
+if [[ "${mode}" == "${ACKNOWLEDGEMENT}" ]] && (( curl_status != 0 && curl_status != 23 )); then
     echo "Archive stream failed: curl exit ${curl_status}. Partial data remains at ${partial}." >&2
     exit "${curl_status}"
 fi
-echo "Archive pipeline completed: curl=${curl_status} tar=${tar_status}."
+if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]]; then
+    echo "Archive verification and extraction completed."
+else
+    echo "Archive pipeline completed: curl=${curl_status} tar=${tar_status}."
+fi
 
 while IFS= read -r archive_member; do
     [[ -n "${archive_member}" ]] || continue

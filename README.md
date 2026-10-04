@@ -16,7 +16,7 @@ new methods.
 
 ## Current result
 
-The first three-user generic, greedy-decoder gate passed. Every reproduced
+The full eight-user generic, greedy-decoder baseline passed. Every reproduced
 validation and test CER is within 0.10 percentage points of its pinned upstream
 reference:
 
@@ -25,14 +25,33 @@ reference:
 | `user0` | 60.082565% | +0.012565 pp | 61.509636% | +0.029636 pp |
 | `user1` | 55.591190% | +0.001190 pp | 59.945858% | -0.014142 pp |
 | `user2` | 47.390659% | +0.010659 pp | 48.010944% | +0.010944 pp |
+| `user3` | 59.027016% | -0.002984 pp | 54.689388% | -0.000612 pp |
+| `user4` | 58.939510% | +0.009510 pp | 58.236763% | -0.003237 pp |
+| `user5` | 56.035351% | +0.025351 pp | 53.847031% | -0.012969 pp |
+| `user6` | 58.067543% | -0.012457 pp | 54.661217% | +0.001217 pp |
+| `user7` | 49.451645% | +0.001645 pp | 52.170109% | +0.000109 pp |
+
+Across all eight users, test CER is **55.383868% mean with 4.383906 sample
+standard deviation**, reproducing the upstream aggregate of 55.38% ± 4.38.
 
 Structured records are in [`results/`](results/), including the
-[`three-user gate summary`](results/m4-three-user-gate-summary.json). The
-remaining five generic users and the personalized baselines are pending.
+[`all-user summary`](results/m4-all-user-generic-greedy-summary.json). The
+released personalized baselines are the next reproduction gate.
 
 No-cost M4 preparation now includes deterministic, pinned manifests for all
 eight held-out users: 100 unique sessions (68 train, 16 validation, 16 test).
 See [`manifests/README.md`](manifests/README.md) for regeneration and validation.
+
+When a complete archive is already available locally, install the pinned M4
+staging dependency before using `--archive-file` mode:
+
+```bash
+python -m pip install -r requirements/m4-staging.txt
+```
+
+That path uses `rapidgzip` parallel decompression, verifies the complete gzip
+stream's CRC32, and only accepts the destination after every selected HDF5
+member passes the manifest checks.
 
 ## Reproduce the one-user baseline
 
@@ -114,11 +133,10 @@ See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
 
 ## Roadmap
 
-1. Reproduce the remaining generic baselines for `user3` through `user7`.
-2. Reproduce the released personalized baselines.
-3. Add seeded contiguous calibration windows at 1, 2, 5, and 10 minutes.
-4. Compare full, final-layer-only, normalization-only, and low-rank adaptation.
-5. Report per-user curves, updated parameter counts, and adaptation time.
+1. Reproduce the released personalized baselines.
+2. Add seeded contiguous calibration windows at 1, 2, 5, and 10 minutes.
+3. Compare full, final-layer-only, normalization-only, and low-rank adaptation.
+4. Report per-user curves, updated parameter counts, and adaptation time.
 
 ## Data, attribution, and license
 
