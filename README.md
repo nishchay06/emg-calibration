@@ -13,6 +13,8 @@ The long-term experiment compares full and parameter-efficient adaptation at
 1, 2, 5, 10, 30, and 60 minutes plus full per-user calibration data. The
 released generic and personalized checkpoints have been reproduced; the next
 gate is reproducing the upstream full-data fine-tuning procedure ourselves.
+The pinned training audit and local harness are in
+[`M5B_RUNBOOK.md`](M5B_RUNBOOK.md); no trained M5b CER is claimed yet.
 
 ## Current result
 

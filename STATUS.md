@@ -342,10 +342,53 @@ archive stream so the downloaded sessions can be reused.
   `$10.4833738603`, an observed `$0.1423415185`; itemized Pod billing had not
   posted at the final audit.
 
+## M5b — own personalized training
+
+**Status:** local harness/configuration preparation passed; training gate not
+run (2026-10-04).
+
+- Started from clean `main` and local `origin/main` at `353095f`; created local
+  branch `local/m5b-adaptation-harness`. No push or public mutation authorized.
+- Audited the clean pinned upstream training entry point, composition, weight
+  initialization, fresh optimizer/scheduler, transformations, loaders, best
+  validation-CER selection, output layout and modification-time auto-resume.
+  The full audit and remaining preflight are in [`M5B_RUNBOOK.md`](M5B_RUNBOOK.md).
+- Added `scripts/adapt.py`: standard-library mutation-free plans, real Hydra
+  composition checks, and a guarded full/full/upstream execution path using
+  the unchanged upstream training entry point. Existing outputs and implicit
+  resume are refused; Hydra changes working directory into the isolated run.
+- Retained seed 1501, Adam base LR 1e-3, 10-epoch warmup from 1e-8, epoch-based
+  cosine decay to 1e-6, 150 epochs, batch 32, four workers and pinned windows,
+  padding and augmentations. Budget/fixed-step/alternate-method execution is
+  rejected until its gates; user5 execution requires passed M5b user0 evidence.
+- Identified the missing training-only Bolts dependency. Added pinned config
+  and training requirements, including matching Torch/torchvision constraints.
+  The training packages were **not** installed or smoke-tested locally.
+- Local Python 3.13.5 verification passed **29 tests, zero skips**, including
+  real Hydra composition for all eight users and synthetic result/gate capture.
+  CLI guards, shell syntax, parallel archive staging, all 10 generated manifest
+  outputs and personalized-reference regeneration passed. The archive test
+  initially lacked rapidgzip on PATH; the explicit installed executable passed.
+- Added checkpoint/HDF5 ignore patterns and local-output guards to keep model
+  artifacts and participant data out of commits. CI now checks M5b composition
+  explicitly after the pinned upstream checkout.
+- Structured preparation evidence is in
+  [`results/m5b-local-preparation.json`](results/m5b-local-preparation.json).
+  No checkpoint download, training, GPU provisioning or billable-resource
+  mutation occurred. Incremental GPU spend is $0; retained-volume storage
+  continues. No live billing or cleanup read-back was performed this turn;
+  the preceding M5a read-back remains historical evidence.
+- No M5b CER, trainable-parameter count, training time or cost has been measured.
+  Both training gates and M6 remain pending. Runtime-package/CUDA compatibility
+  is not established by configuration tests.
+
 ## Next acceptance test
 
-Build the M5b adaptation harness locally with explicit user, budget, method,
-seed, step-count, and checkpoint-selection controls. Its first paid gate is the
-upstream full-data/full-fine-tuning reproduction for `user0`, followed by
-`user5` only if `user0` passes; each test CER must be within 1.0 percentage
-point of the released fine-tuned checkpoint. See [`ROADMAP.md`](ROADMAP.md).
+Use personal CPU resources to smoke-test the pinned Python 3.10 training
+runtime: module/decoder imports, Bolts scheduler constructor/LR trace, one
+synthetic optimizer update and checkpoint save/reload. Then perform live
+read-only Runpod checks and present an exact resource/runtime/cost/copy/cleanup
+proposal for explicit approval. The first paid gate is full-data/full-model
+upstream training for `user0`, then `user5` only if user0 passes. Test CER must
+be within 1.0 pp of the pinned references (20.57% and 5.811%, respectively).
+See [`M5B_RUNBOOK.md`](M5B_RUNBOOK.md) and [`ROADMAP.md`](ROADMAP.md).

@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "phase": "local-harness-and-training-audit",
+  "run_date_local": "2026-10-04",
+  "repository_base_commit": "353095f",
+  "local_branch": "local/m5b-adaptation-harness",
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "source_checkout_verified_clean": true,
+  "training_executed": false,
+  "m5b_training_gate_passed": null,
+  "local_checks": {
+    "passed": true,
+    "python_unit_tests_passed": 29,
+    "python_unit_tests_skipped": 0,
+    "hydra_composition_users_checked": ["user0", "user1", "user2", "user3", "user4", "user5", "user6", "user7"],
+    "configuration_tests_create_no_run_outputs": true,
+    "dry_run_works_without_site_packages": true,
+    "shell_syntax": "passed",
+    "existing_cli_guards": "passed",
+    "parallel_archive_staging": "passed with explicit .venv/bin/rapidgzip",
+    "generated_manifests": "10 outputs match pinned source",
+    "personalized_references": "all identities and CER references match pinned source",
+    "compatibility_patch_guard": "clean and approved optional-KenLM patch accepted; extra edit rejected",
+    "synthetic_capture": "completed metrics, checkpoint digest, full epoch count and resume rejection checked",
+    "user5_order_guard": "M5a, failed and incomplete user0 evidence rejected"
+  },
+  "local_environment": {
+    "python": "3.13.5",
+    "hydra_core": "1.3.2",
+    "hydra_submitit_launcher": "1.2.0",
+    "omegaconf": "2.3.0",
+    "rapidgzip": "0.16.0",
+    "torch_installed": false,
+    "training_runtime_smoke_tested": false
+  },
+  "implemented_protocol": {
+    "budget_minutes": "full",
+    "method": "full",
+    "selection": "upstream",
+    "seed_default": 1501,
+    "epochs": 150,
+    "batch_size": 32,
+    "num_workers": 4,
+    "optimizer": "Adam",
+    "base_learning_rate": 0.001,
+    "warmup_epochs": 10,
+    "warmup_start_lr": 1e-8,
+    "eta_min": 1e-6,
+    "scheduler_interval": "epoch",
+    "resume": "disabled; existing outputs refused; working directory isolated",
+    "calibration_budget_or_alternate_method_execution": "rejected until M6/M8"
+  },
+  "pending_training_acceptance": {
+    "metric": "test CER",
+    "maximum_absolute_delta_percentage_points": 1.0,
+    "user0_reference": 20.57,
+    "user5_reference": 5.811,
+    "order": "user0, then user5 only if user0 passes",
+    "validation_metrics": "recorded as diagnostics; used for upstream full-data selection"
+  },
+  "cost": {
+    "incremental_gpu_spend_usd": 0,
+    "billable_resources_created_deleted_or_resized": 0,
+    "retained_volume_storage_continues": true,
+    "live_billing_checked": false
+  },
+  "cleanup": {
+    "remote_resources_mutated": false,
+    "live_pods_endpoints_or_volume_readback": null,
+    "last_committed_remote_readback": "results/m5-all-user-personalized-greedy-summary.json"
+  },
+  "limitations": [
+    "No trained CER, runtime, parameter count or billable training cost measured",
+    "Torch, Lightning, Bolts, torchvision and CUDA import compatibility not yet smoke-tested",
+    "Fixed-step and calibration sampling semantics intentionally deferred",
+    "Automatic resume not implemented",
+    "Live Runpod facts must be refreshed before any paid work"
+  ],
+  "audit_runbook": "M5B_RUNBOOK.md",
+  "next_acceptance_test": "No-cost Python 3.10 CPU training-runtime smoke test before the approved paid user0 training gate"
+}

@@ -23,9 +23,10 @@ deadline: graduate applications on Dec 15).
 
 **Current next step:** the first milestone in `ROADMAP.md` whose gate is not
 yet recorded as passed in `STATUS.md`. As of 2026-10-04, M5a has passed for
-both released checkpoint families and all eight users. Begin M5b by building
-the adaptation harness locally, with the full-data/full-method upstream
-reproduction as its first paid gate. Do not begin calibration-budget experiments
+both released checkpoint families and all eight users. M5b local harness and
+configuration checks are complete; next verify the Python 3.10 training runtime
+with a no-cost CPU smoke test (see `M5B_RUNBOOK.md`), then prepare the exact paid
+proposal for full-data/full-method upstream reproduction. Do not begin calibration-budget experiments
 until M5b reproduces `user0` and `user5` test CER within 1.0 pp.
 
 ## Approved decisions (2026-10-04). Do not re-open them without the user.

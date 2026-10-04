@@ -7,6 +7,8 @@ __pycache__/
 .DS_Store
 artifacts/
 data/
+*.hdf5
+*.ckpt
 logs/
 upstream/
 Nishchay_Resume.pdf

@@ -1,0 +1,10 @@
+# Install after the M3 CUDA environment, using Python 3.10.
+-r m3-greedy.txt
+# Prevent Bolts' broad torchvision dependency from replacing the audited torch.
+# Install this trio from the CUDA 12.1 index before this requirements file.
+torch==2.3.0
+torchaudio==2.3.0
+torchvision==0.18.0
+# The upstream warmup/cosine scheduler is instantiated only during training.
+lightning-bolts==0.7.0
+tensorboard==2.13.0
