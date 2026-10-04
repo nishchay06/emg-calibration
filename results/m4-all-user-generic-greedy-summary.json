@@ -1,0 +1,83 @@
+{
+  "acceptance": {
+    "maximum_absolute_CER_delta_percentage_points": 0.1,
+    "passed": true,
+    "users_passed": 8,
+    "users_required": 8
+  },
+  "artifacts": {
+    "ignored_archive": "artifacts/m4-runpod-2026-10-04/m4-all-users-evidence-2026-10-04.tgz",
+    "sha256": "05449a3a6b6a1cf724066c185fdd2c836b748ebd9a14fd02d28488eedffc70a1"
+  },
+  "checkpoint_sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81",
+  "aggregate_test_CER": {
+    "mean": 55.38386821746826,
+    "reference_mean": 55.38,
+    "reference_sample_standard_deviation": 4.38,
+    "sample_standard_deviation": 4.383906321939523
+  },
+  "cleanup": {
+    "active_endpoints_after_cleanup": 0,
+    "active_pods_after_cleanup": 0,
+    "current_spend_usd_per_hour": 0.039,
+    "retained_network_volume": {
+      "data_center": "US-IL-1",
+      "id": "ni0dpvtday",
+      "size_gb": 400,
+      "type": "STANDARD",
+      "usd_per_hour": 0.0388888903
+    },
+    "verified": true
+  },
+  "cost": {
+    "balance_after_usd": 10.9720392992,
+    "balance_before_usd": 11.3544687955,
+    "observed_balance_delta_usd": 0.3824294963,
+    "pod_billing_status": "not yet posted at final audit",
+    "run_ceiling_usd": 2.25
+  },
+  "dataset": {
+    "archive_bytes": 308382645571,
+    "archive_crc32_verified": true,
+    "extracted_size_human": "27G",
+    "session_files": 100,
+    "staging_throughput_gate": {
+      "elapsed_seconds": 601,
+      "measured_bytes_per_second": 471770106,
+      "minimum_bytes_per_second": 50000000,
+      "passed": true
+    }
+  },
+  "results": [
+    "results/m4-user0-generic-greedy.json",
+    "results/m4-user1-generic-greedy.json",
+    "results/m4-user2-generic-greedy.json",
+    "results/m4-user3-generic-greedy.json",
+    "results/m4-user4-generic-greedy.json",
+    "results/m4-user5-generic-greedy.json",
+    "results/m4-user6-generic-greedy.json",
+    "results/m4-user7-generic-greedy.json"
+  ],
+  "run_date_utc": "2026-10-04",
+  "runtime": {
+    "container_disk_gb": 20,
+    "data_center": "US-IL-1",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "gpu_price_usd_per_hour": 0.74,
+    "pod_id": "t2a5o7zxoqp098",
+    "provider": "Runpod",
+    "termination_guard_seconds": 10200
+  },
+  "schema_version": 1,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "users": [
+    "user0",
+    "user1",
+    "user2",
+    "user3",
+    "user4",
+    "user5",
+    "user6",
+    "user7"
+  ]
+}
