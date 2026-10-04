@@ -1,0 +1,170 @@
+{
+  "benchmarks": {
+    "finetuned": {
+      "checkpoint_directory": "models/personalized-finetuned",
+      "checkpoint_total_bytes": 508877392,
+      "upstream_label": "Personalized (finetuned)",
+      "users": {
+        "user0": {
+          "checkpoint": {
+            "filename": "user0.ckpt",
+            "sha256": "b2335e1da5b3eeaf8693e4431b806e8d4dda553c37cf844414bf53da249a1474",
+            "size_bytes": 63610538
+          },
+          "test_CER": 20.57,
+          "validation_CER": 17.96
+        },
+        "user1": {
+          "checkpoint": {
+            "filename": "user1.ckpt",
+            "sha256": "b2db4590e6ce84d55ae3c2c86ccbe6558bb1710cd558e13968dfad2fda9c8d93",
+            "size_bytes": 63609962
+          },
+          "test_CER": 10.32,
+          "validation_CER": 8.392
+        },
+        "user2": {
+          "checkpoint": {
+            "filename": "user2.ckpt",
+            "sha256": "189c1c66677fd43968c12f717e6b9ed548e4e5aa514a836459d8d7aa8c65eeb5",
+            "size_bytes": 63609962
+          },
+          "test_CER": 8.409,
+          "validation_CER": 8.165
+        },
+        "user3": {
+          "checkpoint": {
+            "filename": "user3.ckpt",
+            "sha256": "e3cc48ebef8157dfc073f9fe8f6e6f62a4daba85d6e4d9ff3f7ad78a4cbb7ff6",
+            "size_bytes": 63609386
+          },
+          "test_CER": 8.928,
+          "validation_CER": 9.543
+        },
+        "user4": {
+          "checkpoint": {
+            "filename": "user4.ckpt",
+            "sha256": "d3c16cab0c855ff1260401ee47b2ccb351a6bc0adc0d219af6218b031e89f64c",
+            "size_bytes": 63609386
+          },
+          "test_CER": 7.907,
+          "validation_CER": 7.575
+        },
+        "user5": {
+          "checkpoint": {
+            "filename": "user5.ckpt",
+            "sha256": "f881b44a483c3f93584e715271303889c3142c68dfc21e9f5060a90e065bcbec",
+            "size_bytes": 63609386
+          },
+          "test_CER": 5.811,
+          "validation_CER": 7.148
+        },
+        "user6": {
+          "checkpoint": {
+            "filename": "user6.ckpt",
+            "sha256": "06c85fb9998d38f839b9da5663f5534239c4dbd19f7fe60de56c8bea2244d02e",
+            "size_bytes": 63609386
+          },
+          "test_CER": 14.21,
+          "validation_CER": 17.17
+        },
+        "user7": {
+          "checkpoint": {
+            "filename": "user7.ckpt",
+            "sha256": "a1ef5af0e0c7ab14abf0ec0562695aa29395c52cc4239c99383e1e9b3da2a0a2",
+            "size_bytes": 63609386
+          },
+          "test_CER": 14.06,
+          "validation_CER": 15.19
+        }
+      }
+    },
+    "randominit": {
+      "checkpoint_directory": "models/personalized-randominit",
+      "checkpoint_total_bytes": 508702544,
+      "upstream_label": "Personalized (random-init)",
+      "users": {
+        "user0": {
+          "checkpoint": {
+            "filename": "user0.ckpt",
+            "sha256": "e22ec3be7488e02751efc007386bb1f98e7e6885a9141ddcd2f10943844fb0b4",
+            "size_bytes": 63587818
+          },
+          "test_CER": 26.6,
+          "validation_CER": 24.13
+        },
+        "user1": {
+          "checkpoint": {
+            "filename": "user1.ckpt",
+            "sha256": "c96a920290520936a74367e6936edfb9828be1e6dc6006849d0f43c9e7a23b6a",
+            "size_bytes": 63587818
+          },
+          "test_CER": 14.15,
+          "validation_CER": 11.31
+        },
+        "user2": {
+          "checkpoint": {
+            "filename": "user2.ckpt",
+            "sha256": "2ac618c0e4a463ffdcfcb2df83be68fcc1807ac13d3a8d87d1ac4dfd427cd5e3",
+            "size_bytes": 63587818
+          },
+          "test_CER": 11.12,
+          "validation_CER": 10.05
+        },
+        "user3": {
+          "checkpoint": {
+            "filename": "user3.ckpt",
+            "sha256": "4976be783b845a7eba4053967ec3cdbd5c80df3553ca33995880e93849e3a1b3",
+            "size_bytes": 63587818
+          },
+          "test_CER": 13.25,
+          "validation_CER": 14.61
+        },
+        "user4": {
+          "checkpoint": {
+            "filename": "user4.ckpt",
+            "sha256": "9af470db9beabfece9d7671361eec4f66f7bbc8dc4c9a58f634f216f7d16634d",
+            "size_bytes": 63587818
+          },
+          "test_CER": 10.51,
+          "validation_CER": 10.64
+        },
+        "user5": {
+          "checkpoint": {
+            "filename": "user5.ckpt",
+            "sha256": "2f952c545543590ffe7c70fb7d8113071d168eab14904bff0e7671debefdbe22",
+            "size_bytes": 63587818
+          },
+          "test_CER": 7.648,
+          "validation_CER": 9.363
+        },
+        "user6": {
+          "checkpoint": {
+            "filename": "user6.ckpt",
+            "sha256": "d221780cf274579882f7475c7dd9a20c46d86ee6ec78628459797bf8e5a6ea43",
+            "size_bytes": 63587818
+          },
+          "test_CER": 18.82,
+          "validation_CER": 22.2
+        },
+        "user7": {
+          "checkpoint": {
+            "filename": "user7.ckpt",
+            "sha256": "cda34cd76c7ac5494c9fec16e451b547c128d672798ab9a7b3e2d7b3be2f8079",
+            "size_bytes": 63587818
+          },
+          "test_CER": 20.94,
+          "validation_CER": 22.91
+        }
+      }
+    }
+  },
+  "decoder": "ctc_greedy",
+  "schema_version": 1,
+  "source": {
+    "checkpoint_identity": "Git LFS pointer SHA-256 and size",
+    "path": "scripts/experimental_results.py",
+    "repository": "facebookresearch/emg2qwerty",
+    "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1"
+  }
+}
