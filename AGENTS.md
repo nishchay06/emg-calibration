@@ -22,10 +22,11 @@ deadline: graduate applications on Dec 15).
 | `results/*.json` | Structured evidence for every reproduced number |
 
 **Current next step:** the first milestone in `ROADMAP.md` whose gate is not
-yet recorded as passed in `STATUS.md`. As of 2026-10-04, the M5a `user0`–`user2`
-two-family gate has passed. Expand both released checkpoint families to
-`user3`–`user7` with greedy decoding, requiring every validation and test CER
-to remain within 0.10 pp of its pinned reference.
+yet recorded as passed in `STATUS.md`. As of 2026-10-04, M5a has passed for
+both released checkpoint families and all eight users. Begin M5b by building
+the adaptation harness locally, with the full-data/full-method upstream
+reproduction as its first paid gate. Do not begin calibration-budget experiments
+until M5b reproduces `user0` and `user5` test CER within 1.0 pp.
 
 ## Approved decisions (2026-10-04). Do not re-open them without the user.
 

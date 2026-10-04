@@ -191,5 +191,37 @@ treated as a durable guard. Future paid runs require active supervision or a
 separately verified scheduler, followed by the same immediate deletion and
 read-back procedure.
 
-The next M5a gate is both checkpoint families for `user3` through `user7`.
-Do not begin M5b training until that expansion is captured and accepted.
+## Observed users 3–7 expansion completion
+
+The expansion completed on 2026-10-04 using Secure RTX 4090 Pod
+`ttd4el9vlaqfq7` in `US-IL-1`. The Pod reused the retained 400 GB Standard
+volume. The ten additional checkpoints passed filename, exact byte-size, and
+full SHA-256 verification.
+
+| Family | User | Validation CER | Reference | Test CER | Reference | Accepted |
+|---|---|---:|---:|---:|---:|---|
+| finetuned | `user3` | 9.543159% | 9.543% | 8.916987% | 8.928% | yes |
+| finetuned | `user4` | 7.563774% | 7.575% | 7.907294% | 7.907% | yes |
+| finetuned | `user5` | 7.148450% | 7.148% | 5.810502% | 5.811% | yes |
+| finetuned | `user6` | 17.166979% | 17.17% | 14.205607% | 14.21% | yes |
+| finetuned | `user7` | 15.187770% | 15.19% | 14.048322% | 14.06% | yes |
+| randominit | `user3` | 14.605755% | 14.61% | 13.249038% | 13.25% | yes |
+| randominit | `user4` | 10.638298% | 10.64% | 10.508975% | 10.51% | yes |
+| randominit | `user5` | 9.363463% | 9.363% | 7.648402% | 7.648% | yes |
+| randominit | `user6` | 22.197468% | 22.20% | 18.785048% | 18.82% | yes |
+| randominit | `user7` | 22.931206% | 22.91% | 20.935825% | 20.94% | yes |
+
+All 20 expansion checks passed, completing all 32 M5a validation/test checks.
+Across eight users, reproduced fine-tuned test CER is 11.273045% ± 4.758755%
+and random-init test CER is 15.374904% ± 6.278189% (sample standard
+deviations). The ignored expansion evidence archive has SHA-256
+`7bf5868783af3186f8affbe7a6815fe09cdb310dc592d15379d32f50a8fca4f3`.
+
+The Pod was deleted after local verification; read-back found zero Pods and
+zero endpoints. The retained network volume remains. The observed expansion
+balance delta was `$0.1423415185`; itemized Pod billing had not posted at the
+final audit.
+
+M5a is complete. The next gate is M5b: reproduce the upstream full-data,
+full-fine-tuning recipe for `user0`, then `user5` if `user0` passes, with each
+test CER within 1.0 percentage point of the released fine-tuned checkpoint.

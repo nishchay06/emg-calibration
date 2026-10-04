@@ -10,9 +10,9 @@ benchmark and pins all upstream-dependent work to commit
 `3200d91eeb952cbed1f278e47d0cc56928334fd1`.
 
 The long-term experiment compares full and parameter-efficient adaptation at
-1, 2, 5, and 10 minutes of per-user calibration data. The immediate goal is to
-reproduce the released generic and personalized baselines before introducing
-new methods.
+1, 2, 5, 10, 30, and 60 minutes plus full per-user calibration data. The
+released generic and personalized checkpoints have been reproduced; the next
+gate is reproducing the upstream full-data fine-tuning procedure ourselves.
 
 ## Current result
 
@@ -36,13 +36,19 @@ standard deviation**, reproducing the upstream aggregate of 55.38% ± 4.38.
 
 Structured records are in [`results/`](results/), including the
 [`all-user summary`](results/m4-all-user-generic-greedy-summary.json). The
-released personalized baselines are the next reproduction gate.
+released personalized checkpoint evaluation also passed for both families and
+all eight users: all 32 validation/test CER checks are within 0.10 percentage
+points of their pinned references.
 
-M5 preparation audits both released personalized checkpoint families: eight
-random-initialized and eight fine-tuned-from-generic models. Their pinned Git
-LFS identities, greedy CER references, guarded download/evaluation commands,
-and acceptance criteria are documented in [`M5_RUNBOOK.md`](M5_RUNBOOK.md).
-No personalized result is claimed yet.
+| Personalized family | Reproduced mean test CER | Upstream mean test CER |
+|---|---:|---:|
+| Fine-tuned from generic | 11.273045% ± 4.758755% | 11.276875% ± 4.759960% |
+| Trained from random initialization | 15.374904% ± 6.278189% | 15.379750% ± 6.283013% |
+
+These are sample standard deviations across users. See the
+[`M5 all-user summary`](results/m5-all-user-personalized-greedy-summary.json)
+and [`M5_RUNBOOK.md`](M5_RUNBOOK.md) for per-user results, checkpoint
+identities, raw-evidence provenance, and cost/cleanup records.
 
 No-cost M4 preparation now includes deterministic, pinned manifests for all
 eight held-out users: 100 unique sessions (68 train, 16 validation, 16 test).
@@ -139,10 +145,10 @@ See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
 
 ## Roadmap
 
-1. Reproduce the released personalized baselines.
-2. Add seeded contiguous calibration windows at 1, 2, 5, and 10 minutes.
+1. Reproduce the upstream full-data fine-tuning procedure for two users.
+2. Add seeded contiguous calibration windows from 1 to 60 minutes plus full.
 3. Compare full, final-layer-only, normalization-only, and low-rank adaptation.
-4. Report per-user curves, updated parameter counts, and adaptation time.
+4. Report per-user curves, trainable parameter counts, adaptation time, and cost.
 
 ## Data, attribution, and license
 

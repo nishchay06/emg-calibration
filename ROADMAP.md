@@ -15,6 +15,7 @@ leaving two weeks of buffer before the Dec 15 application deadline.
 | M0–M2: preflight, upstream audit, Runpod smoke test | Done |
 | M3: one-user generic baseline | Done |
 | M4: eight-user generic baseline (55.38% ± 4.38 test CER, greedy) | Done 2026-10-04 |
+| M5a: released personalized checkpoints (both families, all users) | Done 2026-10-04 |
 
 The 27 GB of staged sessions and the archive are on the retained 400 GB volume
 `ni0dpvtday` (`US-IL-1`). Keep it until the project ends, and keep the Runpod
