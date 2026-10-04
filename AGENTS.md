@@ -22,9 +22,10 @@ deadline: graduate applications on Dec 15).
 | `results/*.json` | Structured evidence for every reproduced number |
 
 **Current next step:** the first milestone in `ROADMAP.md` whose gate is not
-yet recorded as passed in `STATUS.md`. As of 2026-10-04 that is **M5a**:
-evaluate the released personalized checkpoints for `user0`–`user7` with greedy
-decoding (target mean test CER 11.28% ± 4.76, each within 0.10 pp).
+yet recorded as passed in `STATUS.md`. As of 2026-10-04, the M5a `user0`–`user2`
+two-family gate has passed. Expand both released checkpoint families to
+`user3`–`user7` with greedy decoding, requiring every validation and test CER
+to remain within 0.10 pp of its pinned reference.
 
 ## Approved decisions (2026-10-04). Do not re-open them without the user.
 

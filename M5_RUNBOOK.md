@@ -159,3 +159,37 @@ immediately and stops on the first execution, capture, or acceptance failure.
 Passing released-checkpoint evaluation does not prove that this repository can
 reproduce personalized training. Full-data fine-tuning from the generic
 checkpoint remains the following gate before calibration-budget experiments.
+
+## Observed three-user gate completion
+
+The paid `user0`–`user2` gate completed on 2026-10-04 using Secure RTX 4090 Pod
+`osxf0akjj1suup` in `US-IL-1`. The Pod reused the retained 400 GB Standard
+volume, and the runtime reported PyTorch and Torchaudio `2.3.0+cu121` plus the
+`GREEDY_DECODER_OK` smoke marker. All six checkpoints passed filename, exact
+byte-size, and full SHA-256 verification.
+
+| Family | User | Validation CER | Reference | Test CER | Reference | Accepted |
+|---|---|---:|---:|---:|---:|---|
+| finetuned | `user0` | 17.963375% | 17.96% | 20.567451% | 20.57% | yes |
+| finetuned | `user1` | 8.392132% | 8.392% | 10.319437% | 10.32% | yes |
+| finetuned | `user2` | 8.164897% | 8.165% | 8.408756% | 8.409% | yes |
+| randominit | `user0` | 24.155817% | 24.13% | 26.595289% | 26.60% | yes |
+| randominit | `user1` | 11.310669% | 11.31% | 14.152680% | 14.15% | yes |
+| randominit | `user2` | 10.049104% | 10.05% | 11.123974% | 11.12% | yes |
+
+All 12 CER checks passed the 0.10-percentage-point acceptance threshold. The
+ignored local evidence archive has SHA-256
+`43f557a24e96b2bcd692d33264b902f544860860fb49cadd4adbd03b43c20e64`.
+The Pod was deleted after local verification; read-back found zero Pods and
+zero endpoints. The observed balance delta was `$0.0958902537`; itemized Pod
+billing had not posted at the final audit.
+
+Runpodctl 2.12 and later removed `--stop-after` and `--terminate-after` because
+the backend accepted but did not enforce those deadlines. A detached watchdog
+started from the local tool process was not later observable and must not be
+treated as a durable guard. Future paid runs require active supervision or a
+separately verified scheduler, followed by the same immediate deletion and
+read-back procedure.
+
+The next M5a gate is both checkpoint families for `user3` through `user7`.
+Do not begin M5b training until that expansion is captured and accepted.

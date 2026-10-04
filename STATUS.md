@@ -248,7 +248,7 @@ archive stream so the downloaded sessions can be reused.
 
 ## M5 — released personalized baselines
 
-**Status:** preparation complete (2026-10-04); paid reproduction gate pending
+**Status:** three-user paid gate passed (2026-10-04); users 3–7 expansion pending
 
 - Audited two released checkpoint families at the pinned upstream commit:
   eight `personalized-randominit` and eight `personalized-finetuned` models.
@@ -269,10 +269,43 @@ archive stream so the downloaded sessions can be reused.
   CLI guards, dry-run non-mutation, and existing M3/M4 behavior.
 - No checkpoint was downloaded and no personalized evaluation or paid compute
   was started during this preparation phase.
+- Ran the guarded two-family gate on Secure RTX 4090 Pod `osxf0akjj1suup` in
+  `US-IL-1`, reusing the retained 400 GB Standard volume. All six downloaded
+  checkpoints matched their pinned byte sizes and full SHA-256 identities.
+- The fine-tuned family reproduced the released greedy baselines:
+  - `user0`: validation 17.963375% (+0.003375 pp), test 20.567451%
+    (-0.002549 pp)
+  - `user1`: validation 8.392132% (+0.000132 pp), test 10.319437%
+    (-0.000563 pp)
+  - `user2`: validation 8.164897% (-0.000103 pp), test 8.408756%
+    (-0.000244 pp)
+- The random-init family also reproduced the released greedy baselines:
+  - `user0`: validation 24.155817% (+0.025817 pp), test 26.595289%
+    (-0.004711 pp)
+  - `user1`: validation 11.310669% (+0.000669 pp), test 14.152680%
+    (+0.002680 pp)
+  - `user2`: validation 10.049104% (-0.000896 pp), test 11.123974%
+    (+0.003974 pp)
+- All 12 validation/test CER checks passed the 0.10-percentage-point gate.
+  Structured evidence is recorded in
+  [`results/m5-three-user-personalized-greedy-summary.json`](results/m5-three-user-personalized-greedy-summary.json)
+  and its six referenced result files.
+- Raw console logs, Hydra configurations, staging logs, and the environment
+  record were copied locally under ignored `artifacts/`. The evidence archive
+  SHA-256 is `43f557a24e96b2bcd692d33264b902f544860860fb49cadd4adbd03b43c20e64`.
+- The Pod was deleted after local evidence verification. Read-back found zero
+  Pods and zero endpoints; volume `ni0dpvtday` remains at `$0.0388888903/hour`.
+  Balance decreased from `$10.7759084769` to `$10.6800182232`, an observed
+  `$0.0958902537`; itemized Pod billing had not posted at the final audit.
+- Runpodctl 2.12+ removed its non-functional server-side termination flags.
+  The attempted detached local watchdog could not be verified as persistent in
+  the tool environment, so it is not counted as a reliable guard. This short
+  run remained actively supervised and the Pod was deleted immediately after
+  evidence verification.
 
 ## Next acceptance test
 
-Perform live read-only Runpod checks and present a guarded cost proposal for the
-two-family `user0`-`user2` gate. All six checkpoint evaluations must reproduce
-both validation and test CER within 0.10 percentage points before expanding to
-users 3–7. See [`M5_RUNBOOK.md`](M5_RUNBOOK.md).
+Expand both released personalized checkpoint families to `user3` through
+`user7`, preserving the same 0.10-percentage-point validation/test CER gate and
+stop-on-first-failure behavior. Recheck live Runpod state and cost before
+provisioning. See [`M5_RUNBOOK.md`](M5_RUNBOOK.md).
