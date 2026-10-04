@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "phase": "performance-diagnostic-local-preflight",
+  "repository_unit_tests": {
+    "passed": 34,
+    "failed": 0,
+    "skipped": 0
+  },
+  "shell_syntax_passed": true,
+  "mutation_free_dry_run_passed": true,
+  "cpu_smoke": {
+    "passed": true,
+    "python": "3.10.13",
+    "torch": "2.3.0",
+    "raw_evidence": "artifacts/m5b-perf-local-smoke-20261005-tmp-env",
+    "random_initialization": true,
+    "participant_data_used": false,
+    "released_checkpoint_used": false,
+    "changed_head_elements": 76032,
+    "import_seconds": 43.99789649993181,
+    "profile_stage_timers_exercised": true,
+    "worker_exit_code": 0,
+    "worker_reaped": true,
+    "local_only_thread_limits": {
+      "OMP_NUM_THREADS": 2,
+      "MKL_NUM_THREADS": 2
+    },
+    "cuda_settings_changed": false
+  },
+  "accuracy_gate_evaluated": false,
+  "full_training_started": false
+}

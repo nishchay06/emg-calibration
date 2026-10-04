@@ -16,7 +16,7 @@ That comparison uses the user’s full set of training sessions. In practice, no
 
 ## Related work and novelty check (Phase 0, 2026-10-02)
 
-Searched the 41 papers citing emg2qwerty (Semantic Scholar). **None reports CER as a function of calibration minutes, or compares parameter-efficient adaptation methods, on emg2qwerty.** Every paper uses the benchmark's two fixed settings: zero-shot generic, and full per-user fine-tuning. The gap looks open. Closest work:
+Searched the 41 papers citing emg2qwerty (Semantic Scholar). These are preliminary literature-search notes, not a completed systematic review. The calibration-minute/method comparison is the question under investigation; novelty and candidate-paper numbers must be checked against the original sources before the report. Candidate related work:
 
 | Paper | What it does | Relevance |
 |---|---|---|
@@ -27,7 +27,7 @@ Searched the 41 papers citing emg2qwerty (Semantic Scholar). **None reports CER 
 | **Meta neuromotor interface** (Nature 2025) | Generic models from thousands of users; small personalization gains. | Main motivation reference; read the personalization section. |
 | **EMGBlend** (arXiv 2609.25582, 2026) | Multi-dataset self-supervised EMG pretraining. | Possible stronger base model; out of scope for v1. |
 
-Caveat: the citation list may be incomplete, and the broader EMG gesture literature (e.g. Ninapro) has few-shot calibration work. Positioning: **first data-efficiency and adaptation-method study on open-vocabulary sEMG typing**, not first few-shot EMG work.
+Caveat: the citation list may be incomplete, and the broader EMG gesture literature (e.g. Ninapro) has few-shot calibration work. Positioning: a data-efficiency and adaptation-method study on open-vocabulary sEMG typing; a priority claim is not established.
 
 ### Numbers to reproduce (paper Table 2, mean over 8 test users, test CER %)
 
@@ -46,9 +46,7 @@ greedy-decoder validation and test CER is within 0.10 percentage points of its
 pinned upstream per-user reference. This validates the pinned environment,
 checkpoint, complete-archive CRC32 verification, deterministic 100-session
 staging, sequential evaluation, and structured result capture. Per-user
-records and aggregate provenance are checked in under `results/`. The released
-personalized baselines remain pending and are the next gate before new
-adaptation experiments.
+records and aggregate provenance are checked in under `results/`. Released personalized baselines and the two-user full-data training reproduction have also passed; see `RESEARCH_STATUS.md` and `results/m5b-full-upstream-summary.json`.
 
 ### Data and compute
 
@@ -81,10 +79,10 @@ A negative result on any of these is still a result worth writing down.
 |:---|:---|
 | **Dataset** | emg2qwerty: 1,135 sessions, 108 users, 346 hours of two-wristband sEMG recorded during touch typing, with keylogger ground truth. Official benchmark splits. |
 | **Base model** | Released generic checkpoint and baseline architecture from the emg2qwerty repository (CTC-trained convolutional encoder). I do not retrain the generic model, which keeps the project within single-GPU compute. |
-| **Calibration budgets** | 0 (zero-shot), 1, 2, 5, 10 minutes, and the full per-user training set (reproduces the paper’s personalized setting). Budgets are sampled as contiguous time windows from the user’s training sessions. |
+| **Calibration budgets** | 0 (zero-shot), 1, 2, 5, 10, 30, 60 minutes, and the full per-user training set (reproduces the paper’s personalized setting). Budgets are sampled as contiguous time windows from the user’s training sessions. |
 | **Methods** | (a) zero-shot generic; (b) full fine-tuning; (c) final-layer only; (d) normalization layers only; (e) LoRA adapters on convolutional and linear layers; (f) label-free adaptation (RQ3): re-estimating normalization statistics on the user’s unlabeled signal (AdaBN-style), and entropy minimization on normalization parameters (Tent-style). |
 | **Metric** | Character error rate on each held-out user’s test sessions, with greedy CTC decoding (primary) and beam search with the released character language model (secondary). Also reported: number of updated parameters and adaptation wall-clock time. |
-| **Rigor** | 3 random seeds per (user, budget, method), with different calibration windows per seed. Per-user results, mean and spread. Hyperparameters chosen on validation sessions only, never on test. |
+| **Rigor** | 3 random seeds per (user, budget, method), with different calibration windows per seed. Per-user results, mean and spread. Hyperparameters tuned on user0/user1 validation sessions only, then frozen. Budget runs use fixed optimizer steps and evaluate the final checkpoint; no per-user validation checkpoint selection. |
 | **Compute** | One GPU (Colab or a single rented A100/L40S). |
 
 ### Sanity checks before any new experiment

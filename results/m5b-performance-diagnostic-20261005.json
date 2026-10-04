@@ -1,0 +1,637 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "phase": "completed-performance-diagnostic",
+  "raw_evidence": "artifacts/m5b-performance-20261005/verified-evidence",
+  "archive_sha256": "0d7fda9ab7d4788675b613f8e78a46af37d8ad30562f106e963849975348489b",
+  "file_checksums_verified": 8,
+  "completed": true,
+  "accuracy_gate_evaluated": false,
+  "test_CER": null,
+  "recipe_changed": false,
+  "test_sessions_read": false,
+  "checkpoints_written": false,
+  "worker_started_at_utc": "2026-10-04T20:32:25.164586+00:00",
+  "worker_finished_at_utc": "2026-10-04T20:32:49.855034+00:00",
+  "runtime": {
+    "python": "3.10.12",
+    "torch": "2.3.0+cu121",
+    "device": "cuda",
+    "torch_threads": 64,
+    "torch_interop_threads": 128,
+    "thread_environment": {
+      "OMP_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "NUMEXPR_NUM_THREADS": null
+    },
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": false,
+    "matmul_allow_tf32": false,
+    "cudnn_allow_tf32": true
+  },
+  "driver": "570.195.03",
+  "gpu_memory_mib": 24564,
+  "phases": {
+    "synthetic_batch2": {
+      "unprofiled": {
+        "iteration_wall_s": {
+          "median": 0.015686308965086937,
+          "p90": 0.015879275277256966,
+          "count": 20
+        },
+        "cuda_elapsed_s": {
+          "median": 0.015596240043640137,
+          "p90": 0.015771871566772462,
+          "count": 20
+        },
+        "loader_wait_s": {
+          "median": 3.8603320717811584e-06,
+          "p90": 4.069879651069641e-06,
+          "count": 20
+        }
+      },
+      "profiled": {
+        "host_device_copy_s": {
+          "median": 0.0010426538065075874,
+          "p90": 0.001054953783750534,
+          "count": 3
+        },
+        "forward_s": {
+          "median": 0.004716013558208942,
+          "p90": 0.004760214127600193,
+          "count": 3
+        },
+        "ctc_s": {
+          "median": 0.00045495200902223587,
+          "p90": 0.0004727412015199661,
+          "count": 3
+        },
+        "device_host_copy_s": {
+          "median": 0.00036013126373291016,
+          "p90": 0.0003612106665968895,
+          "count": 3
+        },
+        "decode_s": {
+          "median": 0.0010449737310409546,
+          "p90": 0.001048683188855648,
+          "count": 3
+        },
+        "metrics_s": {
+          "median": 0.00042146071791648865,
+          "p90": 0.00045187026262283325,
+          "count": 3
+        },
+        "backward_s": {
+          "median": 0.006056406535208225,
+          "p90": 0.006256538443267345,
+          "count": 3
+        },
+        "optimizer_s": {
+          "median": 0.0015815449878573418,
+          "p90": 0.0015973448753356934,
+          "count": 3
+        },
+        "iteration_wall_s": {
+          "median": 0.01651488710194826,
+          "p90": 0.01669288706034422,
+          "count": 3
+        },
+        "cuda_elapsed_s": {
+          "median": 0.016438592910766603,
+          "p90": 0.01661452865600586,
+          "count": 3
+        },
+        "loader_wait_s": {
+          "median": 3.7597492337226868e-06,
+          "p90": 3.850087523460388e-06,
+          "count": 3
+        }
+      },
+      "initialization_s": 0.3769596815109253,
+      "iterator_startup_s": 4.7031790018081665e-07,
+      "first_iteration": {
+        "iteration_wall_s": 0.6341787595301867,
+        "cuda_elapsed_s": 0.6341150512695313,
+        "loader_wait_s": 3.3061951398849487e-07
+      },
+      "cpu_quota_us": 1785000,
+      "cpu_period_us": 100000,
+      "cpu_quota_equivalent": 17.85,
+      "visible_logical_cpus": 128,
+      "affinity_cpu_count": 128,
+      "cpu_stat_deltas": {
+        "nr_periods": 14,
+        "nr_throttled": 0,
+        "throttled_time": 0,
+        "nr_bursts": 0,
+        "burst_time": 0
+      },
+      "changed_head_elements": 18265
+    },
+    "synthetic_batch32": {
+      "unprofiled": {
+        "iteration_wall_s": {
+          "median": 0.07424575556069613,
+          "p90": 0.07433735113590956,
+          "count": 20
+        },
+        "cuda_elapsed_s": {
+          "median": 0.0742145767211914,
+          "p90": 0.07430764770507813,
+          "count": 20
+        },
+        "loader_wait_s": {
+          "median": 1.7653219401836395e-06,
+          "p90": 1.8998980522155762e-06,
+          "count": 20
+        }
+      },
+      "profiled": {
+        "host_device_copy_s": {
+          "median": 0.012758266180753708,
+          "p90": 0.012862686067819595,
+          "count": 3
+        },
+        "forward_s": {
+          "median": 0.016982628032565117,
+          "p90": 0.017047418281435966,
+          "count": 3
+        },
+        "ctc_s": {
+          "median": 0.0003096209838986397,
+          "p90": 0.00030975136905908585,
+          "count": 3
+        },
+        "device_host_copy_s": {
+          "median": 0.001142093911767006,
+          "p90": 0.00114460289478302,
+          "count": 3
+        },
+        "decode_s": {
+          "median": 0.006724639795720577,
+          "p90": 0.006728879176080227,
+          "count": 3
+        },
+        "metrics_s": {
+          "median": 0.0023264000192284584,
+          "p90": 0.002339686267077923,
+          "count": 3
+        },
+        "backward_s": {
+          "median": 0.033567135222256184,
+          "p90": 0.03369890432804823,
+          "count": 3
+        },
+        "optimizer_s": {
+          "median": 0.000817921943962574,
+          "p90": 0.0008469624444842339,
+          "count": 3
+        },
+        "iteration_wall_s": {
+          "median": 0.07603176590055227,
+          "p90": 0.0762473763898015,
+          "count": 3
+        },
+        "cuda_elapsed_s": {
+          "median": 0.07599961853027344,
+          "p90": 0.07621478271484375,
+          "count": 3
+        },
+        "loader_wait_s": {
+          "median": 1.8905848264694214e-06,
+          "p90": 1.909211277961731e-06,
+          "count": 3
+        }
+      },
+      "initialization_s": 0.10997940227389336,
+      "iterator_startup_s": 4.0978193283081055e-07,
+      "first_iteration": {
+        "iteration_wall_s": 0.0917965704575181,
+        "cuda_elapsed_s": 0.09175244903564453,
+        "loader_wait_s": 3.6973506212234497e-07
+      },
+      "cpu_quota_us": 1785000,
+      "cpu_period_us": 100000,
+      "cpu_quota_equivalent": 17.85,
+      "visible_logical_cpus": 128,
+      "affinity_cpu_count": 128,
+      "cpu_stat_deltas": {
+        "nr_periods": 22,
+        "nr_throttled": 0,
+        "throttled_time": 0,
+        "nr_bursts": 0,
+        "burst_time": 0
+      },
+      "changed_head_elements": 18887
+    },
+    "user0_train": {
+      "unprofiled": {
+        "iteration_wall_s": {
+          "median": 0.08153915172442794,
+          "p90": 0.09007703512907028,
+          "count": 10
+        },
+        "cuda_elapsed_s": {
+          "median": 0.08149596786499023,
+          "p90": 0.09001337432861328,
+          "count": 10
+        },
+        "loader_wait_s": {
+          "median": 0.00022776518017053604,
+          "p90": 0.35715037398040295,
+          "count": 10
+        }
+      },
+      "profiled": {
+        "host_device_copy_s": {
+          "median": 0.01262008585035801,
+          "p90": 0.012752086855471134,
+          "count": 3
+        },
+        "forward_s": {
+          "median": 0.01728874910622835,
+          "p90": 0.017344389110803604,
+          "count": 3
+        },
+        "ctc_s": {
+          "median": 0.00040655024349689484,
+          "p90": 0.00041122082620859146,
+          "count": 3
+        },
+        "device_host_copy_s": {
+          "median": 0.0011663632467389107,
+          "p90": 0.0012381132692098618,
+          "count": 3
+        },
+        "decode_s": {
+          "median": 0.009254416450858116,
+          "p90": 0.00968069676309824,
+          "count": 3
+        },
+        "metrics_s": {
+          "median": 0.0031750109046697617,
+          "p90": 0.0032508019357919693,
+          "count": 3
+        },
+        "backward_s": {
+          "median": 0.034068587236106396,
+          "p90": 0.03409186750650406,
+          "count": 3
+        },
+        "optimizer_s": {
+          "median": 0.0008482318371534348,
+          "p90": 0.0010114628821611404,
+          "count": 3
+        },
+        "iteration_wall_s": {
+          "median": 0.08084871899336576,
+          "p90": 0.08265332318842411,
+          "count": 3
+        },
+        "cuda_elapsed_s": {
+          "median": 0.08080572509765625,
+          "p90": 0.08259910583496094,
+          "count": 3
+        },
+        "loader_wait_s": {
+          "median": 8.255057036876678e-05,
+          "p90": 0.00033164117485284805,
+          "count": 3
+        }
+      },
+      "initialization_s": 0.15098540857434273,
+      "iterator_startup_s": 0.1533797448500991,
+      "first_iteration": {
+        "iteration_wall_s": 0.0934119550511241,
+        "cuda_elapsed_s": 0.0932349090576172,
+        "loader_wait_s": 1.4945411942899227
+      },
+      "cpu_quota_us": 1785000,
+      "cpu_period_us": 100000,
+      "cpu_quota_equivalent": 17.85,
+      "visible_logical_cpus": 128,
+      "affinity_cpu_count": 128,
+      "cpu_stat_deltas": {
+        "nr_periods": 41,
+        "nr_throttled": 0,
+        "throttled_time": 0,
+        "nr_bursts": 0,
+        "burst_time": 0
+      },
+      "changed_head_elements": 36366
+    },
+    "user0_val": {
+      "unprofiled": {
+        "iteration_wall_s": {
+          "median": 0.04588654497638345,
+          "p90": 0.05133184511214495,
+          "count": 10
+        },
+        "cuda_elapsed_s": {
+          "median": 0.0458311824798584,
+          "p90": 0.05124214553833008,
+          "count": 10
+        },
+        "loader_wait_s": {
+          "median": 0.00023634498938918114,
+          "p90": 0.2084449017420411,
+          "count": 10
+        }
+      },
+      "profiled": {
+        "host_device_copy_s": {
+          "median": 0.01272178627550602,
+          "p90": 0.012776516377925873,
+          "count": 3
+        },
+        "forward_s": {
+          "median": 0.016671158373355865,
+          "p90": 0.01670850720256567,
+          "count": 3
+        },
+        "ctc_s": {
+          "median": 0.00040632113814353943,
+          "p90": 0.0004159221425652504,
+          "count": 3
+        },
+        "device_host_copy_s": {
+          "median": 0.0011778436601161957,
+          "p90": 0.0011989939957857132,
+          "count": 3
+        },
+        "decode_s": {
+          "median": 0.00956666748970747,
+          "p90": 0.01034517865628004,
+          "count": 3
+        },
+        "metrics_s": {
+          "median": 0.0032639969140291214,
+          "p90": 0.003505679778754711,
+          "count": 3
+        },
+        "iteration_wall_s": {
+          "median": 0.04633868206292391,
+          "p90": 0.047629925422370434,
+          "count": 3
+        },
+        "cuda_elapsed_s": {
+          "median": 0.046260833740234375,
+          "p90": 0.04758703994750976,
+          "count": 3
+        },
+        "loader_wait_s": {
+          "median": 7.027946412563324e-05,
+          "p90": 0.00012804009020328522,
+          "count": 3
+        }
+      },
+      "initialization_s": 0.16873397957533598,
+      "iterator_startup_s": 0.1010977067053318,
+      "first_iteration": {
+        "iteration_wall_s": 0.0714853024110198,
+        "cuda_elapsed_s": 0.07121993255615235,
+        "loader_wait_s": 0.7333986228331923
+      },
+      "cpu_quota_us": 1785000,
+      "cpu_period_us": 100000,
+      "cpu_quota_equivalent": 17.85,
+      "visible_logical_cpus": 128,
+      "affinity_cpu_count": 128,
+      "cpu_stat_deltas": {
+        "nr_periods": 25,
+        "nr_throttled": 0,
+        "throttled_time": 0,
+        "nr_bursts": 0,
+        "burst_time": 0
+      },
+      "changed_head_elements": 0
+    },
+    "user5_train": {
+      "unprofiled": {
+        "iteration_wall_s": {
+          "median": 0.07907745474949479,
+          "p90": 0.08223904389888048,
+          "count": 10
+        },
+        "cuda_elapsed_s": {
+          "median": 0.07903627395629884,
+          "p90": 0.082172607421875,
+          "count": 10
+        },
+        "loader_wait_s": {
+          "median": 0.02905413694679737,
+          "p90": 0.3189462358132005,
+          "count": 10
+        }
+      },
+      "profiled": {
+        "host_device_copy_s": {
+          "median": 0.012613076716661453,
+          "p90": 0.01263995561748743,
+          "count": 3
+        },
+        "forward_s": {
+          "median": 0.017075829207897186,
+          "p90": 0.017160318791866302,
+          "count": 3
+        },
+        "ctc_s": {
+          "median": 0.0003747018054127693,
+          "p90": 0.0005258424207568169,
+          "count": 3
+        },
+        "device_host_copy_s": {
+          "median": 0.001143123023211956,
+          "p90": 0.001229441724717617,
+          "count": 3
+        },
+        "decode_s": {
+          "median": 0.008475983515381813,
+          "p90": 0.013362628407776356,
+          "count": 3
+        },
+        "metrics_s": {
+          "median": 0.0024198899045586586,
+          "p90": 0.0032247956842184067,
+          "count": 3
+        },
+        "backward_s": {
+          "median": 0.03396877646446228,
+          "p90": 0.034115737304091454,
+          "count": 3
+        },
+        "optimizer_s": {
+          "median": 0.0007132021710276604,
+          "p90": 0.0011104429140686989,
+          "count": 3
+        },
+        "iteration_wall_s": {
+          "median": 0.0790237532928586,
+          "p90": 0.08614286500960588,
+          "count": 3
+        },
+        "cuda_elapsed_s": {
+          "median": 0.07897369384765625,
+          "p90": 0.08607167816162109,
+          "count": 3
+        },
+        "loader_wait_s": {
+          "median": 0.00022599101066589355,
+          "p90": 0.06978443823754787,
+          "count": 3
+        }
+      },
+      "initialization_s": 0.12319588009268045,
+      "iterator_startup_s": 0.11176438629627228,
+      "first_iteration": {
+        "iteration_wall_s": 0.08722139801830053,
+        "cuda_elapsed_s": 0.08704710388183594,
+        "loader_wait_s": 0.9812462674453855
+      },
+      "cpu_quota_us": 1785000,
+      "cpu_period_us": 100000,
+      "cpu_quota_equivalent": 17.85,
+      "visible_logical_cpus": 128,
+      "affinity_cpu_count": 128,
+      "cpu_stat_deltas": {
+        "nr_periods": 37,
+        "nr_throttled": 0,
+        "throttled_time": 0,
+        "nr_bursts": 0,
+        "burst_time": 0
+      },
+      "changed_head_elements": 34943
+    },
+    "user5_val": {
+      "unprofiled": {
+        "iteration_wall_s": {
+          "median": 0.042254370637238026,
+          "p90": 0.0458968598395586,
+          "count": 10
+        },
+        "cuda_elapsed_s": {
+          "median": 0.04220124816894531,
+          "p90": 0.04585305786132812,
+          "count": 10
+        },
+        "loader_wait_s": {
+          "median": 0.00010853027924895287,
+          "p90": 0.17426719516515732,
+          "count": 10
+        }
+      },
+      "profiled": {
+        "host_device_copy_s": {
+          "median": 0.012831665575504303,
+          "p90": 0.012908676639199257,
+          "count": 3
+        },
+        "forward_s": {
+          "median": 0.01679113693535328,
+          "p90": 0.016828587278723717,
+          "count": 3
+        },
+        "ctc_s": {
+          "median": 0.000372481532394886,
+          "p90": 0.0004836414009332657,
+          "count": 3
+        },
+        "device_host_copy_s": {
+          "median": 0.001176571473479271,
+          "p90": 0.0012034326791763306,
+          "count": 3
+        },
+        "decode_s": {
+          "median": 0.008693074807524681,
+          "p90": 0.010426368564367294,
+          "count": 3
+        },
+        "metrics_s": {
+          "median": 0.0026665404438972473,
+          "p90": 0.002666739746928215,
+          "count": 3
+        },
+        "iteration_wall_s": {
+          "median": 0.04424163606017828,
+          "p90": 0.04675602354109287,
+          "count": 3
+        },
+        "cuda_elapsed_s": {
+          "median": 0.044208961486816405,
+          "p90": 0.04670659255981445,
+          "count": 3
+        },
+        "loader_wait_s": {
+          "median": 6.939936429262161e-05,
+          "p90": 0.00012501981109380722,
+          "count": 3
+        }
+      },
+      "initialization_s": 0.1568669956177473,
+      "iterator_startup_s": 0.11619278974831104,
+      "first_iteration": {
+        "iteration_wall_s": 0.04589022044092417,
+        "cuda_elapsed_s": 0.045711166381835935,
+        "loader_wait_s": 0.7471376415342093
+      },
+      "cpu_quota_us": 1785000,
+      "cpu_period_us": 100000,
+      "cpu_quota_equivalent": 17.85,
+      "visible_logical_cpus": 128,
+      "affinity_cpu_count": 128,
+      "cpu_stat_deltas": {
+        "nr_periods": 24,
+        "nr_throttled": 0,
+        "throttled_time": 0,
+        "nr_bursts": 0,
+        "burst_time": 0
+      },
+      "changed_head_elements": 0
+    }
+  },
+  "supervisor": {
+    "worker_exit_code": 0,
+    "timed_out": false,
+    "worker_reaped": true,
+    "pod_billing_stopped": false
+  },
+  "limitations": [
+    "manual bounded updates without Trainer/logging/checkpointing",
+    "synthetic batches cached in RAM; batch 2 is a historical smoke control",
+    "profiled pass synchronizes stages and is excluded from throughput estimates",
+    "10 measured batches per real train/validation phase; warmed, prefetched short windows do not establish sustained full-epoch throughput",
+    "CUDA event interval includes CPU launch and decoding gaps; it is not isolated kernel busy time",
+    "Profiled stage timings may overlap and must not be summed as independent stages",
+    "Prior Pods lacked quota/thread/stage telemetry; the exact cause of the historical slowdown is unresolved",
+    "No thread/worker/driver remedy was tested or implemented"
+  ],
+  "projection": {
+    "user0": {
+      "train_batches_per_epoch": 97,
+      "validation_batches_per_epoch": 20,
+      "mean_training_batch_including_wait_s": 0.1723532469943166,
+      "mean_validation_batch_including_wait_s": 0.12076502349227666,
+      "150_epoch_minutes_using_batch_means": 47.83391357073561,
+      "150_epoch_minutes_using_batch_medians": 22.13241447112523
+    },
+    "user5": {
+      "train_batches_per_epoch": 79,
+      "validation_batches_per_epoch": 21,
+      "mean_training_batch_including_wait_s": 0.1867761794477701,
+      "mean_validation_batch_including_wait_s": 0.10723013654351235,
+      "150_epoch_minutes_using_batch_means": 42.517877609469,
+      "150_epoch_minutes_using_batch_medians": 23.625144285615534
+    },
+    "caveat": "Rough scenarios from ten batches, not bounds or promised runtimes; exclude Trainer/logging/epoch reset/checkpoint/final evaluation/setup/copy/cleanup overhead. CPU-gradient health checks and synchronized diagnostics also differ from Trainer execution."
+  },
+  "conclusion": "Historical 6x slowdown not reproduced on this fresh Pod: user0 and user5 warmed train compute medians were 81.54ms and 79.08ms. No throttling increments within the six measured phases. Variable loader wait remains an additional throughput cost. A bounded, separately approved full user5 run is the next accuracy gate; no settings fix is justified by this probe alone.",
+  "cost": {
+    "status": "itemized charges pending",
+    "estimated_gpu_usd": 0.07833763333333334,
+    "compute_rate_usd_per_hour": 0.74,
+    "retained_storage_excluded": true,
+    "estimate_is_not_final_charge": true
+  },
+  "raw_archive_availability": "Retained locally; archive hash identifies the preserved evidence and does not provide public access."
+}

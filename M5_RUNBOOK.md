@@ -21,8 +21,7 @@ named and reported in `scripts/experimental_results.py`; this harness evaluates
 it through the same official testing entry point by changing only the released
 checkpoint.
 
-No personalized evaluation has run in this repository yet. This runbook and
-the associated scripts are preparation evidence, not baseline results.
+Both released checkpoint families passed for all eight users; the observed results are recorded below and under `results/`.
 
 ## Audited checkpoint identities
 
@@ -181,8 +180,7 @@ All 12 CER checks passed the 0.10-percentage-point acceptance threshold. The
 ignored local evidence archive has SHA-256
 `43f557a24e96b2bcd692d33264b902f544860860fb49cadd4adbd03b43c20e64`.
 The Pod was deleted after local verification; read-back found zero Pods and
-zero endpoints. The observed balance delta was `$0.0958902537`; itemized Pod
-billing had not posted at the final audit.
+zero endpoints. Itemized Pod billing had not posted at the final audit; exact attributable cost remains pending.
 
 Runpodctl 2.12 and later removed `--stop-after` and `--terminate-after` because
 the backend accepted but did not enforce those deadlines. A detached watchdog
@@ -218,9 +216,7 @@ deviations). The ignored expansion evidence archive has SHA-256
 `7bf5868783af3186f8affbe7a6815fe09cdb310dc592d15379d32f50a8fca4f3`.
 
 The Pod was deleted after local verification; read-back found zero Pods and
-zero endpoints. The retained network volume remains. The observed expansion
-balance delta was `$0.1423415185`; itemized Pod billing had not posted at the
-final audit.
+zero endpoints. The retained network volume remains. Itemized Pod billing had not posted at the final audit; exact attributable cost remains pending.
 
 M5a is complete. The next gate is M5b: reproduce the upstream full-data,
 full-fine-tuning recipe for `user0`, then `user5` if `user0` passes, with each

@@ -6,7 +6,7 @@ before the next milestone spends money. Results are captured as structured JSON
 under `results/`, as in M3 and M4.
 
 **Drafted:** 2026-10-04 · **Target:** report and repository finished by Dec 1,
-leaving two weeks of buffer before the Dec 15 application deadline.
+with publication-ready figures, evidence and reproducibility instructions.
 
 ## Where we are
 
@@ -16,10 +16,9 @@ leaving two weeks of buffer before the Dec 15 application deadline.
 | M3: one-user generic baseline | Done |
 | M4: eight-user generic baseline (55.38% ± 4.38 test CER, greedy) | Done 2026-10-04 |
 | M5a: released personalized checkpoints (both families, all users) | Done 2026-10-04 |
+| M5b: own full-data training (user0/user5, within 1.0 pp) | Done 2026-10-05 |
 
-The 27 GB of staged sessions and the archive are on the retained 400 GB volume
-`ni0dpvtday` (`US-IL-1`). Keep it until the project ends, and keep the Runpod
-balance topped up: the volume costs about $0.93/day.
+The eight-user subset contains 100 sessions and occupies about 27 GB after selective extraction. Dataset and checkpoints are obtained from upstream and retained outside Git.
 
 ## Upstream facts that shape the design
 
@@ -75,6 +74,11 @@ method=full` point of the final grid.
   sets the M9 budget.
 - If the gate fails, stop and diagnose before building anything else. Every
   later result depends on this pipeline.
+
+**Passed 2026-10-05 IST:** both users completed 150 epochs; user0 test CER
+21.209850% (+0.639850 pp), user5 6.130137% (+0.319137 pp). See
+`results/m5b-full-upstream-summary.json` and latest `RESEARCH_STATUS.md` for time,
+provisional costs and verified cleanup.
 
 ### M6: Calibration-budget sampler and training protocol
 
@@ -150,7 +154,7 @@ Drop this if M9 has not finished by Nov 15.
 - A 4–6 page report (Markdown → PDF), with limitations and any refuted
   hypotheses.
 - README rewritten to lead with the question and the figure. Move the cost and
-  infrastructure history from `STATUS.md` to `LOG.md`.
+  experimental measurements in `results/`; keep operational records local.
 - Delete the Runpod volume once all artifacts are copied off.
 
 ## Timeline
@@ -164,29 +168,30 @@ Drop this if M9 has not finished by Nov 15.
 | Nov 9 – Nov 15 | M10 (stretch) | Label-free comparison |
 | Nov 16 – Nov 20 | M11 | With-LM numbers |
 | Nov 21 – Dec 1 | M12 | Report, figures, public repo |
-| Dec 1 – Dec 15 | Buffer | Applications |
+| Dec 1 – Dec 15 | Buffer | Review and revisions |
 
 ## Budget
 
 - Spent through M4: about $4 (compute and storage).
 - Storage: about $0.93/day while the volume exists (about $55 through Dec 1).
-- Compute: unknown until M5b. **Proposed cap: $75 in total compute.**
+- Compute: full-data runs took 27.93–34.44 minutes per user on RTX 4090. **Planning cap: $75 in total compute.**
   Re-check after M5b and M7.
 
-## Decisions needed before M6
+## Fixed experimental decisions
 
-1. Approve the fixed-steps protocol, with no per-user validation selection,
-   for the budgeted runs.
-2. Approve hyperparameter tuning on `user0`/`user1` only.
-3. Approve the 30- and 60-minute budgets.
-4. Approve the $75 compute cap.
+1. Budget runs use fixed optimizer steps and final-checkpoint evaluation;
+   per-user validation cannot select a checkpoint.
+2. Tune steps and learning rates only on user0/user1, then freeze.
+3. Calibration budgets are 1, 2, 5, 10, 30, 60 minutes and full.
+4. Recheck the $75 compute plan after M5b and M7 using attributable charges;
+   keep pending estimates separate from itemized costs.
 
 ## Risks
 
 | Risk | Mitigation |
 |---|---|
-| M5b misses the 1.0 pp gate | Diagnose before M6. Likely causes: seed, number of workers, Lightning version. Record it in `STATUS.md`. |
+| M5b misses the 1.0 pp gate | Diagnose before M6. Likely causes: seed, number of workers, Lightning version. Record it in `RESEARCH_STATUS.md`. |
 | Full-data fine-tuning is slow (hours per user) | Run the full budget only once per user (1 seed), in parallel Pods if needed. Short budgets are cheap. |
 | Very small budgets are unstable | Fixed steps, 3 seeds, and report the spread. Consider 2× steps at 1–2 minutes only if tuned on user0/1. |
-| The Runpod balance runs out and the volume is deleted | Auto-pay or a manual top-up. Copy result JSONs and logs off after every milestone (already the practice). |
+| Loss of ephemeral compute or stored artifacts | Copy evidence after every milestone and verify archive/file hashes before teardown. |
 | Scope creep | M10 is the first thing dropped; M11 is evaluation only. |

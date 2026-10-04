@@ -204,8 +204,7 @@ checkpoint on a Secure Cloud RTX 4090 in `US-IL-1`.
 Selective staging found all 40 sessions after streaming 16.9% of the source
 archive; the extracted data occupied 13 GB. The successful Pod ran for 1,927
 seconds at `$0.74/hour`, an estimated `$0.3961` in compute. The total observed
-Runpod balance decrease for this milestone was `$0.4607`, including short
-failed transfer attempts and temporary storage.
+Additional failed-transfer and storage charges are retained in local operational records; the compute estimate above excludes them.
 
 Raw logs and Hydra configurations were copied locally before cleanup. The
 checked-in results are listed by
@@ -256,7 +255,7 @@ traversal. The staging job was stopped before evaluation; this run produced no
 CER results.
 
 The exact-size archive was copied to the 400 GB Standard volume
-`ni0dpvtday` in `US-IL-1`, and the GPU Pod was deleted. Exact size and
+the retained volume in `US-IL-1`, and the GPU Pod was deleted. Exact size and
 successful range writes were confirmed, but the original source SHA-256 pass
 was too slow and was stopped. Treat the persistent copy as pending integrity
 validation until a complete gzip CRC32-verified traversal succeeds.
@@ -325,10 +324,7 @@ The local evidence archive has SHA-256
 and contains all five raw console logs, Hydra configuration triplets,
 structured results, the environment freeze, and staging logs. The Pod was
 deleted after local verification. CLI and Runpod MCP read-back found zero Pods
-and zero endpoints. The reusable 400 GB volume `ni0dpvtday` remains in
+and zero endpoints. The reusable 400 GB volume the retained volume remains in
 `US-IL-1` at `$0.0388888903/hour`.
 
-The observed balance decrease for this guarded run was `$0.3824294963`, from
-`$11.3544687955` to `$10.9720392992`, below the `$2.25` ceiling. Itemized Pod
-billing had not posted at the final audit; treat the balance delta as the
-current cost evidence and update it only when a matching billing row appears.
+Itemized charges had not posted at the final audit; exact attributable cost remains pending. Account-balance snapshots are kept locally and are not reported as experiment charges.

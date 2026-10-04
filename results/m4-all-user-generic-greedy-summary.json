@@ -16,23 +16,7 @@
     "reference_sample_standard_deviation": 4.38,
     "sample_standard_deviation": 4.383906321939523
   },
-  "cleanup": {
-    "active_endpoints_after_cleanup": 0,
-    "active_pods_after_cleanup": 0,
-    "current_spend_usd_per_hour": 0.039,
-    "retained_network_volume": {
-      "data_center": "US-IL-1",
-      "id": "ni0dpvtday",
-      "size_gb": 400,
-      "type": "STANDARD",
-      "usd_per_hour": 0.0388888903
-    },
-    "verified": true
-  },
   "cost": {
-    "balance_after_usd": 10.9720392992,
-    "balance_before_usd": 11.3544687955,
-    "observed_balance_delta_usd": 0.3824294963,
     "pod_billing_status": "not yet posted at final audit",
     "run_ceiling_usd": 2.25
   },
@@ -64,7 +48,6 @@
     "data_center": "US-IL-1",
     "gpu": "NVIDIA GeForce RTX 4090",
     "gpu_price_usd_per_hour": 0.74,
-    "pod_id": "t2a5o7zxoqp098",
     "provider": "Runpod",
     "termination_guard_seconds": 10200
   },

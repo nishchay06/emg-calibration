@@ -15,3 +15,26 @@ Nishchay_Resume.pdf
 Nishchay_Resume.tex
 /GUIDE.md
 /research-statement.md
+
+# Local agent/session records and infrastructure bookkeeping.
+/private/
+/AGENTS.md
+/CLAUDE.md
+/STATUS.md
+/M5B_PERFORMANCE_DIAGNOSTIC.md
+/M5B_USER5_FULL_RUN.md
+/results/m5b-diagnostic-proposal-*.json
+/results/m5b-*-session*.json
+# Preserved duplicate files created by local synchronization.
+/* 2.md
+/requirements/* 2.txt
+/results/* 2.json
+/scripts/* 2.py
+/tests/* 2.py
+# Credentials and machine-local configuration.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.runpod/

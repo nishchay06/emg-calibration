@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "user": "user0",
+  "budget_minutes": "full",
+  "method": "full",
+  "selection": "upstream",
+  "seed": 1501,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "initial_checkpoint": {
+    "path": "/workspace/emg2qwerty/models/generic.ckpt",
+    "sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81"
+  },
+  "command": [
+    "/usr/bin/python",
+    "-m",
+    "emg2qwerty.train",
+    "user=user0",
+    "train=True",
+    "decoder=ctc_greedy",
+    "checkpoint=\"/workspace/emg2qwerty/models/generic.ckpt\"",
+    "dataset.root=\"/workspace/data\"",
+    "seed=1501",
+    "batch_size=32",
+    "num_workers=4",
+    "trainer.max_epochs=150",
+    "trainer.accelerator=gpu",
+    "trainer.devices=1",
+    "hydra.run.dir=\"/workspace/results/m5b/user0\"",
+    "hydra.job.chdir=True"
+  ],
+  "cwd": "/workspace/emg2qwerty-m5b-20261004",
+  "output_directory": "/workspace/results/m5b/user0",
+  "acceptance": {
+    "maximum_absolute_delta_percentage_points": 1,
+    "passed": true,
+    "test_CER_delta_percentage_points": 0.6398503112792966,
+    "test_CER_reference": 20.57,
+    "validation_is_diagnostic_only": true
+  },
+  "last_checkpoint": {
+    "epoch": 149,
+    "global_step": 14550
+  },
+  "trained_checkpoint": {
+    "epoch": 145,
+    "filename": "epoch=145-step=14162.ckpt",
+    "global_step": 14162,
+    "sha256": "fe7f2f28fa5b0672af301e10df19847ea1b7ccc6e379ef0b93339d8978997bd8",
+    "size_bytes": 63610410
+  },
+  "parameters": {
+    "total": 5293315,
+    "trainable": 5293315
+  },
+  "runtime": {
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "packages": {
+      "hydra-core": "1.3.2",
+      "lightning-bolts": "0.7.0",
+      "omegaconf": "2.3.0",
+      "pip": "24.0",
+      "pytorch-lightning": "1.8.6",
+      "setuptools": "69.5.1",
+      "torchaudio": "2.3.0",
+      "torchmetrics": "0.11.4",
+      "torchvision": "0.18.0"
+    },
+    "python": "3.10.12",
+    "pytorch": "2.3.0+cu121"
+  },
+  "started_at_utc": "2026-10-04T16:36:33.941902+00:00",
+  "completed_at_utc": "2026-10-04T17:11:00.226742+00:00",
+  "wall_clock_seconds": 2066.284816957079,
+  "training_executed": true,
+  "process_exit_code": 0,
+  "resume": "disabled; fresh output required",
+  "metrics": {
+    "test": {
+      "CER": 21.209850311279297,
+      "DER": 2.2162740230560303,
+      "IER": 5.4925055503845215,
+      "SER": 13.501070976257324,
+      "loss": 1.200819492340088
+    },
+    "validation": {
+      "CER": 18.7043514251709,
+      "DER": 2.7945380210876465,
+      "IER": 5.006880283355713,
+      "SER": 10.902932167053223,
+      "loss": 1.1232057809829712
+    }
+  },
+  "hardware": {
+    "container_disk_gb": 20,
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "gpu_memory_mib": 24564,
+    "driver": "570.172.08",
+    "image": "runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04"
+  },
+  "evidence": {
+    "local_raw_directory": "artifacts/m5b-user0-20261004/verified-evidence/results/m5b/user0",
+    "archive": "artifacts/m5b-user0-20261004/m5b-user0-evidence-20261004.tgz",
+    "archive_sha256": "a06652c6428f55da172742fda268fff8392701d6e1153b4889b676b658af26cb",
+    "file_checksums_verified": 15,
+    "independently_verified_log_metrics": true,
+    "independently_verified_best_checkpoint_sha256": true,
+    "local_unit_tests_passed": 29,
+    "raw_archive_availability": "Retained locally; dataset/checkpoints are not redistributed by this repository."
+  },
+  "limitations": [
+    "One seed for upstream full-data reproduction; no calibration-budget experiments executed.",
+    "Validation-selected checkpoints reproduce upstream; future budget runs require fixed-step final-checkpoint evaluation."
+  ],
+  "cost": {
+    "status": "itemized Pod charges posted",
+    "gpu_usd": 0.5424397364258766,
+    "container_disk_usd": 0.0018518520519137383,
+    "total_pod_usd": 0.5442915884777904,
+    "retained_storage_excluded": true,
+    "compute_rate_usd_per_hour": 0.74
+  }
+}

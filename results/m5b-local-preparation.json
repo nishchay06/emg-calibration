@@ -4,7 +4,6 @@
   "phase": "local-harness-and-training-audit",
   "run_date_local": "2026-10-04",
   "repository_base_commit": "353095f",
-  "local_branch": "local/m5b-adaptation-harness",
   "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
   "source_checkout_verified_clean": true,
   "training_executed": false,
@@ -13,7 +12,16 @@
     "passed": true,
     "python_unit_tests_passed": 29,
     "python_unit_tests_skipped": 0,
-    "hydra_composition_users_checked": ["user0", "user1", "user2", "user3", "user4", "user5", "user6", "user7"],
+    "hydra_composition_users_checked": [
+      "user0",
+      "user1",
+      "user2",
+      "user3",
+      "user4",
+      "user5",
+      "user6",
+      "user7"
+    ],
     "configuration_tests_create_no_run_outputs": true,
     "dry_run_works_without_site_packages": true,
     "shell_syntax": "passed",
@@ -45,8 +53,8 @@
     "optimizer": "Adam",
     "base_learning_rate": 0.001,
     "warmup_epochs": 10,
-    "warmup_start_lr": 1e-8,
-    "eta_min": 1e-6,
+    "warmup_start_lr": 1e-08,
+    "eta_min": 1e-06,
     "scheduler_interval": "epoch",
     "resume": "disabled; existing outputs refused; working directory isolated",
     "calibration_budget_or_alternate_method_execution": "rejected until M6/M8"
@@ -64,11 +72,6 @@
     "billable_resources_created_deleted_or_resized": 0,
     "retained_volume_storage_continues": true,
     "live_billing_checked": false
-  },
-  "cleanup": {
-    "remote_resources_mutated": false,
-    "live_pods_endpoints_or_volume_readback": null,
-    "last_committed_remote_readback": "results/m5-all-user-personalized-greedy-summary.json"
   },
   "limitations": [
     "No trained CER, runtime, parameter count or billable training cost measured",

@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "phase": "closed-interrupted-runtime-budget-gate",
+  "user": "user5",
+  "budget_minutes": "full",
+  "method": "full",
+  "selection": "upstream",
+  "seed": 1501,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "training_completed": false,
+  "training_executed": true,
+  "parameters": {
+    "total": 5293315,
+    "trainable": 5293315
+  },
+  "completed_epochs": 4,
+  "intermediate_validation_CER_from_log": 12.00358,
+  "intermediate_validation_is_not_final_evaluation": true,
+  "test_CER": null,
+  "CER_gate_passed": null,
+  "acceptance_test_CER_range": [
+    4.811,
+    6.811
+  ],
+  "runtime": {
+    "python": "3.10.12",
+    "torch": "2.3.0+cu121",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "driver": "580.159.04",
+    "gpu_memory_mib": 24564,
+    "image": "runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04",
+    "image_digest": "sha256:75bf115d87ee3813f8026fed3e11bae3bf68bfd789a9566878735245b723ef8b"
+  },
+  "synthetic_cuda_smoke": {
+    "passed": true,
+    "real_data_used": false,
+    "released_checkpoint_used": true,
+    "loss": 15.61749267578125,
+    "learning_rate": 1e-08,
+    "optimizer_steps": 1,
+    "changed_head_elements": 17894,
+    "fit_seconds": 5.7332490887492895,
+    "finite_loss": true,
+    "finite_gradients": true,
+    "m5b_accuracy_result": false
+  },
+  "stop": {
+    "reason": "Observed runtime projected beyond the approved two-hour session; accuracy gate not evaluated",
+    "observed_epoch_seconds_approx": [
+      77,
+      95
+    ],
+    "projected_training_minutes_approx": [
+      200,
+      240
+    ],
+    "last_completed_checkpoint_epoch": 3,
+    "last_completed_checkpoint_global_step": 316,
+    "root_cause": "Not established; slower host/setup and CUDA smoke observed, not proof of a specific hardware or provider fault"
+  },
+  "evidence": {
+    "local_partial_evidence": "artifacts/m5b-user5-20261004",
+    "initial_checkpoint_sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81",
+    "local_verified_directory": "artifacts/m5b-user5-20261004/verified-evidence",
+    "archive": "artifacts/m5b-user5-20261004/m5b-user5-interrupted-evidence-20261004.tgz",
+    "archive_sha256": "f663dfa804119a8d15299fd746470718badd8e37fa3205a3300dea66811ba11e",
+    "file_checksums_verified_locally": 12,
+    "intermediate_best_and_last_checkpoint_sha256": "2037a2993f43e9a908618239b10d7f2311b0e721f9a925e8398a8e66bd0a3459",
+    "first_checksum_attempt_failed_while_training_log_was_changing": true,
+    "manifest_regenerated_only_after_confirmed_training_stop": true,
+    "local_unit_tests_passed": 29,
+    "raw_archive_availability": "Retained locally; includes checkpoints and is not redistributed."
+  },
+  "cost": {
+    "status": "itemized interrupted-attempt charges posted",
+    "gpu_usd": 0.34769043885171413,
+    "container_disk_usd": 0.0013888890389353037,
+    "total_pod_usd": 0.34907932789064944,
+    "retained_storage_excluded": true
+  }
+}
