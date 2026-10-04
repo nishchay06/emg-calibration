@@ -5,10 +5,12 @@ ARCHIVE_URL="https://fb-ctrl-oss.s3.amazonaws.com/emg2qwerty/emg2qwerty-data-202
 ARCHIVE_BYTES="308382645571"
 ACKNOWLEDGEMENT="--ack-stream-308gb"
 DRY_RUN="--dry-run"
+STREAM_TIMEOUT_SECONDS="${EMG_STAGE_TIMEOUT_SECONDS:-7200}"
 
 usage() {
     echo "Usage: $0 {${ACKNOWLEDGEMENT}|${DRY_RUN}} DESTINATION_DIRECTORY USER [USER ...]" >&2
     echo "USER must be an explicit, unique value from user0 through user7." >&2
+    echo "Set EMG_STAGE_TIMEOUT_SECONDS to a positive integer to override the 7200-second stream guard." >&2
 }
 
 if (( $# < 3 )); then
@@ -22,6 +24,10 @@ shift 2
 
 if [[ "${mode}" != "${ACKNOWLEDGEMENT}" && "${mode}" != "${DRY_RUN}" ]]; then
     usage
+    exit 2
+fi
+if [[ ! "${STREAM_TIMEOUT_SECONDS}" =~ ^[1-9][0-9]*$ ]]; then
+    echo "EMG_STAGE_TIMEOUT_SECONDS must be a positive integer; got '${STREAM_TIMEOUT_SECONDS}'." >&2
     exit 2
 fi
 
@@ -64,6 +70,7 @@ echo "Selected users: ${selected_csv}"
 echo "Required sessions: ${expected_count}"
 echo "Minimum free space: ${minimum_free_gib} GiB"
 echo "Source archive: ${ARCHIVE_BYTES} bytes"
+echo "Stream timeout: ${STREAM_TIMEOUT_SECONDS} seconds"
 
 if [[ "${mode}" == "${DRY_RUN}" ]]; then
     echo "Dry run only; no directories were created and no data was downloaded."
@@ -128,7 +135,7 @@ fi
 mkdir "${partial}"
 echo "Streaming until GNU tar finds all ${expected_count} requested members."
 set +e
-timeout 7200 curl --fail --location --progress-bar "${ARCHIVE_URL}" |
+timeout "${STREAM_TIMEOUT_SECONDS}" curl --fail --location --progress-bar "${ARCHIVE_URL}" |
     tar -xzf - -C "${partial}" --strip-components=1 \
         --occurrence=1 -T "${selection_manifest}"
 stream_status=("${PIPESTATUS[@]}")
