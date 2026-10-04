@@ -26,3 +26,13 @@ it does not make a private raw archive publicly downloadable.
 Raw participant data and model checkpoints are not redistributed. Refer to the
 upstream project for permitted access and licensing. See `README.md` for the
 research objective and `ROADMAP.md` for acceptance criteria.
+
+## Interrupted user5 attempt
+
+The first user5 attempt stopped after four epochs: 77–95 seconds per epoch
+projected beyond the planned session. It produced no final test CER and has no
+accuracy-gate verdict. Matching packages/recipes and a 6.842× slower synthetic
+CUDA fit suggested an execution-environment regression; driver differences and
+shared cuDNN warnings did not establish causality. See
+`results/m5b-user5-interrupted-upstream.json` and
+`results/m5b-user5-runtime-diagnosis.json`.

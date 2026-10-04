@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "milestone": "M5b",
+  "type": "local_saved_evidence_diagnosis",
+  "date_utc": "2026-10-04",
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "new_paid_work_performed": false,
+  "training_or_infrastructure_changed": false,
+  "conclusion": "Execution-environment throughput regression is the leading explanation; the exact bottleneck is not identifiable from preserved evidence. No accuracy-gate verdict is available for user5.",
+  "comparisons": {
+    "training_packages_freeze_identical": true,
+    "training_harness_source_identical_between_run_snapshots": true,
+    "resolved_config_differences_only": [
+      "user",
+      "dataset session identities",
+      "trainer.default_root_dir",
+      "checkpoint callback output directory"
+    ],
+    "same_generic_checkpoint_sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81",
+    "same_seed": 1501,
+    "same_batch_size": 32,
+    "same_loader_workers": 4,
+    "same_gpu_model": "NVIDIA GeForce RTX 4090",
+    "drivers": {
+      "user0": "570.172.08",
+      "user5": "580.159.04"
+    },
+    "driver_causality_established": false
+  },
+  "progress_bar_timings": {
+    "units": "seconds; whole-second progress-bar readings, not profiler measurements",
+    "epoch_bar_includes_training_and_validation": true,
+    "user0": {
+      "completed_epochs": 150,
+      "training_batches_per_epoch": 97,
+      "validation_batches_per_epoch": 20,
+      "first_four_epoch_seconds": [
+        18,
+        13,
+        13,
+        12
+      ],
+      "all_completed_epochs_median_seconds": 13,
+      "epochs_1_to_3_training_end_seconds": [
+        11,
+        10,
+        10
+      ],
+      "epochs_1_to_3_validation_seconds_by_subtraction": [
+        2,
+        3,
+        2
+      ]
+    },
+    "user5": {
+      "completed_epochs": 4,
+      "training_batches_per_epoch": 79,
+      "validation_batches_per_epoch": 21,
+      "completed_epoch_seconds": [
+        95,
+        78,
+        77,
+        78
+      ],
+      "epochs_1_to_3_median_seconds": 78,
+      "epochs_1_to_3_training_end_seconds": [
+        63,
+        63,
+        63
+      ],
+      "epochs_1_to_3_validation_seconds_by_subtraction": [
+        15,
+        14,
+        15
+      ],
+      "interrupted_epoch_index": 4,
+      "last_progress": {
+        "batches": 22,
+        "total_epoch_bar_batches": 100,
+        "seconds": 19
+      }
+    },
+    "steady_epoch_ratio_user5_over_user0": 6,
+    "extrapolated_150_epoch_minutes_at_user5_steady_median": 195.28333333333333,
+    "extrapolation_excludes": [
+      "setup",
+      "checkpoint-save overhead outside progress bar",
+      "final evaluation",
+      "evidence copying",
+      "cleanup"
+    ],
+    "extrapolation_is_not_a_guaranteed_runtime": true
+  },
+  "synthetic_cuda_comparison": {
+    "user0_fit_seconds": 0.8379065385088325,
+    "user5_fit_seconds": 5.7332490887492895,
+    "ratio_user5_over_user0": 6.842349146663038,
+    "logs_identical_except_fit_seconds": true,
+    "real_participant_files_used": false,
+    "loader_workers": 0,
+    "batch_size": 2,
+    "includes_trainer_startup": true,
+    "steady_state_kernel_benchmark": false,
+    "interpretation": "Participant HDF5 I/O and four-worker data loading cannot alone explain the synthetic slowdown; startup, CPU/runtime, GPU transfer or driver factors remain possible."
+  },
+  "training_health": {
+    "cuda_used_confirmed": true,
+    "traceback_or_runtime_error_or_oom_observed": false,
+    "completed_epoch_validation_CER_from_logs": [
+      53.63016,
+      18.492,
+      13.37957,
+      12.00358
+    ],
+    "validation_values_are_intermediate_not_final": true,
+    "test_CER": null,
+    "accuracy_gate_evaluated": false,
+    "cudnn_plan_warning_present_in_both_runs": true,
+    "cudnn_warning_proven_cause": false
+  },
+  "user5_hardware_snapshot": {
+    "observed_at_utc": "2026-10-04T17:51:20Z",
+    "gpu_utilization_percent": 0,
+    "gpu_memory_mib": 3612,
+    "gpu_clock_mhz": 2520,
+    "gpu_power_watts": 55.15,
+    "visible_logical_cpus": 128,
+    "cpu_model": "AMD EPYC 7B13 64-Core Processor",
+    "limitation": "One sampled GPU reading and lifetime-average process CPU usage cannot establish sustained utilization, allocated CPU quota, throttling, or the exact bottleneck."
+  },
+  "leading_hypotheses_not_confirmed": [
+    "CPU scheduling contention, cgroup quota or host-side thread overhead",
+    "Host/GPU transfer latency or driver/backend execution differences",
+    "Participant data loading or network-volume latency as an additional contributor, not the sole explanation"
+  ],
+  "missing_discriminating_evidence": [
+    "CPU affinity, cgroup CPU quota/statistics and throttling deltas",
+    "PyTorch intra-op/inter-op thread counts and OMP/MKL/OpenBLAS settings",
+    "CPU/GPU profiler stage timings for transfer, forward/loss, decode/metrics, backward/optimizer and data wait",
+    "Repeated GPU utilization and clock-event sampling, PCIe link details",
+    "Repeated warm synthetic batch-32 timings excluding one-time Trainer initialization"
+  ],
+  "next_proposed_step_not_approved_or_executed": "At this stage, perform bounded warmed synthetic and real-batch measurements without changing the recipe. See the subsequent performance diagnostic record.",
+  "evidence": {
+    "user0_raw": "artifacts/m5b-user0-20261004/verified-evidence",
+    "user5_raw": "artifacts/m5b-user5-20261004/verified-evidence",
+    "user5_run_checksums_reverified": 12,
+    "diagnosis_assertions_passed": true,
+    "local_unit_tests_passed": 29,
+    "source_paths": [
+      "emg2qwerty/lightning.py:TDSConvCTCModule._step",
+      "emg2qwerty/lightning.py:WindowedEMGDataModule",
+      "emg2qwerty/data.py:WindowedEMGDataset.__getitem__",
+      "emg2qwerty/transforms.py:LogSpectrogram",
+      "emg2qwerty/decoder.py:CTCGreedyDecoder",
+      "emg2qwerty/metrics.py:CharacterErrorRates.update"
+    ],
+    "official_documentation": [
+      "https://docs.pytorch.org/docs/2.3/notes/multiprocessing.html#cpu-oversubscription",
+      "https://docs.nvidia.com/deploy/nvidia-smi/index.html#utilization"
+    ],
+    "no_new_live_billing_or_resource_check": true
+  }
+}
