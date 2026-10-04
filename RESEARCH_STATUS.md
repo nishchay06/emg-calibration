@@ -36,3 +36,11 @@ CUDA fit suggested an execution-environment regression; driver differences and
 shared cuDNN warnings did not establish causality. See
 `results/m5b-user5-interrupted-upstream.json` and
 `results/m5b-user5-runtime-diagnosis.json`.
+
+## Bounded performance diagnostic
+
+All six synthetic/real train/validation phases completed without recipe changes.
+The historical slowdown was not reproduced. User5 warmed training computation
+was 79.08 ms/batch; loader wait varied. CPU quota/thread and stage measurements
+are in `results/m5b-performance-diagnostic-20261005.json`. The exact original
+cause remains unresolved. Short-batch projections are scenarios, not bounds.
