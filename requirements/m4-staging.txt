@@ -1,0 +1,2 @@
+# Parallel decompression of the pinned upstream tar.gz archive.
+rapidgzip==0.16.0

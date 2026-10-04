@@ -168,12 +168,13 @@ fi
 
 mkdir "${partial}"
 if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]]; then
-    echo "Reading the validated local archive until GNU tar finds all ${expected_count} requested members."
+    echo "Reading and verifying the complete local archive while extracting ${expected_count} requested members."
     set +e
-    tar -xzf "${archive_file}" -C "${partial}" --strip-components=1 \
-        --occurrence=1 -T "${selection_manifest}"
-    tar_status="$?"
+    "${script_dir}/extract_selected_archive.sh" \
+        "${archive_file}" "${selection_manifest}" "${partial}"
+    archive_status="$?"
     set -e
+    tar_status="0"
     curl_status="0"
 else
     echo "Streaming until GNU tar finds all ${expected_count} requested members."
@@ -187,6 +188,10 @@ else
     tar_status="${stream_status[1]}"
 fi
 
+if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]] && (( archive_status != 0 )); then
+    echo "Verified local-archive extraction failed: exit ${archive_status}. Partial data remains at ${partial}." >&2
+    exit "${archive_status}"
+fi
 if (( tar_status != 0 )); then
     echo "Selective extraction failed: tar exit ${tar_status}. Partial data remains at ${partial}." >&2
     exit "${tar_status}"
@@ -196,7 +201,7 @@ if [[ "${mode}" == "${ACKNOWLEDGEMENT}" ]] && (( curl_status != 0 && curl_status
     exit "${curl_status}"
 fi
 if [[ "${mode}" == "${ARCHIVE_FILE_MODE}" ]]; then
-    echo "Archive extraction completed: tar=${tar_status}."
+    echo "Archive verification and extraction completed."
 else
     echo "Archive pipeline completed: curl=${curl_status} tar=${tar_status}."
 fi
