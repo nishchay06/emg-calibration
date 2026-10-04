@@ -382,13 +382,51 @@ run (2026-10-04).
   Both training gates and M6 remain pending. Runtime-package/CUDA compatibility
   is not established by configuration tests.
 
+### CPU training-runtime preparation (2026-10-04)
+
+- The approved no-cost smoke gate passed on personal macOS arm64 CPU, in
+  isolated `artifacts/m5b-cpu-venv` with Python 3.10.13. The original local
+  Python 3.13 environment remains for lightweight tests.
+- The initial Setuptools 84.0.0 bootstrap failed Lightning 1.8.6's
+  `pkg_resources` import. Pinning upstream Setuptools 69.5.1 resolved it;
+  requirements now pin that version and upstream pip 24.0. Torch 2.3.0,
+  Torchaudio 2.3.0, torchvision 0.18.0 and Bolts 0.7.0 imports passed, and
+  `pip check` found no broken requirements.
+- `scripts/smoke_adaptation_cpu.py` uses the full pinned upstream module,
+  transforms, collation, optimizer/scheduler and Lightning callbacks with
+  synthetic inputs and labels. It uses random initialization, batch 2 and
+  zero loader workers; no participant data or released checkpoint was used.
+- All six checks passed. The 151-point epoch-based LR trace had maximum
+  absolute error 3.252607e-19 against the expected warmup/cosine schedule.
+  The model has **5,293,315 total/trainable parameters**. One update at LR
+  1e-8 produced finite CTC loss 305.681335 and finite gradients, changing
+  76,032 final-layer weight elements. Synthetic loss is not an accuracy result.
+- Checkpoint restoration matched all model state and produced identical
+  evaluation outputs (maximum absolute difference 0). Adam moments and
+  scheduler state restored exactly; validation-selected checkpoint creation
+  also succeeded.
+- One-step Trainer fit took 1.300786 seconds; full script time was 100.371960
+  seconds including imports/preflight. These CPU timings do not predict
+  full-data GPU runtime or cost.
+- Structured evidence is in
+  [`results/m5b-cpu-runtime-smoke.json`](results/m5b-cpu-runtime-smoke.json).
+  Raw config, package freeze, structured result, TensorBoard log and synthetic
+  checkpoints remain under ignored `artifacts/m5b-cpu-smoke-2026-10-04/`.
+  The ignored upstream source remains pinned with only the approved
+  optional-KenLM patch; checkpoints/HDF5 files were not committed.
+- Incremental GPU/cloud spend is $0. No Runpod resource or public GitHub
+  mutation occurred. Retained-volume storage continues; no live billing or
+  cleanup read-back was performed during this CPU milestone.
+- Both M5b real-data CER gates remain pending. CUDA, generic-checkpoint loading
+  and participant-file data loading must still be checked in the paid runtime.
+- All 29 repository unit tests passed with zero skips. CLI guards, shell
+  syntax, parallel archive staging and pinned manifest/reference checks passed.
+
 ## Next acceptance test
 
-Use personal CPU resources to smoke-test the pinned Python 3.10 training
-runtime: module/decoder imports, Bolts scheduler constructor/LR trace, one
-synthetic optimizer update and checkpoint save/reload. Then perform live
-read-only Runpod checks and present an exact resource/runtime/cost/copy/cleanup
-proposal for explicit approval. The first paid gate is full-data/full-model
+Perform live read-only Runpod checks and prepare an exact resource/runtime/
+cost/copy/cleanup proposal for explicit approval. Verify Linux/CUDA imports and
+the synthetic update on approved compute before training. The first paid gate is full-data/full-model
 upstream training for `user0`, then `user5` only if user0 passes. Test CER must
 be within 1.0 pp of the pinned references (20.57% and 5.811%, respectively).
 See [`M5B_RUNBOOK.md`](M5B_RUNBOOK.md) and [`ROADMAP.md`](ROADMAP.md).

@@ -89,14 +89,62 @@ methods, existing outputs, gate tolerance boundaries, incomplete training,
 missing checkpoint provenance and accidental resume. CI explicitly runs the
 composition checks after checking out pinned upstream.
 
-## Training environment preflight still required
+## CPU training-runtime smoke gate passed
 
-The local Python 3.13 environment has no Torch/Lightning. Preparation checks
-therefore do **not** establish training-package import compatibility or CUDA
-execution. Before the paid gate, test the pinned Python 3.10 environment,
-scheduler constructor and LR trace, one synthetic optimizer update, checkpoint
-save/reload, and module/decoder imports. Prefer personal CPU resources for this
-remaining no-cost smoke test before provisioning.
+On 2026-10-04, the separate ignored `artifacts/m5b-cpu-venv` environment used
+Python 3.10.13 and the pinned training packages on macOS arm64. The original
+Python 3.13 configuration-test environment was retained. The CPU gate passed;
+it does **not** establish CUDA compatibility or real-data CER reproduction.
+
+[`results/m5b-cpu-runtime-smoke.json`](results/m5b-cpu-runtime-smoke.json)
+records six passed checks: imports/configuration, the full 151-point LR trace,
+finite CTC loss and gradients, changed weights, and checkpoint restoration.
+The full upstream model has 5,293,315 parameters, all trainable. A single update
+at the upstream starting LR of 1e-8 changed 76,032 output-layer weight elements.
+Synthetic CTC loss was 305.681335; this is a plumbing check, not an accuracy
+result. Model state and evaluation outputs were identical after reload, and
+Adam moments and scheduler state also restored exactly.
+
+The maximum LR trace error against the expected formula was
+3.252607e-19. The one-step Trainer fit took 1.300786 seconds locally; the full
+script took 100.371960 seconds including imports/preflight. Neither number is
+a GPU-training runtime estimate. The smoke uses two generated 10,000-sample
+signals, upstream transforms/collation, synthetic text targets, random model
+initialization and zero loader workers. It deliberately differs from the
+full-data recipe's batch 32/four-worker pipeline; no HDF5 data or released
+checkpoint is needed or read.
+
+Raw structured result, resolved config, package freeze, TensorBoard event log
+and synthetic checkpoints remain under ignored
+`artifacts/m5b-cpu-smoke-2026-10-04/`. The synthetic roundtrip checkpoint digest
+is `0b9b98bc491994bf7e7c9884bdf7c4a0ab35bbe7cb6435a153a8fba5b6c981cf`.
+Only the small result JSON is committed. `pip check` reported no broken
+requirements.
+
+The initial freshly seeded environment installed Setuptools 84.0.0, causing
+Lightning's `pkg_resources` import to fail. Pinning upstream's Setuptools
+69.5.1 fixed the observed error. The training requirements now also pin
+upstream's pip 24.0. Newer Setuptools removed that module; see the
+[official release history](https://setuptools.pypa.io/en/latest/history.html).
+
+To recreate the local smoke, choose a fresh ignored environment and fresh
+output path. The Mac wheel versions match the
+[official PyTorch 2.3.0 install instructions](https://pytorch.org/get-started/previous-versions/#v230).
+The existing ignored upstream checkout has only the approved optional-KenLM
+patch applied. On a clean source checkout, apply that patch before imports.
+
+```bash
+uv venv --python 3.10.13 --seed artifacts/m5b-cpu-venv
+uv pip install --python artifacts/m5b-cpu-venv/bin/python \
+  -r requirements/m5b-training.txt
+artifacts/m5b-cpu-venv/bin/python scripts/smoke_adaptation_cpu.py \
+  --upstream-dir upstream/emg2qwerty \
+  --output-dir artifacts/m5b-cpu-smoke-new-run
+```
+
+Before real training on an approved Pod, still verify the Linux/CUDA wheel
+imports and synthetic update in that runtime. CPU success does not prove
+generic-checkpoint loading, participant-file data loading or GPU compatibility.
 
 Upstream `environment.yml` pins `lightning-bolts==0.7.0`; M3/M5a's evaluation
 requirements did not install it. Bolts also
@@ -111,7 +159,7 @@ python -m pip install torch==2.3.0 torchaudio==2.3.0 torchvision==0.18.0 \
 python -m pip install -r requirements/m5b-training.txt
 ```
 
-These are future environment instructions, not proof of an executed smoke test.
+These CUDA-specific commands have not been executed during the CPU gate.
 Do not substitute `prepare_m3_environment.sh` on an existing checkout: it
 deliberately refuses overwrite. Keep only the audited optional-KenLM patch;
 the adaptation preflight rejects other tracked upstream changes.

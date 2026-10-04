@@ -1,5 +1,8 @@
 # Install after the M3 CUDA environment, using Python 3.10.
 -r m3-greedy.txt
+# Match upstream environment.yml; Lightning 1.8.6 imports pkg_resources.
+setuptools==69.5.1
+pip==24.0
 # Prevent Bolts' broad torchvision dependency from replacing the audited torch.
 # Install this trio from the CUDA 12.1 index before this requirements file.
 torch==2.3.0

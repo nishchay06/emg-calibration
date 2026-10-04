@@ -229,9 +229,11 @@ def run(args, record, config):
         raise ValueError("GPU requested but CUDA is unavailable")
     from importlib.metadata import version
     expected_versions = {"pytorch-lightning": "1.8.6", "lightning-bolts": "0.7.0",
-                         "hydra-core": "1.3.2", "omegaconf": "2.3.0", "torchmetrics": "0.11.4"}
+                         "hydra-core": "1.3.2", "omegaconf": "2.3.0", "torchmetrics": "0.11.4",
+                         "setuptools": "69.5.1", "pip": "24.0",
+                         "torchaudio": "2.3.0", "torchvision": "0.18.0"}
     for package, expected in expected_versions.items():
-        if version(package) != expected:
+        if version(package).split("+")[0] != expected:
             raise ValueError(f"{package} must be {expected}")
     if torch.__version__.split("+")[0] != "2.3.0":
         raise ValueError("PyTorch must be 2.3.0")
