@@ -22,6 +22,7 @@ jobs:
             python -m json.tool "$result" >/dev/null
           done
           python -m json.tool references/generic-greedy.json >/dev/null
+          python -m json.tool references/personalized-greedy.json >/dev/null
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
       - name: Test command-line guards and dry runs
@@ -36,4 +37,6 @@ jobs:
           path: upstream/emg2qwerty
           lfs: false
       - name: Verify generated test-user manifests
-        run: ./scripts/generate_test_user_manifests.py upstream/emg2qwerty --check
+        run: |
+          ./scripts/generate_test_user_manifests.py upstream/emg2qwerty --check
+          ./scripts/generate_personalized_reference.py upstream/emg2qwerty --check

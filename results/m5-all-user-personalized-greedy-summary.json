@@ -1,0 +1,122 @@
+{
+  "acceptance": {
+    "evaluations_passed": 16,
+    "evaluations_required": 16,
+    "families_passed": 2,
+    "families_required": 2,
+    "maximum_absolute_CER_delta_percentage_points": 0.1,
+    "metric_checks_passed": 32,
+    "metric_checks_required": 32,
+    "passed": true
+  },
+  "aggregates": {
+    "finetuned": {
+      "test_CER": {
+        "maximum_absolute_delta_percentage_points": 0.011678276062012216,
+        "reference_mean": 11.276875,
+        "reference_sample_standard_deviation": 4.7599603370946575,
+        "reproduced_mean": 11.273044645786285,
+        "reproduced_sample_standard_deviation": 4.7587551956745
+      },
+      "validation_CER": {
+        "maximum_absolute_delta_percentage_points": 0.011225891113281428,
+        "reference_mean": 11.392875,
+        "reference_sample_standard_deviation": 4.572621331280967,
+        "reproduced_mean": 11.391316950321198,
+        "reproduced_sample_standard_deviation": 4.57377401733418
+      }
+    },
+    "randominit": {
+      "test_CER": {
+        "maximum_absolute_delta_percentage_points": 0.0349524688720706,
+        "reference_mean": 15.37975,
+        "reference_sample_standard_deviation": 6.283012511071876,
+        "reproduced_mean": 15.374903857707977,
+        "reproduced_sample_standard_deviation": 6.278189193844931
+      },
+      "validation_CER": {
+        "maximum_absolute_delta_percentage_points": 0.025817031860352557,
+        "reference_mean": 15.651625,
+        "reference_sample_standard_deviation": 6.3631096157572875,
+        "reproduced_mean": 15.656472444534302,
+        "reproduced_sample_standard_deviation": 6.3713853609103905
+      }
+    }
+  },
+  "artifacts": [
+    {
+      "ignored_archive": "artifacts/m5-runpod-2026-10-04.tar.gz",
+      "sha256": "43f557a24e96b2bcd692d33264b902f544860860fb49cadd4adbd03b43c20e64",
+      "users": ["user0", "user1", "user2"]
+    },
+    {
+      "ignored_archive": "artifacts/m5-runpod-2026-10-04-expansion.tar.gz",
+      "sha256": "7bf5868783af3186f8affbe7a6815fe09cdb310dc592d15379d32f50a8fca4f3",
+      "users": ["user3", "user4", "user5", "user6", "user7"]
+    }
+  ],
+  "checkpoints": {
+    "count": 16,
+    "total_bytes": 1017579936,
+    "verification": "filename, byte size, and full SHA-256"
+  },
+  "cleanup": {
+    "active_endpoints_after_cleanup": 0,
+    "active_pods_after_cleanup": 0,
+    "cleanup_verified_at_utc": "2026-10-04T11:06:16Z",
+    "current_spend_usd_per_hour": 0.039,
+    "retained_network_volume": {
+      "data_center": "US-IL-1",
+      "id": "ni0dpvtday",
+      "size_gb": 400,
+      "type": "STANDARD",
+      "usd_per_hour": 0.0388888903
+    },
+    "verified": true
+  },
+  "cost": {
+    "expansion_balance_after_usd": 10.4833738603,
+    "expansion_balance_before_usd": 10.6257153788,
+    "expansion_observed_balance_delta_usd": 0.1423415185,
+    "observed_balance_delta_across_two_runs_usd": 0.2382317722,
+    "pod_billing_status": "not yet posted at final expansion audit",
+    "three_user_observed_balance_delta_usd": 0.0958902537
+  },
+  "results": [
+    "results/m5-user0-personalized-finetuned-greedy.json",
+    "results/m5-user1-personalized-finetuned-greedy.json",
+    "results/m5-user2-personalized-finetuned-greedy.json",
+    "results/m5-user3-personalized-finetuned-greedy.json",
+    "results/m5-user4-personalized-finetuned-greedy.json",
+    "results/m5-user5-personalized-finetuned-greedy.json",
+    "results/m5-user6-personalized-finetuned-greedy.json",
+    "results/m5-user7-personalized-finetuned-greedy.json",
+    "results/m5-user0-personalized-randominit-greedy.json",
+    "results/m5-user1-personalized-randominit-greedy.json",
+    "results/m5-user2-personalized-randominit-greedy.json",
+    "results/m5-user3-personalized-randominit-greedy.json",
+    "results/m5-user4-personalized-randominit-greedy.json",
+    "results/m5-user5-personalized-randominit-greedy.json",
+    "results/m5-user6-personalized-randominit-greedy.json",
+    "results/m5-user7-personalized-randominit-greedy.json"
+  ],
+  "run_date_utc": "2026-10-04",
+  "runtime": {
+    "container_disk_gb": 20,
+    "data_center": "US-IL-1",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "gpu_price_usd_per_hour": 0.74,
+    "image": "runpod/pytorch:2.2.0-py3.10-cuda12.1.1-devel-ubuntu22.04",
+    "pod_ids": ["osxf0akjj1suup", "ttd4el9vlaqfq7"],
+    "provider": "Runpod",
+    "pytorch": "2.3.0+cu121",
+    "termination_guard": {
+      "native_server_side_available": false,
+      "pods_deleted_after_local_evidence_verification": true,
+      "runs_actively_supervised": true
+    }
+  },
+  "schema_version": 1,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "users": ["user0", "user1", "user2", "user3", "user4", "user5", "user6", "user7"]
+}

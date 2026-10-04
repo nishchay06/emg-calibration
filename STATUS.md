@@ -246,9 +246,106 @@ archive stream so the downloaded sessions can be reused.
   `$0.3824294963`. The itemized Pod billing row had not posted at the final
   audit, so this is recorded as a balance delta rather than a finalized charge.
 
+## M5 — released personalized baselines
+
+**Status:** all-user released-checkpoint gate passed (2026-10-04)
+
+- Audited two released checkpoint families at the pinned upstream commit:
+  eight `personalized-randominit` and eight `personalized-finetuned` models.
+- Recorded all 16 Git LFS SHA-256 identities and byte sizes plus the upstream
+  no-language-model validation/test CER references in
+  [`references/personalized-greedy.json`](references/personalized-greedy.json).
+- Added deterministic regeneration/check mode from the upstream LFS pointers
+  and `scripts/experimental_results.py`; CI now detects reference drift.
+- Verified the official GitHub media URL pattern with HTTP 200, exact content
+  length, and matching ETag for `user0` in both checkpoint families.
+- Added guarded checkpoint staging with dry-run, explicit family/user lists,
+  partial-directory isolation, full SHA-256 verification, and overwrite
+  refusal.
+- Added single-user and sequential personalized greedy evaluation, per-family
+  checkpoint verification, structured result capture, and stop-on-first-failure
+  acceptance enforcement.
+- Local tests cover reference parsing, checkpoint verification, result capture,
+  CLI guards, dry-run non-mutation, and existing M3/M4 behavior.
+- No checkpoint was downloaded and no personalized evaluation or paid compute
+  was started during this preparation phase.
+- Ran the guarded two-family gate on Secure RTX 4090 Pod `osxf0akjj1suup` in
+  `US-IL-1`, reusing the retained 400 GB Standard volume. All six downloaded
+  checkpoints matched their pinned byte sizes and full SHA-256 identities.
+- The fine-tuned family reproduced the released greedy baselines:
+  - `user0`: validation 17.963375% (+0.003375 pp), test 20.567451%
+    (-0.002549 pp)
+  - `user1`: validation 8.392132% (+0.000132 pp), test 10.319437%
+    (-0.000563 pp)
+  - `user2`: validation 8.164897% (-0.000103 pp), test 8.408756%
+    (-0.000244 pp)
+- The random-init family also reproduced the released greedy baselines:
+  - `user0`: validation 24.155817% (+0.025817 pp), test 26.595289%
+    (-0.004711 pp)
+  - `user1`: validation 11.310669% (+0.000669 pp), test 14.152680%
+    (+0.002680 pp)
+  - `user2`: validation 10.049104% (-0.000896 pp), test 11.123974%
+    (+0.003974 pp)
+- All 12 validation/test CER checks passed the 0.10-percentage-point gate.
+  Structured evidence is recorded in
+  [`results/m5-three-user-personalized-greedy-summary.json`](results/m5-three-user-personalized-greedy-summary.json)
+  and its six referenced result files.
+- Raw console logs, Hydra configurations, staging logs, and the environment
+  record were copied locally under ignored `artifacts/`. The evidence archive
+  SHA-256 is `43f557a24e96b2bcd692d33264b902f544860860fb49cadd4adbd03b43c20e64`.
+- The Pod was deleted after local evidence verification. Read-back found zero
+  Pods and zero endpoints; volume `ni0dpvtday` remains at `$0.0388888903/hour`.
+  Balance decreased from `$10.7759084769` to `$10.6800182232`, an observed
+  `$0.0958902537`; itemized Pod billing had not posted at the final audit.
+- Runpodctl 2.12+ removed its non-functional server-side termination flags.
+  The attempted detached local watchdog could not be verified as persistent in
+  the tool environment, so it is not counted as a reliable guard. This short
+  run remained actively supervised and the Pod was deleted immediately after
+  evidence verification.
+- Expanded both released checkpoint families to `user3`–`user7` on Secure RTX
+  4090 Pod `ttd4el9vlaqfq7` in `US-IL-1`. All ten additional checkpoints
+  matched their pinned byte sizes and SHA-256 identities.
+- The fine-tuned expansion reproduced the released greedy baselines:
+  - `user3`: validation 9.543159% (+0.000159 pp), test 8.916987%
+    (-0.011013 pp)
+  - `user4`: validation 7.563774% (-0.011226 pp), test 7.907294%
+    (+0.000294 pp)
+  - `user5`: validation 7.148450% (+0.000450 pp), test 5.810502%
+    (-0.000498 pp)
+  - `user6`: validation 17.166979% (-0.003021 pp), test 14.205607%
+    (-0.004393 pp)
+  - `user7`: validation 15.187770% (-0.002230 pp), test 14.048322%
+    (-0.011678 pp)
+- The random-init expansion also reproduced the released greedy baselines:
+  - `user3`: validation 14.605755% (-0.004245 pp), test 13.249038%
+    (-0.000962 pp)
+  - `user4`: validation 10.638298% (-0.001702 pp), test 10.508975%
+    (-0.001025 pp)
+  - `user5`: validation 9.363463% (+0.000463 pp), test 7.648402%
+    (+0.000402 pp)
+  - `user6`: validation 22.197468% (-0.002532 pp), test 18.785048%
+    (-0.034952 pp)
+  - `user7`: validation 22.931206% (+0.021206 pp), test 20.935825%
+    (-0.004175 pp)
+- All 20 expansion checks and all 32 all-user validation/test CER checks
+  passed the 0.10-percentage-point threshold. Fine-tuned mean test CER is
+  11.273045% ± 4.758755%; random-init mean test CER is 15.374904% ± 6.278189%
+  (sample standard deviations). Structured evidence is recorded in
+  [`results/m5-all-user-personalized-greedy-summary.json`](results/m5-all-user-personalized-greedy-summary.json)
+  and its 16 referenced result files.
+- The ignored expansion archive contains 10 result JSON files, 10 console
+  logs, 30 Hydra YAML files, staging/runtime evidence, and SHA-256
+  `7bf5868783af3186f8affbe7a6815fe09cdb310dc592d15379d32f50a8fca4f3`.
+- The expansion Pod was deleted after local evidence verification. Read-back
+  found zero Pods and zero endpoints; volume `ni0dpvtday` remains at
+  `$0.0388888903/hour`. Balance decreased from `$10.6257153788` to
+  `$10.4833738603`, an observed `$0.1423415185`; itemized Pod billing had not
+  posted at the final audit.
+
 ## Next acceptance test
 
-M5 begins with a no-cost audit of the released personalized checkpoints and
-official evaluation path. Do not start calibration-budget or novel adaptation
-experiments until the personalized baseline reproduction plan and acceptance
-criteria are documented and the relevant released baselines are reproduced.
+Build the M5b adaptation harness locally with explicit user, budget, method,
+seed, step-count, and checkpoint-selection controls. Its first paid gate is the
+upstream full-data/full-fine-tuning reproduction for `user0`, followed by
+`user5` only if `user0` passes; each test CER must be within 1.0 percentage
+point of the released fine-tuned checkpoint. See [`ROADMAP.md`](ROADMAP.md).
