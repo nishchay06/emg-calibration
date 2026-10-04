@@ -89,6 +89,22 @@ streams the public archive until every requested member is found, accepts curl
 exit 23 only when tar completed successfully, validates every non-empty HDF5
 file, and refuses to overwrite an existing destination.
 
+When the complete upstream archive has already been downloaded to temporary
+Pod storage, avoid a second network traversal with the local-archive mode:
+
+```bash
+./scripts/stage_test_users_data.sh \
+  --archive-file /tmp/emg2qwerty-data-2021-08.tar.gz \
+  /workspace/data \
+  user0 user1 user2 user3 user4 user5 user6 user7
+```
+
+This mode requires the archive to match the pinned 308,382,645,571-byte size
+before creating the destination. It then reuses the same deterministic member
+selection, GNU tar behavior, non-empty-file checks, and exact HDF5 count as the
+streaming path. The archive itself remains on temporary storage and must never
+be committed.
+
 ## Per-user evaluation
 
 ```bash

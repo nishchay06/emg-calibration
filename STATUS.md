@@ -189,6 +189,9 @@ archive stream so the downloaded sessions can be reused.
   `us-east-1` and supports byte-range requests. The NEMAR per-file copy uses a
   converted BDF/TSV representation rather than the upstream HDF5 inputs, so it
   is not an acceptable substitute for baseline reproduction.
+- Added and tested an `--archive-file` staging mode. It requires the full local
+  archive to match the pinned 308,382,645,571-byte size, then applies the same
+  deterministic manifest extraction and HDF5 validation as the streaming path.
 - Next: approve a revised, guarded `US-IL-1` proposal that downloads the
   original archive in parallel to temporary Pod disk, selectively extracts the
   pinned HDF5 sessions to a colocated network volume, then evaluates `user3`
