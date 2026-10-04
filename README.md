@@ -34,6 +34,17 @@ No-cost M4 preparation now includes deterministic, pinned manifests for all
 eight held-out users: 100 unique sessions (68 train, 16 validation, 16 test).
 See [`manifests/README.md`](manifests/README.md) for regeneration and validation.
 
+When a complete archive is already available locally, install the pinned M4
+staging dependency before using `--archive-file` mode:
+
+```bash
+python -m pip install -r requirements/m4-staging.txt
+```
+
+That path uses `rapidgzip` parallel decompression, verifies the complete gzip
+stream's CRC32, and only accepts the destination after every selected HDF5
+member passes the manifest checks.
+
 ## Reproduce the one-user baseline
 
 The scripts expect Linux, Python 3.10, and a CUDA-capable machine. Dataset and

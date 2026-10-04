@@ -181,10 +181,9 @@ archive stream so the downloaded sessions can be reused.
   stream was intentionally stopped after 11 minutes 42 seconds at 0.4% of the
   archive; tar consequently exited 2 and left only unvalidated partial data.
 - The failed L4 Pod (`uevnc74dw12z7b`) was deleted after its raw logs were
-  copied to ignored `artifacts/m4-runpod-2026-10-04/`. The 60 GB Standard
-  network volume (`6jpri33smy`) remains in `EU-RO-1` at `$0.006/hour` pending
-  the next staging decision. The observed balance decrease from preflight
-  through cleanup was `$0.1580947138`.
+  copied to ignored `artifacts/m4-runpod-2026-10-04/`. Its 60 GB Standard
+  network volume (`6jpri33smy`) was subsequently deleted. The observed balance
+  decrease from preflight through the original cleanup was `$0.1580947138`.
 - Read-only follow-up confirmed that the upstream archive is served from AWS
   `us-east-1` and supports byte-range requests. The NEMAR per-file copy uses a
   converted BDF/TSV representation rather than the upstream HDF5 inputs, so it
@@ -192,7 +191,35 @@ archive stream so the downloaded sessions can be reused.
 - Added and tested an `--archive-file` staging mode. It requires the full local
   archive to match the pinned 308,382,645,571-byte size, then applies the same
   deterministic manifest extraction and HDF5 validation as the streaming path.
-- Next: approve a revised, guarded `US-IL-1` proposal that downloads the
-  original archive in parallel to temporary Pod disk, selectively extracts the
-  pinned HDF5 sessions to a colocated network volume, then evaluates `user3`
-  through `user7` sequentially.
+- A guarded Secure RTX 4090 attempt in `US-IL-1` downloaded the complete
+  archive with 16 HTTP range connections. The corrected ten-minute gate was
+  59.8 MB/s and the completed aria2 transfer averaged 51 MiB/s. Exact archive
+  size validation passed.
+- The subsequent all-user extraction did not finish. GNU tar delegated gzip
+  decoding to a single `gzip -d` process; after 1,680 seconds it had read only
+  25,225,068,544 compressed bytes. The projected full traversal was about five
+  to six hours, so evaluation never started and no new CER result was claimed.
+- The archive was preserved at its exact 308,382,645,571-byte size on the
+  400 GB Standard `US-IL-1` volume `ni0dpvtday`. Successful range writes and
+  exact size are recorded, but a complete source digest was not obtained; the
+  next extraction must therefore traverse the full gzip stream and validate
+  its CRC32 before accepting staged data.
+- The retained archive path is
+  `/workspace/archive/emg2qwerty-data-2021-08.tar.gz`. The volume also contains
+  the deliberately unaccepted `/workspace/data.partial` from the stopped
+  single-core extraction and an empty `.source.sha256` placeholder. Inspect
+  and remove those two failed-attempt artifacts before the next staging run;
+  neither is verification evidence.
+- Runpod billing reports `$2.3493767390` for Pod `kykgn9f9oaq52q`, including
+  `$2.1873397008` GPU and `$0.1620370382` temporary-disk charges. Volume billing
+  through the read-only audit was `$0.2508333419`; the retained volume continues
+  at `$0.0388888903/hour`. Read-back found zero Pods and zero endpoints.
+- Replaced single-threaded local-archive decompression with pinned
+  `rapidgzip==0.16.0`, automatic parallelism, and explicit CRC32 verification.
+  Local synthetic tests prove successful selection, missing-member rejection,
+  truncated-archive rejection, and invalid-configuration rejection. The
+  production archive remains unverified until the next attached-compute run.
+- Next: attach the retained volume to guarded `US-IL-1` compute, measure
+  parallel decompression early, require a complete CRC-verified traversal and
+  exactly 100 staged HDF5 files, then evaluate `user3` through `user7`
+  sequentially.

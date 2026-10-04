@@ -100,10 +100,19 @@ Pod storage, avoid a second network traversal with the local-archive mode:
 ```
 
 This mode requires the archive to match the pinned 308,382,645,571-byte size
-before creating the destination. It then reuses the same deterministic member
-selection, GNU tar behavior, non-empty-file checks, and exact HDF5 count as the
-streaming path. The archive itself remains on temporary storage and must never
-be committed.
+before creating the destination. Install the pinned parallel decoder first:
+
+```bash
+python -m pip install -r requirements/m4-staging.txt
+```
+
+Local-archive mode uses `rapidgzip==0.16.0` with automatic parallelism and
+explicit CRC32 verification. Unlike the network-stream path, it deliberately
+does not ask GNU tar to stop after the first occurrence: the decoder and tar
+scan the complete archive so truncation or a corrupt gzip trailer cannot be
+hidden by an early successful member match. The destination is accepted only
+after the decoder, tar, per-file, and exact-count checks all pass. The archive
+must never be committed.
 
 ## Per-user evaluation
 
@@ -237,3 +246,47 @@ range requests to temporary Pod disk, verify its exact byte size, and extract
 only the required HDF5 members to a colocated network volume. Do not provision
 this revised path until its live price, runtime guard, storage lifecycle, and
 hard cost ceiling are approved.
+
+## Observed US-IL-1 archive-preservation attempt
+
+The approved follow-up used a Secure RTX 4090 in `US-IL-1`. Sixteen HTTP range
+connections passed a corrected ten-minute gate at 59.8 MB/s and completed the
+308,382,645,571-byte archive at an aria2-reported average of 51 MiB/s.
+
+Staging then exposed a different bottleneck: `tar -xzf` launched one `gzip -d`
+process at effectively one CPU core. After 1,680 seconds that process had read
+25,225,068,544 compressed bytes, implying roughly five to six hours for a full
+traversal. The staging job was stopped before evaluation; this run produced no
+CER results.
+
+The exact-size archive was copied to the 400 GB Standard volume
+`ni0dpvtday` in `US-IL-1`, and the GPU Pod was deleted. Exact size and
+successful range writes were confirmed, but the original source SHA-256 pass
+was too slow and was stopped. Treat the persistent copy as pending integrity
+validation until a complete gzip CRC32-verified traversal succeeds.
+
+The preserved file is
+`/workspace/archive/emg2qwerty-data-2021-08.tar.gz`. Before rerunning staging,
+inspect and remove the unaccepted `/workspace/data.partial` directory and the
+empty archive `.source.sha256` placeholder left by the stopped attempt. Do not
+mistake either artifact for validated evidence. The guarded staging command is:
+
+```bash
+python -m pip install -r requirements/m4-staging.txt
+./scripts/stage_test_users_data.sh \
+  --archive-file /workspace/archive/emg2qwerty-data-2021-08.tar.gz \
+  /workspace/data \
+  user0 user1 user2 user3 user4 user5 user6 user7
+```
+
+Billing evidence from Runpod records `$2.3493767390` for the Pod and its
+temporary disk. The retained volume had accrued `$0.2508333419` through the
+subsequent audit and continues at `$0.0388888903/hour`.
+
+The local-archive implementation now pins `rapidgzip==0.16.0` and streams
+`rapidgzip --verify -P 0` into tar. It intentionally scans the complete stream
+instead of using tar's early-exit `--occurrence=1` behavior. Synthetic tests
+cover successful selected-member extraction, missing members, a truncated gzip
+trailer, and invalid parallelism. This is local evidence only; benchmark the
+preserved production archive under a paid time and cost guard before assuming
+its throughput.
