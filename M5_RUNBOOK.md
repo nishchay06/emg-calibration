@@ -225,3 +225,6 @@ final audit.
 M5a is complete. The next gate is M5b: reproduce the upstream full-data,
 full-fine-tuning recipe for `user0`, then `user5` if `user0` passes, with each
 test CER within 1.0 percentage point of the released fine-tuned checkpoint.
+
+The pinned training audit, local adaptation harness and separate training gates
+are documented in [`M5B_RUNBOOK.md`](M5B_RUNBOOK.md).
