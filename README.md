@@ -38,6 +38,12 @@ Structured records are in [`results/`](results/), including the
 [`all-user summary`](results/m4-all-user-generic-greedy-summary.json). The
 released personalized baselines are the next reproduction gate.
 
+M5 preparation audits both released personalized checkpoint families: eight
+random-initialized and eight fine-tuned-from-generic models. Their pinned Git
+LFS identities, greedy CER references, guarded download/evaluation commands,
+and acceptance criteria are documented in [`M5_RUNBOOK.md`](M5_RUNBOOK.md).
+No personalized result is claimed yet.
+
 No-cost M4 preparation now includes deterministic, pinned manifests for all
 eight held-out users: 100 unique sessions (68 train, 16 validation, 16 test).
 See [`manifests/README.md`](manifests/README.md) for regeneration and validation.

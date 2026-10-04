@@ -246,9 +246,33 @@ archive stream so the downloaded sessions can be reused.
   `$0.3824294963`. The itemized Pod billing row had not posted at the final
   audit, so this is recorded as a balance delta rather than a finalized charge.
 
+## M5 — released personalized baselines
+
+**Status:** preparation complete (2026-10-04); paid reproduction gate pending
+
+- Audited two released checkpoint families at the pinned upstream commit:
+  eight `personalized-randominit` and eight `personalized-finetuned` models.
+- Recorded all 16 Git LFS SHA-256 identities and byte sizes plus the upstream
+  no-language-model validation/test CER references in
+  [`references/personalized-greedy.json`](references/personalized-greedy.json).
+- Added deterministic regeneration/check mode from the upstream LFS pointers
+  and `scripts/experimental_results.py`; CI now detects reference drift.
+- Verified the official GitHub media URL pattern with HTTP 200, exact content
+  length, and matching ETag for `user0` in both checkpoint families.
+- Added guarded checkpoint staging with dry-run, explicit family/user lists,
+  partial-directory isolation, full SHA-256 verification, and overwrite
+  refusal.
+- Added single-user and sequential personalized greedy evaluation, per-family
+  checkpoint verification, structured result capture, and stop-on-first-failure
+  acceptance enforcement.
+- Local tests cover reference parsing, checkpoint verification, result capture,
+  CLI guards, dry-run non-mutation, and existing M3/M4 behavior.
+- No checkpoint was downloaded and no personalized evaluation or paid compute
+  was started during this preparation phase.
+
 ## Next acceptance test
 
-M5 begins with a no-cost audit of the released personalized checkpoints and
-official evaluation path. Do not start calibration-budget or novel adaptation
-experiments until the personalized baseline reproduction plan and acceptance
-criteria are documented and the relevant released baselines are reproduced.
+Perform live read-only Runpod checks and present a guarded cost proposal for the
+two-family `user0`-`user2` gate. All six checkpoint evaluations must reproduce
+both validation and test CER within 0.10 percentage points before expanding to
+users 3–7. See [`M5_RUNBOOK.md`](M5_RUNBOOK.md).

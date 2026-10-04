@@ -43,6 +43,20 @@ expect_exit 2 "${project_dir}/scripts/evaluate_generic_sweep.sh" \
     --dry-run /unused /unused /unused /unused user8
 expect_exit 2 "${project_dir}/scripts/evaluate_generic_sweep.sh" \
     --dry-run /unused /unused /unused /unused user0 user0
+expect_exit 2 "${project_dir}/scripts/evaluate_personalized_greedy.sh" \
+    unknown user0 /unused /unused /unused /unused
+expect_exit 2 "${project_dir}/scripts/evaluate_personalized_greedy.sh" \
+    finetuned user8 /unused /unused /unused /unused
+expect_exit 2 "${project_dir}/scripts/evaluate_personalized_sweep.sh"
+expect_exit 2 "${project_dir}/scripts/evaluate_personalized_sweep.sh" \
+    --dry-run unknown /unused /unused /unused /unused user0
+expect_exit 2 "${project_dir}/scripts/evaluate_personalized_sweep.sh" \
+    --dry-run finetuned /unused /unused /unused /unused user0 user0
+expect_exit 2 "${project_dir}/scripts/stage_personalized_checkpoints.sh"
+expect_exit 2 "${project_dir}/scripts/stage_personalized_checkpoints.sh" \
+    --dry-run unknown /unused user0
+expect_exit 2 "${project_dir}/scripts/stage_personalized_checkpoints.sh" \
+    --dry-run finetuned /unused user0 user0
 
 mkdir "${temporary_dir}/not-upstream" "${temporary_dir}/data"
 touch "${temporary_dir}/checkpoint"
@@ -124,5 +138,49 @@ expect_exit 1 "${project_dir}/scripts/evaluate_generic_sweep.sh" \
     "${missing_input_output_root}" \
     user0 user1
 [[ ! -e "${missing_input_output_root}" ]]
+
+personalized_output_root="${temporary_dir}/personalized-dry-run-output"
+personalized_plan="$(
+    "${project_dir}/scripts/evaluate_personalized_sweep.sh" \
+        --dry-run \
+        finetuned \
+        /workspace/emg2qwerty \
+        /workspace/data \
+        /workspace/checkpoints/personalized-finetuned \
+        "${personalized_output_root}" \
+        user0 user1 user2
+)"
+[[ "${personalized_plan}" == *"Benchmark: finetuned"* ]]
+[[ "${personalized_plan}" == *"Selected users: user0,user1,user2"* ]]
+[[ "${personalized_plan}" == *"Evaluation count: 3"* ]]
+[[ "${personalized_plan}" == *"user2.ckpt output=${personalized_output_root}/user2-personalized-finetuned-greedy"* ]]
+[[ "${personalized_plan}" == *"Dry run only; no directories were created"* ]]
+[[ ! -e "${personalized_output_root}" ]]
+
+personalized_missing_output_root="${temporary_dir}/personalized-missing-output"
+expect_exit 1 "${project_dir}/scripts/evaluate_personalized_sweep.sh" \
+    --run \
+    randominit \
+    "${temporary_dir}/missing-upstream" \
+    "${temporary_dir}/missing-data" \
+    "${temporary_dir}/missing-checkpoints" \
+    "${personalized_missing_output_root}" \
+    user0 user1
+[[ ! -e "${personalized_missing_output_root}" ]]
+
+checkpoint_destination="${temporary_dir}/personalized-checkpoints"
+checkpoint_plan="$(
+    "${project_dir}/scripts/stage_personalized_checkpoints.sh" \
+        --dry-run \
+        finetuned \
+        "${checkpoint_destination}" \
+        user0 user1 user2
+)"
+[[ "${checkpoint_plan}" == *"Benchmark: finetuned"* ]]
+[[ "${checkpoint_plan}" == *"Checkpoint count: 3"* ]]
+[[ "${checkpoint_plan}" == *"Expected bytes: 190830462"* ]]
+[[ "${checkpoint_plan}" == *"models/personalized-finetuned/user2.ckpt"* ]]
+[[ "${checkpoint_plan}" == *"Dry run only; no directories were created"* ]]
+[[ ! -e "${checkpoint_destination}" ]]
 
 echo "CLI guard tests passed"
