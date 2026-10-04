@@ -12,7 +12,8 @@ session records stay outside version control.
 - M5a: both released personalized checkpoint families reproduced for all eight
   users, with the same 0.10 pp per-split tolerance.
 - M5b: pinned adaptation harness and CPU checkpoint-restoration smoke passed.
-  Full-data training reproduction is the next gate.
+  User0 full-data reproduction passed: 150 epochs, test CER 21.209850%,
+  +0.639850 pp from reference, 34.44 minutes. User5 is the remaining gate.
 
 ## Evidence policy
 
