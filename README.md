@@ -89,7 +89,7 @@ they are not committed here.
 ```
 
 [`M3_RUNBOOK.md`](M3_RUNBOOK.md) documents the audited inputs, acceptance
-criteria, observed run, and cost evidence. [`STATUS.md`](STATUS.md) records each
+criteria, observed run, and cost evidence. [`RESEARCH_STATUS.md`](RESEARCH_STATUS.md) records each
 completed milestone and known limitation.
 
 ## Plan a multi-user baseline
