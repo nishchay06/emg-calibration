@@ -15,7 +15,8 @@ within 1.0 percentage point of 20.57% (user0) or 5.811% (user5). Validation
 CER is diagnostic; upstream validation selection is intentional for this gate.
 Calibration-budget experiments must instead use fixed steps and the final
 checkpoint. The harness currently supports full/full/upstream reproduction;
-other advertised budget/method choices are guarded until implemented.
+fixed-step full-model calibration is implemented in `M6_RUNBOOK.md`.
+Head/norm/LoRA remain guarded until M8.
 
 ## Prepare and run
 
@@ -29,7 +30,9 @@ not committed. Apply only the optional-KenLM greedy compatibility patch.
 Preview the exact command, then validate composition without training:
 
 ```bash
-python scripts/adapt.py --dry-run --user user0
+python scripts/adapt.py --dry-run --user user0 \
+  --upstream-dir /workspace/emg2qwerty --data-dir /workspace/data \
+  --output-dir /workspace/results/m5b/user0 --accelerator gpu
 python scripts/adapt.py --check-config --user user0 \
   --upstream-dir /workspace/emg2qwerty --data-dir /workspace/data \
   --checkpoint /workspace/emg2qwerty/models/generic.ckpt \

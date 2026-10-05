@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "status": "draft",
+  "purpose": "CLI illustration only; these five-update values are not tuned research hyperparameters",
+  "selection": "final",
+  "schedule": "update-warmup-cosine-v1",
+  "methods": {
+    "full": {
+      "steps": 5,
+      "learning_rate": 0.001,
+      "warmup_steps": 2,
+      "warmup_start_lr": 1e-8,
+      "minimum_lr": 1e-6
+    }
+  }
+}

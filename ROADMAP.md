@@ -17,6 +17,7 @@ with publication-ready figures, evidence and reproducibility instructions.
 | M4: eight-user generic baseline (55.38% ± 4.38 test CER, greedy) | Done 2026-10-04 |
 | M5a: released personalized checkpoints (both families, all users) | Done 2026-10-04 |
 | M5b: own full-data training (user0/user5, within 1.0 pp) | Done 2026-10-05 |
+| M6: local sampler and fixed-update protocol | Done 2026-10-05; real-data preflight pending |
 
 The eight-user subset contains 100 sessions and occupies 28.42 GB (26.47 GiB)
 after selective extraction. Dataset and checkpoints are obtained from upstream
@@ -26,8 +27,8 @@ and retained outside Git.
 400 GB to 50 GB stopped at the transfer gate. The original source remains
 authoritative; the incomplete candidate must not be used for training. Both
 temporary CPU Pods were deleted, and both volumes were retained. See
-`results/storage-migration-attempt-20261005.json`. M6 remains the next research
-gate and can proceed locally.
+`results/storage-migration-attempt-20261005.json`. M6 was the next research
+gate at that time; its local checks subsequently passed (see below).
 
 ## Upstream facts that shape the design
 
@@ -110,6 +111,13 @@ No GPU needed; local tests only.
   windows never overlap validation or test sessions; the `full` budget
   reproduces the upstream training set exactly.
 
+**Local gate passed 2026-10-05:** all 52 unit tests passed without skips,
+including bounded HDF5 loading, 56 fixed-mode configuration combinations and
+real upstream-model CPU checkpoint/evaluation checks. Dataset coverage used
+synthetic lengths; actual recording coverage and generic/CUDA runtime checks
+remain mandatory before M7 training. No research profile has been tuned yet.
+See `M6_RUNBOOK.md` and `results/m6-local-acceptance.json`.
+
 ### M7: First curve (first real result)
 
 - `method=full`, budgets 1 → full, users 0–2, 1 seed.
@@ -118,6 +126,22 @@ No GPU needed; local tests only.
 - **Output:** first figure, CER vs minutes (log x-axis) per user. This is
   already a result worth putting in the lab interest form and the email to the
   professor.
+
+The fixed-protocol full point uses different step/checkpoint selection from
+M5b's upstream reference. Declare its comparison criteria before the paid run;
+do not assume identical CER or tune on untouched users to force agreement.
+
+**Draft prepared 2026-10-05:** `M7_PROPOSAL.md` declares the candidate matrix,
+validation-only selection, full-data comparison and trend gates, with separate
+bounded tuning and curve sessions. All 16 candidate compositions passed local
+checks (`results/m7-local-preparation.json`). No paid run or profile freeze is
+approved; the draft's criteria require review before execution.
+
+**Session A approved 2026-10-05:** its sequential worker and safeguards passed
+59 repository tests without skips. The initial start stopped before creation
+because the exact location/Secure RTX 4090 quote had no runnable availability.
+No Pod or training began. See `M7_SESSION_A_RUNBOOK.md` and
+`results/m7-session-a-pre-provision.json`. Session B remains separately gated.
 
 ### M8: Adaptation methods
 

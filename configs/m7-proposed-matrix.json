@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "milestone": "M7",
+  "status": "proposed_not_approved",
+  "tuning_users": [
+    "user0",
+    "user1"
+  ],
+  "tuning_budgets": [
+    "5",
+    "full"
+  ],
+  "seed": 1501,
+  "candidates": [
+    {
+      "id": "full-s1000-lr3e-4",
+      "path": "configs/m7-candidates/full-s1000-lr3e-4.json"
+    },
+    {
+      "id": "full-s1000-lr1e-3",
+      "path": "configs/m7-candidates/full-s1000-lr1e-3.json"
+    },
+    {
+      "id": "full-s3000-lr3e-4",
+      "path": "configs/m7-candidates/full-s3000-lr3e-4.json"
+    },
+    {
+      "id": "full-s3000-lr1e-3",
+      "path": "configs/m7-candidates/full-s3000-lr1e-3.json"
+    }
+  ],
+  "tuning_runs": [
+    {
+      "id": "full-s1000-lr3e-4-user0-5",
+      "candidate": "configs/m7-candidates/full-s1000-lr3e-4.json",
+      "user": "user0",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s1000-lr3e-4-user0-full",
+      "candidate": "configs/m7-candidates/full-s1000-lr3e-4.json",
+      "user": "user0",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s1000-lr3e-4-user1-5",
+      "candidate": "configs/m7-candidates/full-s1000-lr3e-4.json",
+      "user": "user1",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s1000-lr3e-4-user1-full",
+      "candidate": "configs/m7-candidates/full-s1000-lr3e-4.json",
+      "user": "user1",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s1000-lr1e-3-user0-5",
+      "candidate": "configs/m7-candidates/full-s1000-lr1e-3.json",
+      "user": "user0",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s1000-lr1e-3-user0-full",
+      "candidate": "configs/m7-candidates/full-s1000-lr1e-3.json",
+      "user": "user0",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s1000-lr1e-3-user1-5",
+      "candidate": "configs/m7-candidates/full-s1000-lr1e-3.json",
+      "user": "user1",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s1000-lr1e-3-user1-full",
+      "candidate": "configs/m7-candidates/full-s1000-lr1e-3.json",
+      "user": "user1",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 1000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr3e-4-user0-5",
+      "candidate": "configs/m7-candidates/full-s3000-lr3e-4.json",
+      "user": "user0",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr3e-4-user0-full",
+      "candidate": "configs/m7-candidates/full-s3000-lr3e-4.json",
+      "user": "user0",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr3e-4-user1-5",
+      "candidate": "configs/m7-candidates/full-s3000-lr3e-4.json",
+      "user": "user1",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr3e-4-user1-full",
+      "candidate": "configs/m7-candidates/full-s3000-lr3e-4.json",
+      "user": "user1",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr1e-3-user0-5",
+      "candidate": "configs/m7-candidates/full-s3000-lr1e-3.json",
+      "user": "user0",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr1e-3-user0-full",
+      "candidate": "configs/m7-candidates/full-s3000-lr1e-3.json",
+      "user": "user0",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr1e-3-user1-5",
+      "candidate": "configs/m7-candidates/full-s3000-lr1e-3.json",
+      "user": "user1",
+      "budget_minutes": "5",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    },
+    {
+      "id": "full-s3000-lr1e-3-user1-full",
+      "candidate": "configs/m7-candidates/full-s3000-lr1e-3.json",
+      "user": "user1",
+      "budget_minutes": "full",
+      "method": "full",
+      "seed": 1501,
+      "optimizer_steps": 3000,
+      "phase": "tuning",
+      "test_evaluated": false
+    }
+  ],
+  "total_optimizer_updates": 32000,
+  "selection": {
+    "score": "unweighted mean final-checkpoint validation CER across user0/user1 x 5/full",
+    "tie_rule": "Candidates within 0.1 percentage points of the lowest mean: choose fewer updates, then lower learning rate.",
+    "test_metrics_permitted": false
+  },
+  "curve": {
+    "users": [
+      "user0",
+      "user1",
+      "user2"
+    ],
+    "budgets": [
+      "1",
+      "2",
+      "5",
+      "10",
+      "30",
+      "60",
+      "full"
+    ],
+    "seed": 1501,
+    "runs": 21,
+    "additional_full_sentinel": "user5",
+    "maximum_optimizer_updates": 66000
+  },
+  "full_gate": {
+    "user0_reference_CER": 21.209850311279297,
+    "user5_reference_CER": 6.130136966705322,
+    "maximum_absolute_delta_pp": 1,
+    "action_on_failure": "Preserve results, delete Pod, stop for scientific review; no automatic retuning or retry."
+  }
+}

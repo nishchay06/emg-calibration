@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import subprocess
 import sys
 import tempfile
@@ -18,6 +19,36 @@ READY = UPSTREAM.is_dir() and importlib.util.find_spec("hydra") is not None
 
 @unittest.skipUnless(READY, "requires pinned upstream and requirements/m5b-config.txt")
 class AdaptCompositionTest(unittest.TestCase):
+    def test_all_users_and_budgets_compose_fixed_without_outputs(self):
+        from calibration_sampler import BUDGETS, digest
+        from fixed_adaptation import compose_fixed, plan_fixed
+
+        protocol = {"schema_version": 1, "upstream_commit": adapt.UPSTREAM_COMMIT,
+                    "status": "draft", "selection": "final", "schedule": "update-warmup-cosine-v1",
+                    "methods": {"full": {"steps": 5, "learning_rate": 0.001, "warmup_steps": 2,
+                                          "warmup_start_lr": 1e-8, "minimum_lr": 1e-6}}}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "protocol.json"
+            path.write_text(json.dumps(protocol))
+            for index in range(8):
+                for budget in BUDGETS:
+                    with self.subTest(user=index, budget=budget):
+                        args = adapt.arguments(["--user", f"user{index}", "--select", "fixed",
+                                                "--budget-minutes", budget, "--protocol", str(path),
+                                                "--check-config", "--upstream-dir", str(UPSTREAM),
+                                                "--data-dir", str(root / "data"),
+                                                "--output-dir", str(root / f"user{index}-{budget}")])
+                        record = plan_fixed(args)
+                        config = compose_fixed(args, record)
+                        self.assertEqual(record["profile_digest"], digest(protocol["methods"]["full"]))
+                        self.assertEqual(config["trainer"]["max_steps"], 5)
+                        self.assertEqual(config["trainer"]["limit_val_batches"], 0)
+                        self.assertEqual(config["trainer"]["num_sanity_val_steps"], 0)
+                        self.assertEqual(config["lr_scheduler"]["interval"], "step")
+                        self.assertEqual(config["callbacks"], [])
+            self.assertEqual(list(root.iterdir()), [path])
+
     def test_all_users_compose_exact_splits_without_creating_outputs(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Plan, check, or run the M5b full-data upstream personalization recipe.
+"""Plan, check, or run upstream reproduction or fixed-step calibration.
 
-Budget sampling and parameter-efficient methods are deliberately unavailable
-until their roadmap gates. A dry run needs only the Python standard library.
+Parameter-efficient methods remain gated until M8. Dry runs use only the
+Python standard library; fixed plans require an explicit protocol file.
 """
 
 from __future__ import annotations
@@ -63,6 +63,9 @@ def arguments(argv=None):
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--user0-result", type=Path, help="Required passed M5b evidence before running user5")
+    parser.add_argument("--protocol", type=Path, help="Versioned fixed-step method profile")
+    parser.add_argument("--session-index", type=Path, help="Read-only HDF5 header index for a concrete dry-run allocation")
+    parser.add_argument("--tune", action="store_true", help="Final-checkpoint validation on user0/user1 only; no test evaluation")
     parser.add_argument("--accelerator", choices=["cpu", "gpu"], default="cpu")
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--dry-run", action="store_true")
@@ -75,13 +78,17 @@ def arguments(argv=None):
         parser.error("steps must be positive")
     if args.select == "upstream" and args.budget_minutes != "full":
         parser.error("upstream validation selection is allowed only for full data")
-    if (args.budget_minutes, args.method, args.select) != ("full", "full", "upstream"):
-        parser.error("M5b supports full/full/upstream only; M6/M8 are gated")
-    if args.steps is not None:
-        parser.error("M5b uses 150 epochs; a step override changes the reproduction")
-    if args.run and args.user not in ("user0", "user5"):
+    if args.method != "full":
+        parser.error("head/norm/lora remain gated until M8")
+    if args.select == "upstream" and (args.protocol or args.session_index or args.tune or args.steps is not None):
+        parser.error("M5b uses the unchanged 150-epoch upstream recipe")
+    if args.select == "fixed" and args.protocol is None:
+        parser.error("Fixed calibration requires --protocol")
+    if args.tune and (args.select != "fixed" or args.user not in ("user0", "user1")):
+        parser.error("Tuning is restricted to user0/user1 fixed-step validation")
+    if args.select == "upstream" and args.run and args.user not in ("user0", "user5"):
         parser.error("The M5b paid gate runs user0, then user5 only")
-    if args.run and args.user == "user5" and args.user0_result is None:
+    if args.select == "upstream" and args.run and args.user == "user5" and args.user0_result is None:
         parser.error("user5 requires --user0-result from a passed M5b training run")
     for name in ("upstream_dir", "data_dir", "output_dir"):
         setattr(args, name, getattr(args, name).expanduser().absolute())
@@ -332,6 +339,18 @@ def verify_user0_gate(path):
 def main(argv=None):
     args = arguments(argv)
     try:
+        if args.select == "fixed":
+            from fixed_adaptation import compose_fixed, plan_fixed, run_fixed
+            record = plan_fixed(args)
+            if args.dry_run:
+                print(json.dumps(record, indent=2))
+                return 0
+            config = compose_fixed(args, record)
+            if args.check_config:
+                record.update(resolved_configuration=config, configuration_checked=True)
+                print(json.dumps(record, indent=2))
+                return 0
+            return run_fixed(args, record, config)
         record = plan(args)
         if args.dry_run:
             print(json.dumps(record, indent=2))
@@ -343,7 +362,7 @@ def main(argv=None):
             print(json.dumps(record, indent=2))
             return 0
         return run(args, record, config)
-    except (ValueError, OSError, subprocess.CalledProcessError, ImportError) as error:
+    except (ValueError, OSError, KeyError, TypeError, subprocess.CalledProcessError, ImportError) as error:
         print(f"Adaptation preflight failed: {error}", file=sys.stderr)
         return 1
 

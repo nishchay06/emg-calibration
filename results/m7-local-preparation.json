@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "milestone": "M7",
+  "recorded_at_utc": "2026-10-05T13:07:25Z",
+  "status": "proposal_preparation_only",
+  "paid_execution_approved": false,
+  "training_executed": false,
+  "frozen_profile": false,
+  "local_checks": {
+    "tuning_configuration_checks_passed": 16,
+    "total_tuning_optimizer_updates": 32000,
+    "test_evaluation_during_tuning": false,
+    "validation_during_fit": false,
+    "actual_data_coverage": "pending",
+    "CUDA_and_generic_initialization": "pending"
+  },
+  "proposal_files": [
+    {
+      "path": "M7_PROPOSAL.md",
+      "sha256": "924599d5fe9f539e020e114cc5f3571cda545c223f127ad1507db20a2c8c189d"
+    },
+    {
+      "path": "configs/m7-proposed-matrix.json",
+      "sha256": "2bf6cc56421190dfb656651163c60b4140adcf678369ac387f7645d12aec6b09"
+    },
+    {
+      "path": "configs/m7-candidates/full-s1000-lr1e-3.json",
+      "sha256": "32666ab0bea8dfb623dc8d34899a8f8e03a4af2678aa09cc5c8ef2677b7399d2"
+    },
+    {
+      "path": "configs/m7-candidates/full-s1000-lr3e-4.json",
+      "sha256": "39c592f08ff0d38f16f1edf160a25d08bde0b6e7267d2210ad2e84173d1afbec"
+    },
+    {
+      "path": "configs/m7-candidates/full-s3000-lr1e-3.json",
+      "sha256": "c9d48f430d813e3ef6a998299cbb867212b0ee8e11ea5ad47df32936ff28e1a6"
+    },
+    {
+      "path": "configs/m7-candidates/full-s3000-lr3e-4.json",
+      "sha256": "e843b55fc10411bfce2a8c05ef50c80f278024370c3b3302fc6f07d4cf8a8a47"
+    }
+  ],
+  "cost_reconciliation": {
+    "source": "read-only provider Pod billing API",
+    "query_start_utc": "2026-09-05T00:00:00Z",
+    "query_end_utc": "2026-10-06T00:00:00Z",
+    "account_pod_records": 17,
+    "conservative_charges_against_project_cap_usd": 5.4562451016536215,
+    "compute_cap_usd": 75,
+    "remaining_before_proposal_usd": 69.54375489834638,
+    "scope": "Conservatively includes every returned account Pod GPU/CPU/container-disk charge; attribution is not asserted for every record. Retained network storage excluded. Posted snapshot, not final invoice.",
+    "accepted_user0_pod_total_usd": 0.5442915884777904,
+    "accepted_user5_pod_total_usd": 0.45887297857552767,
+    "diagnostic_pod_total_usd": 0.07861598336603492,
+    "interrupted_user5_pod_total_usd": 0.34907932789064944,
+    "migration_CPU_pods_total_usd": 0.052231290595955215
+  },
+  "cloud_read_back": {
+    "pods": 0,
+    "endpoints": 0,
+    "retained_volumes": 2,
+    "new_resources_created": 0
+  },
+  "proposed_limits": {
+    "session_A_hours": 3,
+    "session_A_pod_usd": 2.5,
+    "session_B_requires_separate_approval": true,
+    "session_B_provisional_hours": 5.5,
+    "session_B_provisional_pod_usd": 4.5,
+    "termination_limit_type": "Operational deadline; no provider-enforced dollar cap or automatic deletion deadline verified."
+  },
+  "next_gate": "Review and explicitly approve Session A scope and billing supervision risk; actual 100-session coverage, CUDA/checkpoint checks, user0/user1 tuning then freeze. Session B, retries, migration, deletion of volumes and push remain unapproved."
+}
