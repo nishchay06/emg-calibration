@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 import math
 
-from calibration_sampler import digest
+from calibration_sampler import BUDGETS, digest
 from generate_test_user_manifests import UPSTREAM_COMMIT
 
 PROFILE_KEYS = {"steps", "learning_rate", "warmup_steps", "warmup_start_lr", "minimum_lr"}
@@ -59,8 +59,9 @@ def validate_protocol(protocol, method="full", *, require_frozen=False):
         for name, profile in protocol["methods"].items():
             matches = [r for r in protocol.get("tuning_evidence", [])
                        if r.get("method") == name and r.get("profile_digest") == digest(profile)]
-            if {r.get("user") for r in matches} != {"user0", "user1"} or len(matches) != 2:
-                raise ValueError("Frozen profiles require exactly user0/user1 tuning receipts")
+            if {r.get("user") for r in matches} != {"user0", "user1"} or len(matches) < 2:
+                raise ValueError("Frozen profiles require both user0/user1 tuning receipts")
+            contexts = {"user0": set(), "user1": set()}
             for receipt in matches:
                 if (receipt.get("selection"), receipt.get("test_evaluated"), receipt.get("optimizer_steps")) != (
                         "final", False, profile["steps"]):
@@ -72,6 +73,17 @@ def validate_protocol(protocol, method="full", *, require_frozen=False):
                 cer = receipt.get("validation_CER")
                 if type(cer) not in (int, float) or not math.isfinite(cer) or cer < 0:
                     raise ValueError("Invalid tuning validation CER")
+                budget, seed = receipt.get("budget_minutes"), receipt.get("seed")
+                if budget is not None and budget not in BUDGETS:
+                    raise ValueError("Invalid tuning budget")
+                if seed is not None and (type(seed) is not int or not 0 <= seed < 2**32):
+                    raise ValueError("Invalid tuning seed")
+                context = (budget, seed)
+                if context in contexts[receipt["user"]]:
+                    raise ValueError("Duplicate tuning user/budget/seed receipt")
+                contexts[receipt["user"]].add(context)
+            if contexts["user0"] != contexts["user1"]:
+                raise ValueError("Tuning users require the same budget/seed contexts")
     return protocol["methods"][method]
 
 
@@ -105,6 +117,9 @@ def freeze_protocol(candidate, results):
                          "optimizer_steps": result["optimizer_steps"],
                          "validation_CER": result["metrics"]["validation"]["CER"],
                          "final_checkpoint_sha256": result["trained_checkpoint"]["sha256"]})
+        for key in ("budget_minutes", "seed"):
+            if key in result:
+                receipts[-1][key] = result[key]
     frozen.update(status="frozen", tuning_evidence=receipts)
     validate_protocol(frozen, require_frozen=True)
     return frozen

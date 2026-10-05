@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from calibration_sampler import digest
 from generate_test_user_manifests import UPSTREAM_COMMIT
 from run_m7_tuning import choose_candidate, projected_seconds
+from calibration_protocol import freeze_protocol
 
 
 class CandidateSelectionTests(unittest.TestCase):
@@ -72,6 +73,14 @@ class CandidateSelectionTests(unittest.TestCase):
 
     def test_projection_includes_all_remaining_runs_and_overheads(self):
         self.assertEqual(projected_seconds(self.matrix["tuning_runs"], 0.25, 30), 8480)
+
+    def test_complete_matrix_selection_freezes_all_winning_receipts(self):
+        winner, scores = self.choose()
+        records = [self.results[r["id"]] for r in self.matrix["tuning_runs"] if r["candidate"] == winner]
+        frozen = freeze_protocol(self.protocols[winner], records)
+        self.assertEqual(frozen["status"], "frozen")
+        self.assertEqual(len(frozen["tuning_evidence"]), 4)
+        self.assertEqual({r["budget_minutes"] for r in frozen["tuning_evidence"]}, {"5", "full"})
 
 
 if __name__ == "__main__":

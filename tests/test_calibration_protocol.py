@@ -81,6 +81,19 @@ class CalibrationProtocolTest(unittest.TestCase):
                 self.assertNotEqual(failed.returncode, 0)
                 self.assertFalse((root / "output").exists())
 
+    def test_freeze_preserves_all_four_matched_budget_receipts(self):
+        records = [{**tuning_result(user), "budget_minutes": budget, "seed": 1501}
+                   for user in ("user0", "user1") for budget in ("5", "full")]
+        frozen = freeze_protocol(draft(), records)
+        self.assertEqual(len(frozen["tuning_evidence"]), 4)
+        self.assertEqual({(r["user"], r["budget_minutes"], r["seed"])
+                          for r in frozen["tuning_evidence"]},
+                         {(u, b, 1501) for u in ("user0", "user1") for b in ("5", "full")})
+        with self.assertRaises(ValueError):
+            freeze_protocol(draft(), records[:-1])
+        with self.assertRaises(ValueError):
+            freeze_protocol(draft(), records + [records[0]])
+
 
 if __name__ == "__main__":
     unittest.main()
