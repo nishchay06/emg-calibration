@@ -144,7 +144,9 @@ def fit_fixed(module, datamodule, profile, output, *, accelerator="cpu", stats=N
                          accumulate_grad_batches=1, limit_val_batches=0, num_sanity_val_steps=0,
                          enable_checkpointing=False, logger=False, enable_progress_bar=False,
                          enable_model_summary=False, default_root_dir=str(output), callbacks=[Capture()])
+    fit_started = time.monotonic()
     trainer.fit(module, datamodule=datamodule, ckpt_path=None)
+    stats["fit_wall_clock_seconds"] = time.monotonic() - fit_started
     if trainer.global_step != profile["steps"] or len(stats["learning_rates_at_updates"]) != profile["steps"]:
         raise ValueError("Fixed optimizer-step count mismatch")
     if not all(torch.isfinite(value).all().item() for value in module.state_dict().values()):
