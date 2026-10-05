@@ -96,4 +96,3 @@ machine and API/network availability. These are operational limits, not a
 provider-enforced dollar cap. Keep the controller awake and arrange a deadline
 check; failure to delete can accrue charges beyond the proposal. Do not start
 unless this supervision risk is accepted.
-
