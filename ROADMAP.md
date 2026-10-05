@@ -131,6 +131,12 @@ The fixed-protocol full point uses different step/checkpoint selection from
 M5b's upstream reference. Declare its comparison criteria before the paid run;
 do not assume identical CER or tune on untouched users to force agreement.
 
+**Draft prepared 2026-10-05:** `M7_PROPOSAL.md` declares the candidate matrix,
+validation-only selection, full-data comparison and trend gates, with separate
+bounded tuning and curve sessions. All 16 candidate compositions passed local
+checks (`results/m7-local-preparation.json`). No paid run or profile freeze is
+approved; the draft's criteria require review before execution.
+
 ### M8: Adaptation methods
 
 - `head`: final linear layer only.
