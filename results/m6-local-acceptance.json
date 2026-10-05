@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "milestone": "M6",
+  "status": "local acceptance passed; real-data preflight pending",
+  "recorded_at_utc": "2026-10-05T12:50:00.236705+00:00",
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "local_gate_passed": true,
+  "participant_calibration_experiments_executed": false,
+  "real_recording_coverage_checked": false,
+  "research_protocol_tuned_or_frozen": false,
+  "budgets_minutes": [
+    1,
+    2,
+    5,
+    10,
+    30,
+    60,
+    "full"
+  ],
+  "samples_per_minute": 120000,
+  "validation": {
+    "unit_tests_passed": 52,
+    "unit_tests_skipped": 0,
+    "shell_syntax": "passed",
+    "cli_guards": "passed",
+    "parallel_archive_staging": "passed with pinned rapidgzip 0.16.0",
+    "fixed_configurations_checked": 56,
+    "synthetic_allocation_combinations_checked": 56,
+    "allocation_lengths_source": "synthetic values with actual pinned split identities",
+    "synthetic_coverage_digest": "d44c72dc3aaf9375bfed578227a527f0897279d43c39b2368c0a0026162fe22a",
+    "stdlib_only_concrete_dry_run": "passed; selected 120000 samples and created no output",
+    "documented_example_configuration": "passed without creating output"
+  },
+  "checks": {
+    "exact_sample_allocation": true,
+    "deterministic_selection": true,
+    "training_only_split_isolation": true,
+    "rejects_insufficient_data": true,
+    "bounded_context_jitter_and_labels": true,
+    "full_upstream_order_and_loading_identity": true,
+    "small_batches_retained": true,
+    "fixed_optimizer_updates": true,
+    "update_driven_learning_rate_schedule": true,
+    "final_checkpoint_reload_identity": true,
+    "no_validation_during_fit": true,
+    "tuning_validation_only": true,
+    "ordinary_final_test_only": true,
+    "frozen_profile_tuning_provenance": true,
+    "m5b_regression_tests": true
+  },
+  "cpu_integration": {
+    "synthetic_data_only": true,
+    "initialization": "seeded random upstream model; no generic checkpoint",
+    "fixture_samples": 24000,
+    "fixture_batch_size_cap": 2,
+    "fixture_workers": 0,
+    "production_batch_size_cap": 32,
+    "production_workers": 4,
+    "profile": {
+      "steps": 3,
+      "learning_rate": 0.001,
+      "warmup_steps": 1,
+      "warmup_start_lr": 1e-08,
+      "minimum_lr": 1e-06
+    },
+    "fit_wall_seconds": 2.092136791907251,
+    "learning_rates_at_updates": [
+      1e-08,
+      0.001,
+      1e-06
+    ],
+    "batch_sizes": [
+      2,
+      1,
+      2
+    ],
+    "finite_losses": true,
+    "finite_gradients": true,
+    "validation_batches_during_fit": 0,
+    "optimizer_steps": 3,
+    "trained_checkpoint": {
+      "filename": "final.ckpt",
+      "sha256": "bfab2eb57951d663d336f9775228836df13cb12e8e2528a571a0c0671b07b9fd",
+      "size_bytes": 63584940,
+      "epoch": 2,
+      "global_step": 3
+    },
+    "final_state_reload_equal": true,
+    "final_evaluation_outputs_equal": true,
+    "final_test_path_exercised": true,
+    "final_tuning_validation_path_exercised": true,
+    "tuning_test_evaluated": false,
+    "parameters": 5293315
+  },
+  "evidence": {
+    "local_directory": "artifacts/m6-local-20261005/",
+    "files_verified": 10,
+    "preservation_receipt_sha256": "0b79f69c6fd33f7089e4bbe931c70409349e3b874411eae8db844637a5e9d137",
+    "raw_fixtures_and_checkpoint_committed": false
+  },
+  "compute": {
+    "paid_resources_created": false,
+    "new_paid_compute_cost_usd": 0,
+    "storage": "Existing retained storage is separate; no live billing check or resource mutation in M6."
+  },
+  "limitations": [
+    "No actual recording lengths or real-user calibration CER checked locally.",
+    "CPU integration uses seeded random weights, a 24000-sample fixture, batch cap 2 and zero workers; production uses batch cap 32 and four workers.",
+    "Nominal window capacity is not a measurement of distinct samples consumed under repeated jittered training.",
+    "Fixed-protocol full-data results are distinct from M5b upstream best-validation references."
+  ],
+  "next_gate": "Prepare bounded M7 tuning/first-curve proposal; before training verify actual dataset coverage, generic initialization and CUDA runtime, tune only user0/user1 and freeze the chosen full-method profile.",
+  "implementation_commits": [
+    "192b811",
+    "4e20132",
+    "612a25a"
+  ]
+}

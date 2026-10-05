@@ -20,7 +20,7 @@ jobs:
         run: python -m pip install -r requirements/m5b-config.txt
       - name: Validate structured results
         run: |
-          for result in results/*.json; do
+          for result in results/*.json configs/*.json; do
             python -m json.tool "$result" >/dev/null
           done
           python -m json.tool references/generic-greedy.json >/dev/null
@@ -42,5 +42,5 @@ jobs:
         run: |
           ./scripts/generate_test_user_manifests.py upstream/emg2qwerty --check
           ./scripts/generate_personalized_reference.py upstream/emg2qwerty --check
-      - name: Check M5b configuration composition against pinned upstream
+      - name: Check training configuration composition against pinned upstream
         run: python tests/test_adapt_config.py -v

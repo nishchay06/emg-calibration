@@ -54,8 +54,9 @@ recorded for both users. `results/m5b-full-upstream-summary.json` consolidates
 metrics and runtime. The full runs use upstream validation checkpoint selection
 for reproduction; this must not be used for calibration-budget experiments.
 
-Next: M6's local deterministic calibration-window sampler, exact sample counts,
-training-only windows, no validation/test overlap, and full-training-set identity.
+M6's local deterministic calibration-window sampler, exact sample counts,
+training-only windows, no validation/test overlap, and full-training-set identity
+have now passed their local acceptance checks (see below).
 Budget experiments use fixed optimizer steps and final-checkpoint evaluation;
 hyperparameters are tuned only on user0/user1, then frozen. No calibration-minute
 curve or head/norm/LoRA result is claimed yet.
@@ -79,4 +80,29 @@ confirmed zero Pods and endpoints, with both volumes retained. CPU cost is an
 estimate of $0.05189 through cleanup, with itemized billing pending. Raw evidence
 was preserved locally and its archive digest verified. See
 `results/storage-migration-attempt-20261005.json`. Training recipes and the
-passed M5b gate are unchanged; M6 remains next.
+passed M5b gate were unchanged; M6 was the next gate at that time.
+
+## M6 local acceptance
+
+The deterministic sampler, bounded HDF5 dataset adapter and fixed-update runner
+passed local tests. All seven budgets and eight pinned split configurations
+were checked with synthetic lengths; padding, jitter and labels stay inside
+selected ranges, and full-data loading delegates to upstream.
+
+The real 5,293,315-parameter upstream model completed a synthetic CPU check:
+exactly three optimizer updates, batches of 2/1/2, and learning rates
+1e-8/1e-3/1e-6. No validation batches ran during fitting. Final checkpoint state
+and evaluation outputs matched after reload; ordinary test and tuning-only
+validation paths both completed. These checks use seeded random initialization,
+not the released generic checkpoint, and establish no participant CER result.
+
+All 52 local unit tests passed with no skips, along with shell syntax, CLI guards
+and parallel archive-staging checks. Ordinary calibration runs require a frozen
+profile supported by user0/user1 final-checkpoint tuning receipts; no research
+profile has been tuned or frozen yet. See `M6_RUNBOOK.md` and
+`results/m6-local-acceptance.json`.
+
+Next: prepare the bounded M7 tuning/first-curve proposal. Before real training,
+verify actual session coverage/allocation, generic initialization and CUDA runtime,
+then tune only on user0/user1 and freeze the selected full-method profile. The
+storage migration remains incomplete; the original source remains authoritative.

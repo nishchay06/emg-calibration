@@ -19,10 +19,12 @@ for GPU runs. Install lightweight validation dependencies with
 - `python -m unittest discover -s tests -v`: run unit tests.
 - `./tests/test_cli_guards.sh`: check command guards and mutation-free previews.
 - `./tests/test_parallel_staging.sh`: verify archive integrity and extraction.
-- `python scripts/adapt.py --dry-run --user user0`: preview adaptation.
+- `python scripts/adapt.py --dry-run --user user0 --upstream-dir upstream/emg2qwerty --data-dir data --output-dir artifacts/m5b-preview`: preview reproduction.
 
 Configuration tests additionally need the pinned upstream checkout at
 `upstream/emg2qwerty`; see `.github/workflows/validate.yml` for complete checks.
+M6 CPU integration tests need the full training dependencies; lightweight CI
+alone skips those tests. See `M6_RUNBOOK.md` for calibration checks and commands.
 
 ## Coding Style & Naming Conventions
 

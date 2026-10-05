@@ -13,9 +13,13 @@ The long-term experiment compares full and parameter-efficient adaptation at
 1, 2, 5, 10, 30, and 60 minutes plus full per-user calibration data. The
 released generic and personalized checkpoints have been reproduced. Our own
 full-data fine-tuning also passed the two-user upstream reproduction gate. The
-next milestone is a local calibration-budget sampler; CER-versus-minutes curves
-and head/norm/LoRA comparisons remain future work. See
+local calibration-budget sampler and fixed-update protocol have passed their
+CPU acceptance checks. The next milestone is tuning and the first full-method
+curve; CER-versus-minutes results and head/norm/LoRA comparisons remain future work. See
 [`M5B_RUNBOOK.md`](M5B_RUNBOOK.md) for the recipe and training evidence.
+See [`M6_RUNBOOK.md`](M6_RUNBOOK.md) for calibration allocation and fixed-step
+training; actual recording coverage and a tuned/frozen research profile remain
+required before participant experiments.
 
 ## Current result
 
@@ -161,15 +165,17 @@ See [`M4_RUNBOOK.md`](M4_RUNBOOK.md) for the staged rollout and spending gate.
 | `manifests/` | Exact upstream archive members required by an experiment |
 | `patches/` | Narrow compatibility changes applied to pinned upstream code |
 | `requirements/` | Reproducibility dependency pins |
+| `configs/` | Versioned protocol examples and future frozen method profiles |
 | `results/` | Small structured result artifacts; no raw participant data |
 | `project-plan.md` | Research questions, hypotheses, scope, and experiment design |
 
 ## Roadmap
 
 1. Completed: reproduce upstream full-data fine-tuning for two users.
-2. Add seeded contiguous calibration windows from 1 to 60 minutes plus full.
-3. Compare full, final-layer-only, normalization-only, and low-rank adaptation.
-4. Report per-user curves, trainable parameter counts, adaptation time, and cost.
+2. Completed locally: seeded calibration windows and fixed-step/final-checkpoint protocol.
+3. Verify real recording coverage, tune on user0/user1, freeze the profile and produce the first full-method curve.
+4. Compare full, final-layer-only, normalization-only, and low-rank adaptation.
+5. Report per-user curves, trainable parameter counts, adaptation time, and cost.
 
 ## Data, attribution, and license
 
