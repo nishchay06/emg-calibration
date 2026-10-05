@@ -27,6 +27,12 @@ jobs:
           python -m json.tool references/personalized-greedy.json >/dev/null
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
+      - name: Install offline plotting dependencies
+        run: python -m pip install -r requirements/analysis.txt
+      - name: Check offline figure exports
+        env:
+          MPLBACKEND: Agg
+        run: python tests/check_calibration_plot.py -v
       - name: Test command-line guards and dry runs
         run: ./tests/test_cli_guards.sh
       - name: Test parallel archive staging

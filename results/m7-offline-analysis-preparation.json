@@ -1,0 +1,121 @@
+{
+  "analysis_contract": {
+    "additional_user5_full_sentinel_required": 1,
+    "baselines": "Accepted M4 user0-user2 generic greedy records; reused as zero-minute horizontal references",
+    "curve_points_required": 21,
+    "exports": [
+      "JSON",
+      "CSV",
+      "Markdown",
+      "PNG",
+      "PDF",
+      "SVG"
+    ],
+    "failures": "Valid complete scientific failures remain in exports; invalid or incomplete inputs are refused",
+    "inputs_checked": [
+      "four matching winning tuning receipts",
+      "complete unique run identities",
+      "shared frozen protocol/profile and exact updates",
+      "generic initialization and final reload digests",
+      "successful GPU adaptation, finite training and no fit-time validation",
+      "all indexed official splits, index digest and replayed allocations",
+      "selected samples, window accounting, parameter counts and finite durations"
+    ],
+    "interpretation": "One-seed exploratory curve; user0/user1 tuned, user2 untouched; no uncertainty/significance claims",
+    "method": "full",
+    "references": "Own accepted M5b user0/user5 reproductions, distinct from fixed-protocol full points",
+    "scientific_checks": [
+      "user0/user5 full CER within 1.0 pp of own M5b",
+      "negative budget-order Spearman per curve user",
+      "median 60-minute CER below median 1-minute CER"
+    ],
+    "seed": 1501
+  },
+  "authorization": {
+    "automatic_paid_retry_or_resume": false,
+    "existing_session_A_only": true,
+    "hardware_or_location_change": false,
+    "push": false,
+    "session_B": false,
+    "volume_migration_or_deletion": false
+  },
+  "cloud_queries_or_mutations": false,
+  "freeze_fix": {
+    "behavior": "Retain matched user0/user1 budget/seed contexts; reject duplicates and incomplete pairs",
+    "cause": "Worker submits four winning receipts; previous validator required exactly two",
+    "local_commit": "7038e4a",
+    "regression": "Complete 16-candidate-run selection freezes all four winning receipts",
+    "training_recipe_changed": false
+  },
+  "implementation_sha256": {
+    "scripts/calibration_protocol.py": "a81013878a39380e2afcaef7ce30080f27ffb3cfd0da80edbf46f27f21ecd1ef",
+    "scripts/calibration_report.py": "75fe80f542c7ce62571272a2fc58f2300d91787d6dddf56cc618490f568a9032",
+    "scripts/calibration_report_demo.py": "45442dfe9a3765087e37f6b7085ca7d9051ef12b47bd5aef29e9c4df12acb3e3",
+    "scripts/plot_calibration_report.py": "60ec3da1a8bc6c7f555ba1a7784e599aaae80101490c79114165d75d8b4ee8c3",
+    "tests/check_calibration_plot.py": "b644ea80c45b406303ad48738184b78d643bcb1353432d67be7f681017aa904a",
+    "tests/test_calibration_protocol.py": "da7b66db223ea4ae664af7d54e519a068134c6c83988079078cfb036db45445c",
+    "tests/test_calibration_report.py": "2ce26fa12bc51a6b1be17eb6dad4b5b0f076bdb7c8a58836c7dc83d380ef7c84",
+    "tests/test_m7_tuning.py": "4d37d2169a724528ee06d205d2f965823992415d6d91d60a43fd9a1ff504c2a3"
+  },
+  "limits": [
+    "No real recording lengths or participant calibration CER measured",
+    "Receipt/digest validation does not reread signals/checkpoint contents or remeasure CER",
+    "Analysis alone is not complete M7 acceptance; paid-session evidence, costs and cleanup remain required",
+    "Retained storage continues; no live account/billing refresh during this offline work"
+  ],
+  "local_preparation_passed": true,
+  "m7_research_gate_passed": false,
+  "milestone": "M7",
+  "new_compute_spend_usd": 0,
+  "next": "Wait for user availability signal; refresh exact approved quote/balance once, then bounded Session A",
+  "participant_data_read": false,
+  "real_protocol_frozen": false,
+  "recorded_at_utc": "2026-10-05T14:37:55.690883+00:00",
+  "schema_version": 1,
+  "stage": "offline_analysis_preparation",
+  "synthetic_demo": {
+    "all_lengths_checkpoints_timings_and_cer_are_fictional": true,
+    "artifacts_ignored": true,
+    "directory": "artifacts/m7-offline-20261005-demo",
+    "exports_sha256": {
+      "figures/cer-vs-minutes.pdf": "29322171602ac86b8d98953d630c4f40356f74348abb32f79984fe3c1b4eee21",
+      "figures/cer-vs-minutes.png": "5d3a812da70c1460f9acb9a07c0653f889d04291a610c4c0a1dcb3d5594c4057",
+      "figures/cer-vs-minutes.svg": "ce4645d47c80524a62527166ee927a68470a6f16496b3dc53f0c75af061294df",
+      "report/curve.csv": "ccaaa366b733ad84e578f7335cca67b214747e868f423d0faff59608dbbb0d7e",
+      "report/summary.json": "c734ce49e7e53bb409823a111715b8e5672715c8832e0c474d9b4a4aa2e27e48",
+      "report/table.md": "a102911f50963c17bd8de1dc1066c1c9875e1c70697623cbbb75a479c89e0ac8"
+    },
+    "kind": "synthetic_pipeline_demo",
+    "ordinary_mode_rejects_marked_synthetic_inputs": true
+  },
+  "training_executed": false,
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1",
+  "verification": {
+    "full_cpu_suite": {
+      "log_sha256": "295f85ab93565aa9d9ff74a00564a8168b3979f658027e063ebc4b73826b2904",
+      "passed": 70,
+      "skipped": 0,
+      "wall_seconds": 56.584
+    },
+    "official_manifests": {
+      "pinned_and_unchanged": true,
+      "sessions": 100,
+      "users": 8
+    },
+    "python_compile": "passed; final receipt guard also imported by targeted tests",
+    "report_tests_after_final_provenance_guard": {
+      "log_sha256": "bf63f83f19e4ca1b313f4c5bac0ba5fea66535d8d7c3616a2e7259e9bb8d5cc4",
+      "passed": 9,
+      "skipped": 0,
+      "wall_seconds": 0.073
+    },
+    "separate_plot_checks": {
+      "log_sha256": "6460eb46f3e2dc2d545796952e2275977c909d2ae0adc6539eab6d53d8e1e23b",
+      "passed": 1,
+      "skipped": 0,
+      "wall_seconds": 1.853
+    },
+    "shell_syntax": "passed; no shell changes",
+    "visual_inspection": "Synthetic PNG checked: three log-x panels, full positions, generic lines and prominent fiction labels"
+  }
+}

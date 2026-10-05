@@ -1,0 +1,2 @@
+# Separate plotting environment; do not add to the pinned training runtime.
+matplotlib==3.10.0

@@ -20,6 +20,8 @@ curve; CER-versus-minutes results and head/norm/LoRA comparisons remain future w
 See [`M6_RUNBOOK.md`](M6_RUNBOOK.md) for calibration allocation and fixed-step
 training; actual recording coverage and a tuned/frozen research profile remain
 required before participant experiments.
+See [`M7_ANALYSIS_RUNBOOK.md`](M7_ANALYSIS_RUNBOOK.md) for offline receipt checks,
+tables and figure exports; its synthetic demo establishes no calibration result.
 
 ## Current result
 

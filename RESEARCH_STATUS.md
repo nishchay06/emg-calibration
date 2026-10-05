@@ -106,3 +106,30 @@ Next: prepare the bounded M7 tuning/first-curve proposal. Before real training,
 verify actual session coverage/allocation, generic initialization and CUDA runtime,
 then tune only on user0/user1 and freeze the selected full-method profile. The
 storage migration remains incomplete; the original source remains authoritative.
+
+## M7 offline work during the capacity wait
+
+Session A is approved but its initial start stopped before provisioning at the
+location-specific GPU availability gate. No participant tuning or freeze has
+occurred; Session B remains a separate approval. The user will signal when
+capacity is available, so no availability polling is running.
+
+Offline inspection found a receipt-count mismatch: the tuning worker supplies
+four winning receipts (users0/1 × 5/full), while protocol validation previously
+required exactly two. The fix retains matched budget/seed contexts, rejects
+duplicates and incomplete pairs, and passes a full selection-to-freeze regression.
+The fixed-step training recipe and approved tuning grid are unchanged.
+
+The offline reporting pipeline validates a complete 21-point full-method curve
+and user5 full sentinel, replays selected allocations against pinned splits,
+checks protocol/initialization/final-checkpoint provenance, and exports JSON,
+CSV, Markdown and PNG/PDF/SVG figures. It separates tuning users, reuses M4
+generic baselines, places full points at measured recording minutes, and retains
+failed scientific checks and adjacent inversions. Synthetic fixtures exercise
+the pipeline without recordings or participant training; their outputs are
+explicitly fictional and remain ignored. See `M7_ANALYSIS_RUNBOOK.md` and
+`results/m7-offline-analysis-preparation.json` for scope and local verification.
+
+Next: wait for the user's availability signal, refresh the exact approved quote
+and balance once, then perform Session A within its existing limits. Offline
+analysis does not pass M7, freeze a real profile, or authorize the curve session.
