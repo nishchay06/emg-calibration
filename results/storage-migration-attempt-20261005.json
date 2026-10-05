@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "operation": "reduce working network storage from 400 GB to 50 GB",
+  "status": "stopped after failed file-transfer gate; migration incomplete",
+  "source_preserved": true,
+  "source_checks": {
+    "passed": true,
+    "expected_hdf5_files": 100,
+    "dataset_bytes": 28417553136,
+    "complete_preservation_file_count": 1012,
+    "complete_preservation_bytes": 30539725849,
+    "sha256_recorded_for_every_preserved_file": true,
+    "generic_checkpoint_sha256": "338afa55f2ad5dd23abe3900e8047068bf8ee9893e75b54e1c6e6ab91c0d1a81",
+    "complete_inventory_sha256": "5b9c38bde4f3733cb0793db3772ce10e3106304a4ce89737a6a7beef1615d827",
+    "excluded_dataset_archive_bytes": 308382645571,
+    "unique_extraction_map_preserved_locally": true,
+    "only_other_exclusions": "seven directories containing compiled Python bytecode"
+  },
+  "transfer": {
+    "cpu_pods": 2,
+    "vcpus_per_pod": 2,
+    "cost_per_pod_usd_per_hour": 0.06,
+    "session_limit_seconds": 3600,
+    "estimated_session_allowance_usd": 0.25,
+    "provider_enforced_dollar_cap": false,
+    "single_stream": "paused because observed file-copy rate projected beyond the approved session",
+    "private_connection": "not reachable; no network configuration changed",
+    "bounded_network_probe": {
+      "streams": 8,
+      "mib": 128,
+      "wall_seconds": 0.44560543447732925,
+      "aggregate_mib_per_second": 287.2496385734994,
+      "limitation": "SSH writes to /dev/null; this does not test destination filesystem throughput"
+    },
+    "parallel_file_copy": {
+      "streams": 8,
+      "passed": false,
+      "all_exit_codes": 30,
+      "wall_seconds": 123.15296035539359,
+      "failure": "rsync sender I/O timeout after approximately 121 seconds",
+      "cause": "unresolved; the passing network-only probe does not establish filesystem or rsync health"
+    },
+    "no_deadline_extension": true,
+    "no_training_or_recipe_change": true
+  },
+  "destination": {
+    "size_gb": 50,
+    "ready_for_use": false,
+    "snapshot_regular_files_including_partial": 91,
+    "snapshot_bytes_including_partial": 4334265912,
+    "snapshot_data_directory_files_including_partial": 10,
+    "completed_hdf5_names_at_last_coarse_check": 8,
+    "file_sha256_verification_passed": false,
+    "hdf5_readability_checked": false,
+    "mounted_configuration_checked": false
+  },
+  "evidence": {
+    "local_directory": "artifacts/storage-migration/",
+    "source_evidence_archive_sha256": "ec527a19749688cebfea9f34d33386de1fbf228b60b5da3a2e4660dfcb747701",
+    "archive_members_verified": 14,
+    "local_validation": "100 valid HDF5 fixtures accepted; equal-size corruption and incomplete/mismatched manifests rejected"
+  },
+  "cleanup": {
+    "both_temporary_pods_deleted": true,
+    "delete_response_status": 204,
+    "pods_remaining": 0,
+    "endpoints_remaining": 0,
+    "readback_at_utc": "2026-10-04T22:50:25Z",
+    "original_volume_retained": true,
+    "incomplete_destination_volume_retained": true
+  },
+  "cost": {
+    "cpu_estimate_usd_through_cleanup_readback": 0.05189,
+    "estimate_is_final_attributed_charge": false,
+    "itemized_charge_usd": null,
+    "remaining_storage_spend_usd_per_hour": 0.044
+  },
+  "next_step": "Diagnose from preserved evidence before another paid attempt; no automatic copy retry or volume deletion is approved. M5b remains passed and M6 remains the next research milestone."
+}
