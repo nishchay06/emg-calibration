@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "milestone": "M7",
+  "stage": "approved_session_A_pre_provision",
+  "status": "blocked_by_capacity",
+  "recorded_at_utc": "2026-10-05T13:46:16Z",
+  "approval": {
+    "session_A": true,
+    "session_B": false,
+    "maximum_hours_from_creation_request": 3,
+    "maximum_pod_charges_usd": 2.5,
+    "hardware": "one Secure RTX 4090",
+    "data_center": "US-IL-1",
+    "storage": "existing authoritative source",
+    "supervision_risk_accepted": true
+  },
+  "implementation": {
+    "local_commit": "cc9c4da",
+    "worker": "scripts/run_m7_tuning.py",
+    "runbook": "M7_SESSION_A_RUNBOOK.md",
+    "training_recipe_changed": false,
+    "observability_change": "Record fit wall time for session projection"
+  },
+  "verification": {
+    "repository_tests_passed": 59,
+    "repository_tests_skipped": 0,
+    "additional_controller_checks_passed": 4,
+    "selection_checks": "complete matrix, validation-only selection, matched allocations, initialization/profile/checkpoint proofs and tie rule",
+    "cleanup_checks": "reject unavailable/overpriced quotes, delete only session Pod, retain both volumes, refuse all-clear with unrelated active Pod"
+  },
+  "capacity_gate": {
+    "passed": false,
+    "catalog_secure_GPU_price_usd_per_hour": 0.74,
+    "location_specific_quote": {
+      "uninterruptablePrice": null,
+      "stockStatus": null,
+      "availableGpuCounts": null,
+      "maxUnreservedGpuCount": null
+    },
+    "reason": "No runnable US-IL-1 Secure RTX 4090 quote; global or stale low-stock views do not establish location-specific availability"
+  },
+  "execution": {
+    "pod_creation_requested": false,
+    "new_resources_created": 0,
+    "training_executed": false,
+    "tuning_runs_completed": 0,
+    "profile_frozen": false,
+    "actual_dataset_coverage": "pending",
+    "generic_initialization_and_CUDA": "pending",
+    "deadline_started": false,
+    "guardian_started": false,
+    "new_compute_spend_usd": 0
+  },
+  "cloud_read_back": {
+    "pods": 0,
+    "endpoints": 0,
+    "retained_volumes": 2,
+    "source_and_candidate_retained": true,
+    "ongoing_storage_usd_per_hour": 0.044
+  },
+  "next_gate": "Session A approval remains valid for the same resource and limits. On a user-requested continuation, refresh the exact location quote/balance; create at most one Pod only when the capacity/price gate passes, then run mounted-data/CUDA preflight and the complete tuning matrix. No automatic repeated stock polling, alternative GPU/region, Session B, paid retry/resume, volume migration/deletion or push."
+}

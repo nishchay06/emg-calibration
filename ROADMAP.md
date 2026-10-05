@@ -137,6 +137,12 @@ bounded tuning and curve sessions. All 16 candidate compositions passed local
 checks (`results/m7-local-preparation.json`). No paid run or profile freeze is
 approved; the draft's criteria require review before execution.
 
+**Session A approved 2026-10-05:** its sequential worker and safeguards passed
+59 repository tests without skips. The initial start stopped before creation
+because the exact location/Secure RTX 4090 quote had no runnable availability.
+No Pod or training began. See `M7_SESSION_A_RUNBOOK.md` and
+`results/m7-session-a-pre-provision.json`. Session B remains separately gated.
+
 ### M8: Adaptation methods
 
 - `head`: final linear layer only.
