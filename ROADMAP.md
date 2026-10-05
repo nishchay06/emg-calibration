@@ -18,7 +18,16 @@ with publication-ready figures, evidence and reproducibility instructions.
 | M5a: released personalized checkpoints (both families, all users) | Done 2026-10-04 |
 | M5b: own full-data training (user0/user5, within 1.0 pp) | Done 2026-10-05 |
 
-The eight-user subset contains 100 sessions and occupies about 27 GB after selective extraction. Dataset and checkpoints are obtained from upstream and retained outside Git.
+The eight-user subset contains 100 sessions and occupies 28.42 GB (26.47 GiB)
+after selective extraction. Dataset and checkpoints are obtained from upstream
+and retained outside Git.
+
+**Storage update, 2026-10-05 IST:** the attempt to migrate the working data from
+400 GB to 50 GB stopped at the transfer gate. The original source remains
+authoritative; the incomplete candidate must not be used for training. Both
+temporary CPU Pods were deleted, and both volumes were retained. See
+`results/storage-migration-attempt-20261005.json`. M6 remains the next research
+gate and can proceed locally.
 
 ## Upstream facts that shape the design
 
@@ -173,7 +182,9 @@ Drop this if M9 has not finished by Nov 15.
 ## Budget
 
 - Spent through M4: about $4 (compute and storage).
-- Storage: about $0.93/day while the volume exists (about $55 through Dec 1).
+- Storage: the migration cleanup read-back recorded about $0.044/hour
+  ($1.05/day) for the retained 400 GB source and incomplete 50 GB candidate.
+  This is a historical estimate, not a live billing check or final charge.
 - Compute: full-data runs took 27.93–34.44 minutes per user on RTX 4090. **Planning cap: $75 in total compute.**
   Re-check after M5b and M7.
 

@@ -59,3 +59,24 @@ training-only windows, no validation/test overlap, and full-training-set identit
 Budget experiments use fixed optimizer steps and final-checkpoint evaluation;
 hyperparameters are tuned only on user0/user1, then frozen. No calibration-minute
 curve or head/norm/LoRA result is claimed yet.
+
+## Incomplete storage migration
+
+The 400 GB to 50 GB storage migration stopped at its file-transfer gate.
+Source checks verified 100 expected HDF5 sessions (28,417,553,136 bytes), the
+generic checkpoint digest, and a preservation inventory of 1,012 files
+(30,539,725,849 bytes). The large dataset archive was excluded from the copy;
+the original source was retained.
+
+A bounded network-only probe passed, but all eight parallel rsync file streams
+timed out. This does not establish a filesystem throughput fix; the cause
+remains unresolved. The destination contains partial files and has not passed
+digest, HDF5-readability or mounted-configuration verification. It must not be
+used for training.
+
+Both temporary CPU Pods were deleted; read-back at 2026-10-04 22:50:25 UTC
+confirmed zero Pods and endpoints, with both volumes retained. CPU cost is an
+estimate of $0.05189 through cleanup, with itemized billing pending. Raw evidence
+was preserved locally and its archive digest verified. See
+`results/storage-migration-attempt-20261005.json`. Training recipes and the
+passed M5b gate are unchanged; M6 remains next.

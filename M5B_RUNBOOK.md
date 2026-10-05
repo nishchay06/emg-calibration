@@ -72,3 +72,20 @@ Its runtime diagnosis and subsequent bounded measurements are retained publicly;
 see `PERFORMANCE_DIAGNOSTIC.md`. The old slowdown was not reproduced, its cause
 remains unresolved, and no recipe fix was applied. Raw archives and checkpoints
 remain local under ignored `artifacts/`, subject to upstream terms.
+
+## Storage migration acceptance
+
+The subsequent 50 GB migration failed its transfer gate; it did not change the
+training recipe or M5b result. Continue using the verified original source.
+The candidate contains partial files and is not an accepted data directory.
+
+Before accepting any replacement, verify exactly 100 expected nonempty HDF5
+sessions, manifest coverage, every copied file's SHA-256, generic checkpoint
+identity, accepted user0 result integrity, HDF5 readability and M5b configuration
+composition at the replacement paths. Retain the source throughout verification;
+source deletion requires separate approval after all gates pass.
+
+Source inventory and evidence preservation passed, but the destination gates
+did not pass. Both temporary CPU Pods were deleted and cleanup read-back
+recorded zero Pods/endpoints. See `results/storage-migration-attempt-20261005.json`;
+raw inventories and logs remain in ignored `artifacts/storage-migration/`.
