@@ -137,3 +137,7 @@ analysis does not pass M7, freeze a real profile, or authorize the curve session
 ## M7 measurements — 2026-10-18
 
 Completed the required preflight and smoke run (user0, 100 updates; validation CER 48.38%; final-checkpoint save/reload verified). All 16 tuning runs completed; selected and froze the full-method profile at 3,000 steps and learning rate 3e-4, with mean final-checkpoint validation CER 21.11%. Completed all seven user0 curve budgets: test CER was 51.62% (1 min), 45.16% (2), 41.30% (5), 79.12% (10; inversion), 40.82% (30), 41.76% (60), and 21.43% (full). Estimated session spend was $4.42; the Pod was terminated and zero Pods remain. Remaining M7: user1/user2 curves, user5 full sentinel, plot and inversion summary.
+
+## M7 continuation attempt — 2026-10-18
+
+Committed and pushed the completed smoke, 16-run tuning set, frozen profile, and seven user0 curve records as `da75666`. A single continuation Pod create for the first approved GPU (RTX 4090, Community, US-IL-1; catalog showed Low stock) was rejected with Runpod's 400 “There are no longer any instances available with the requested specifications.” Per the fixed start rule, no retry, GPU substitution, location move, or training run was made; a fresh Pod listing confirms zero Pods. No new measurements or Pod compute were produced this attempt. Resume M7 at user1/user2 curves, user5 full sentinel, plot and inversion summary when the approved GPU can be placed.
