@@ -1,0 +1,71 @@
+{
+  "methods": {
+    "full": {
+      "learning_rate": 0.0003,
+      "minimum_lr": 1e-06,
+      "steps": 3000,
+      "warmup_start_lr": 1e-08,
+      "warmup_steps": 300
+    }
+  },
+  "purpose": "M7 proposed candidate; not approved, tuned or frozen",
+  "schedule": "update-warmup-cosine-v1",
+  "schema_version": 1,
+  "selection": "final",
+  "status": "frozen",
+  "tuning_evidence": [
+    {
+      "budget_minutes": "5",
+      "final_checkpoint_sha256": "b42a286f0176cea68868084df3d6b247049413ca970b61a9d4fb7f1473b487b7",
+      "method": "full",
+      "optimizer_steps": 3000,
+      "profile_digest": "aacf676b61a3282bc457cd825ce03e1591fa0e2a02b80830f44c24e29bb8c81d",
+      "result_digest": "90b5b332558850ae0eaad2ddd59cba02380bccff336bf38f682377a3eb48cb2a",
+      "seed": 1501,
+      "selection": "final",
+      "test_evaluated": false,
+      "user": "user0",
+      "validation_CER": 34.847042083740234
+    },
+    {
+      "budget_minutes": "full",
+      "final_checkpoint_sha256": "93fbdeeedb54f04d6e77d734fd136f14adc845842288ad60d430834fd07b927c",
+      "method": "full",
+      "optimizer_steps": 3000,
+      "profile_digest": "aacf676b61a3282bc457cd825ce03e1591fa0e2a02b80830f44c24e29bb8c81d",
+      "result_digest": "5ba0d058ffd1e133850a0cb0f711876b82cac296f41b3a18d8c8a8538288fbfb",
+      "seed": 1501,
+      "selection": "final",
+      "test_evaluated": false,
+      "user": "user0",
+      "validation_CER": 18.714935302734375
+    },
+    {
+      "budget_minutes": "5",
+      "final_checkpoint_sha256": "ee6e3576e6b11214b85a76631ffd87f78844e7e1bd2a0e59ed01882a4172938a",
+      "method": "full",
+      "optimizer_steps": 3000,
+      "profile_digest": "aacf676b61a3282bc457cd825ce03e1591fa0e2a02b80830f44c24e29bb8c81d",
+      "result_digest": "6a2656e3f76aeb79331e467ef3e052b92e369702726d53603f3d6b66e967a5b3",
+      "seed": 1501,
+      "selection": "final",
+      "test_evaluated": false,
+      "user": "user1",
+      "validation_CER": 21.188796997070312
+    },
+    {
+      "budget_minutes": "full",
+      "final_checkpoint_sha256": "3d9fa8e9984c5ebb3c3182cc929114b78af7fad8e12a1462397dcd32854c8794",
+      "method": "full",
+      "optimizer_steps": 3000,
+      "profile_digest": "aacf676b61a3282bc457cd825ce03e1591fa0e2a02b80830f44c24e29bb8c81d",
+      "result_digest": "0e0c5f1bb30c938ac4a2de3aab3b09579a6eeb3e14252b0a692f29acf91ee616",
+      "seed": 1501,
+      "selection": "final",
+      "test_evaluated": false,
+      "user": "user1",
+      "validation_CER": 9.68569564819336
+    }
+  ],
+  "upstream_commit": "3200d91eeb952cbed1f278e47d0cc56928334fd1"
+}

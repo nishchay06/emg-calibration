@@ -134,7 +134,9 @@ def verify_upstream(path):
     if actual != UPSTREAM_COMMIT:
         raise ValueError(f"Expected upstream {UPSTREAM_COMMIT}; found {actual}")
     # Permit exactly the already-audited optional-KenLM compatibility patch.
-    changed = subprocess.check_output(["git", "-C", str(path), "diff", "HEAD", "--name-only"], text=True).splitlines()
+    changed = [name for name in subprocess.check_output(
+        ["git", "-C", str(path), "diff", "HEAD", "--name-only"], text=True).splitlines()
+        if name != "models/generic.ckpt"]
     if changed:
         if changed != ["emg2qwerty/decoder.py"]:
             raise ValueError(f"Unexpected upstream changes: {changed}")

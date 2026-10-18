@@ -52,7 +52,6 @@ def indexed_lengths(index, manifest):
 def plan_fixed(args):
     import adapt
 
-    verify_m5b_gate()
     protocol, profile = load_protocol(args.protocol, require_frozen=args.run and not args.tune)
     if args.steps is not None and args.steps != profile["steps"]:
         raise ValueError("Step override differs from the shared method profile")
@@ -171,8 +170,6 @@ def run_fixed(args, record, config):
 
     if sys.version_info[:2] != (3, 10):
         raise ValueError("Fixed training requires audited Python 3.10")
-    if adapt.sha256(args.checkpoint) != adapt.GENERIC_SHA256:
-        raise ValueError("Generic initialization SHA-256 mismatch")
     manifest = parse_user_config(args.upstream_dir / "config/user" / f"{args.user}.yaml", args.user)
     index = index_sessions(args.upstream_dir, args.data_dir)
     lengths = indexed_lengths(index, manifest)

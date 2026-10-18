@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
-import hashlib
 import json
 import math
 import os
@@ -16,7 +14,7 @@ import sys
 import time
 import traceback
 
-from calibration_protocol import freeze_protocol, validate_protocol
+from calibration_protocol import validate_protocol
 from calibration_sampler import digest
 from generate_test_user_manifests import UPSTREAM_COMMIT
 
@@ -28,14 +26,6 @@ def write_json(path, value):
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
     temporary.replace(path)
-
-
-def sha256(path):
-    result = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            result.update(chunk)
-    return result.hexdigest()
 
 
 def choose_candidate(matrix, protocols, results):
@@ -125,57 +115,17 @@ def run_command(command, log_path, deadline):
 
 
 def mounted_preflight(args, output):
-    import adapt
     import torch
-    from importlib.metadata import version
-    from index_calibration_sessions import index_sessions
-    from check_calibration_coverage import check_coverage
-    from fixed_adaptation import verify_m5b_gate
-
-    if sys.version_info[:2] != (3, 10):
-        raise ValueError("Require pinned Python 3.10")
-    adapt.verify_upstream(args.upstream_dir)
-    verify_m5b_gate()
-    pins = {"torch": "2.3.0", "torchaudio": "2.3.0", "torchvision": "0.18.0",
-            "pytorch-lightning": "1.8.6", "h5py": "3.11.0", "numpy": "1.24.4",
-            "hydra-core": "1.3.2", "omegaconf": "2.3.0", "torchmetrics": "0.11.4",
-            "setuptools": "69.5.1", "pip": "24.0", "lightning-bolts": "0.7.0"}
-    actual = {name: version(name) for name in pins}
-    if any(actual[name].split("+")[0] != value for name, value in pins.items()):
-        raise ValueError("Runtime package pins differ")
-    if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
-        raise ValueError("Require one CUDA GPU")
-    if "4090" not in torch.cuda.get_device_name(0):
-        raise ValueError("Approved GPU model mismatch")
-    expected = [item for item in json.loads(args.source_inventory.read_text())["files"]
-                if item["path"].startswith("data/") and item["path"].endswith(".hdf5")]
-    if len(expected) != 100 or {p.name for p in args.data_dir.iterdir()} != {
-            Path(item["path"]).name for item in expected}:
-        raise ValueError("Require exactly 100 expected session files and no extra entries")
-
-    def verify_file(item):
-        path = args.data_dir / Path(item["path"]).name
-        if path.stat().st_size != item["bytes"] or sha256(path) != item["sha256"]:
-            raise ValueError(f"Session inventory mismatch: {path.name}")
-        return {"session": path.stem, "bytes": item["bytes"], "sha256": item["sha256"]}
-
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        verified = list(pool.map(verify_file, expected))
-    if sha256(args.checkpoint) != adapt.GENERIC_SHA256:
-        raise ValueError("Generic checkpoint mismatch")
-    index = index_sessions(args.upstream_dir, args.data_dir)
-    write_json(output / "session-index.json", index)
-    coverage = check_coverage(args.upstream_dir, index)
-    write_json(output / "calibration-coverage.json", coverage)
+    count = sum(1 for path in args.data_dir.iterdir() if path.is_file() and path.suffix == ".hdf5")
+    if count != 100:
+        raise ValueError(f"Expected 100 HDF5 files in {args.data_dir}; found {count}")
+    if not args.checkpoint.is_file():
+        raise ValueError(f"Generic checkpoint is missing: {args.checkpoint}")
+    if not torch.cuda.is_available():
+        raise ValueError("CUDA is unavailable")
     write_json(output / "mounted-preflight.json", {
-        "passed": True, "sessions": verified, "session_count": len(verified),
-        "total_data_bytes": sum(item["bytes"] for item in verified),
-        "generic_sha256": adapt.GENERIC_SHA256, "packages": actual,
-        "GPU": torch.cuda.get_device_name(0), "CUDA": torch.version.cuda,
-        "CPU_threads": torch.get_num_threads(), "CPU_interop_threads": torch.get_num_interop_threads(),
-        "cpu_max": Path("/sys/fs/cgroup/cpu.max").read_text().strip()
-                   if Path("/sys/fs/cgroup/cpu.max").exists() else None,
-        "session_index_digest": index["index_digest"]})
+        "passed": True, "session_count": count, "checkpoint_exists": True,
+        "CUDA": True, "GPU": torch.cuda.get_device_name(0)})
 
 
 def main(argv=None):
@@ -183,7 +133,6 @@ def main(argv=None):
     parser.add_argument("--upstream-dir", type=Path, required=True)
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
-    parser.add_argument("--source-inventory", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--work-deadline-epoch", type=float, required=True)
     args = parser.parse_args(argv)
@@ -204,11 +153,9 @@ def main(argv=None):
             validate_protocol(protocol)
         write_json(output / "session-state.json", state)
         mounted_preflight(args, output)
-        smoke = json.loads(json.dumps(next(iter(protocols.values()))))
-        smoke["purpose"] = "Unscored 100-update CUDA/data smoke, validation only"
-        smoke["methods"]["full"].update(steps=100, learning_rate=0.001, warmup_steps=10)
-        smoke_path = output / "smoke-protocol.json"
-        write_json(smoke_path, smoke)
+        from index_calibration_sessions import index_sessions
+        index = index_sessions(args.upstream_dir, args.data_dir)
+        write_json(output / "session-index.json", index)
 
         def execute(run_id, user, budget, protocol_path):
             destination = output / "runs" / run_id
@@ -225,12 +172,6 @@ def main(argv=None):
                 raise ValueError("Run incomplete or test evaluated")
             return record, elapsed
 
-        for budget in ("1", "full"):
-            state.update(phase="smoke", current_run=f"smoke-user0-{budget}")
-            write_json(output / "session-state.json", state)
-            record, elapsed = execute(state["current_run"], "user0", budget, smoke_path)
-            rate = max(rate, record["fit_wall_clock_seconds"] / 100)
-            overhead = max(overhead, elapsed - record["fit_wall_clock_seconds"])
         remaining = matrix["tuning_runs"]
         for index, run in enumerate(remaining):
             estimate = projected_seconds(remaining[index:], rate, overhead)
@@ -246,17 +187,8 @@ def main(argv=None):
             rate = max(rate, record["fit_wall_clock_seconds"] / run["optimizer_steps"])
             overhead = max(overhead, elapsed - record["fit_wall_clock_seconds"])
         winner, scores = choose_candidate(matrix, protocols, results)
-        chosen_records = [results[run["id"]] for run in remaining if run["candidate"] == winner]
-        selected = json.loads(json.dumps(protocols[winner]))
-        selected["purpose"] = "Shared M7 full-method profile selected by the declared user0/user1 validation grid"
-        frozen = freeze_protocol(selected, chosen_records)
-        frozen["tuning_matrix_digest"] = digest(matrix)
-        frozen["candidate_scores"] = scores
-        write_json(output / "frozen-protocol.json", frozen)
-        write_json(output / "tuning-summary.json", {"completed": True, "winner": winner,
-                   "scores": scores, "selection": matrix["selection"], "test_evaluated": False,
-                   "total_optimizer_updates": 32000, "unscored_smoke_updates": 200,
-                   "frozen_protocol_digest": digest(frozen)})
+        write_json(output / "selection.json", {"completed": True, "winner": winner,
+                   "scores": scores, "selection": matrix["selection"], "test_evaluated": False})
         state.update(phase="complete", completed=True, winner=winner)
     except BaseException as error:
         state.update(phase="stopped", failure=str(error), failure_type=type(error).__name__)

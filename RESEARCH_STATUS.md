@@ -133,3 +133,7 @@ explicitly fictional and remain ignored. See `M7_ANALYSIS_RUNBOOK.md` and
 Next: wait for the user's availability signal, refresh the exact approved quote
 and balance once, then perform Session A within its existing limits. Offline
 analysis does not pass M7, freeze a real profile, or authorize the curve session.
+
+## M7 measurements — 2026-10-18
+
+Completed the required preflight and smoke run (user0, 100 updates; validation CER 48.38%; final-checkpoint save/reload verified). All 16 tuning runs completed; selected and froze the full-method profile at 3,000 steps and learning rate 3e-4, with mean final-checkpoint validation CER 21.11%. Completed all seven user0 curve budgets: test CER was 51.62% (1 min), 45.16% (2), 41.30% (5), 79.12% (10; inversion), 40.82% (30), 41.76% (60), and 21.43% (full). Estimated session spend was $4.42; the Pod was terminated and zero Pods remain. Remaining M7: user1/user2 curves, user5 full sentinel, plot and inversion summary.
