@@ -141,3 +141,8 @@ Completed the required preflight and smoke run (user0, 100 updates; validation C
 ## M7 continuation attempt — 2026-10-18
 
 Committed and pushed the completed smoke, 16-run tuning set, frozen profile, and seven user0 curve records as `da75666`. A single continuation Pod create for the first approved GPU (RTX 4090, Community, US-IL-1; catalog showed Low stock) was rejected with Runpod's 400 “There are no longer any instances available with the requested specifications.” Per the fixed start rule, no retry, GPU substitution, location move, or training run was made; a fresh Pod listing confirms zero Pods. No new measurements or Pod compute were produced this attempt. Resume M7 at user1/user2 curves, user5 full sentinel, plot and inversion summary when the approved GPU can be placed.
+
+
+## M7 measurements — 2026-10-18 (continued)
+
+Completed the 1-minute full-method final-checkpoint test evaluations for user1 and user2 with the frozen 3,000-step, 3e-4 profile on an RTX 4090. Test CER was 37.16% for user1 (105.03 min) and 27.40% for user2 (105.33 min); both used 3,000 optimizer steps and completed with finite losses and gradients. The estimated session compute spend was about $3.8, and the Pod was terminated after these runs; no running Pods remain. User0’s recorded 10-minute inversion remains visible in the curve. Next: run the remaining user1/user2 budgets, then the user5 full-data report-only point, and generate the M7 plot and inversion summary.
