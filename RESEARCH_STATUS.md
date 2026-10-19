@@ -156,3 +156,7 @@ Attempted to start the next M7 curve point (user1, 5-minute budget, full method,
 ## M7 measurement — 2026-10-19
 
 Completed user1’s 5-minute full-method curve point (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX A5000. Final-checkpoint test CER was 22.93% in 14.82 minutes, improving 10.95 percentage points over user1’s 2-minute result (33.88%); losses and gradients remained finite. Estimated run GPU cost was $0.067; total Pod GPU spend including setup was about $0.118 ($0.135 including the existing volume). The Pod was terminated and zero Pods remain. Next: user1 at 10 minutes.
+
+## M7 measurement — 2026-10-19 (continued)
+
+Completed user1’s 10-minute full-method curve point (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX 4090. Final-checkpoint test CER was 32.41% in 9.98 minutes, a 9.47-point inversion from user1’s 5-minute CER of 22.93%; losses and gradients were finite. Estimated run GPU cost was $0.148 and total Pod GPU spend including setup was about $0.45; the Pod was deleted and zero Pods remain. Next: user1 at 30, 60 and full budgets, then user2’s remaining budgets, user5 full sentinel, and the M7 plot/inversion summary.
