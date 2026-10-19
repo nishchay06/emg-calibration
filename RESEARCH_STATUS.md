@@ -152,3 +152,7 @@ At the user's request, ran the next M7 curve point on an RTX A5000: user1, 2-min
 ## M7 continuation blocked — 2026-10-19
 
 Attempted to start the next M7 curve point (user1, 5-minute budget, full method, seed 1501) on RTX 4090 Community in US-IL-1 ($0.34/hour), because the project’s GPU order places it first; the live catalog showed Low availability, but Pod creation returned HTTP 400, “There are no longer any instances available with the requested specifications.” The user clarified that only RTX A5000 should be used. The live US-IL-1 availability read did not list an A5000, so no A5000 Pod was created; per the create-failure rule, no second placement attempt or other GPU substitution was made. The post-attempt Pod listing confirmed zero Pods, so no compute was spent and no M7 measurement was produced. Account balance at session start was $1.0494981135. Next: run this same curve point on an A5000 once it is listed as available in US-IL-1.
+
+## M7 measurement — 2026-10-19
+
+Completed user1’s 5-minute full-method curve point (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX A5000. Final-checkpoint test CER was 22.93% in 14.82 minutes, improving 10.95 percentage points over user1’s 2-minute result (33.88%); losses and gradients remained finite. Estimated run GPU cost was $0.067; total Pod GPU spend including setup was about $0.118 ($0.135 including the existing volume). The Pod was terminated and zero Pods remain. Next: user1 at 10 minutes.
