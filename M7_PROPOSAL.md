@@ -78,9 +78,11 @@ protocol and public-safe evidence JSON.
 
 ## Costs, supervision and cleanup
 
-Propose one Secure RTX 4090, existing volume, no archive transfer or parallel
-Pods. Refresh balance, location-specific availability and the actual all-in
-quote before creation. The planning GPU catalog rate is $0.74/hour.
+Prefer one GPU in `US-IL-1`, using the first available in this order: RTX A5000,
+RTX 4090, L40S, A40, RTX A6000, RTX 3090. Secure or Community cloud is fine.
+Use the existing volume, with no archive transfer or parallel Pods. Refresh the
+balance, location-specific availability and actual all-in quote before creation;
+use the selected GPU's live catalog rate for cost planning.
 Network storage is ongoing and separate from Pod limits. No new volume,
 migration retry, data deletion or push is included.
 
