@@ -25,11 +25,10 @@
  - Create, use and delete Runpod Pods, up to **$5 and 6 hours per session**,
    while total project compute stays under **$75**. Check the balance **once**
    at the start.
- - **GPU choice:** in data center `US-IL-1` (where the volume is), take the
-   **first available** of: RTX A5000 → RTX 4090 → L40S → A40 → RTX A6000 → RTX 3090.
-   Secure or Community cloud are both fine. Never wait or poll for a specific
-   GPU. Record the GPU used in the result JSON. If none of them is available in
-   `US-IL-1`, tell the user and stop. Do not move data.
+ - **GPU choice:** use RTX A5000 only in data center `US-IL-1` (where the
+   volume is). Do not use RTX 4090 or any other GPU as a fallback. Never wait
+   or poll for a specific GPU. Record the GPU used in the result JSON. If RTX
+   A5000 is unavailable in `US-IL-1`, tell the user and stop. Do not move data.
  - Run any milestone from §5 end to end, including back-to-back sessions for
    the same milestone. There are **no separate session approvals** (no
    "Session A / Session B").
