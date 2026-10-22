@@ -160,3 +160,7 @@ Completed user1’s 5-minute full-method curve point (seed 1501; frozen profile,
 ## M7 measurement — 2026-10-19 (continued)
 
 Completed user1’s 10-minute full-method curve point (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX 4090. Final-checkpoint test CER was 32.41% in 9.98 minutes, a 9.47-point inversion from user1’s 5-minute CER of 22.93%; losses and gradients were finite. Estimated run GPU cost was $0.148 and total Pod GPU spend including setup was about $0.45; the Pod was deleted and zero Pods remain. Next: user1 at 30, 60 and full budgets, then user2’s remaining budgets, user5 full sentinel, and the M7 plot/inversion summary.
+
+## M7 measurements — 2026-10-22
+
+Completed user1’s 30-minute, 60-minute and full-budget points on an RTX 4090: final-checkpoint test CERs were 17.27%, 12.94% and 11.19% (3,000 steps, lr 3e-4; runtimes 8.21, 7.73 and 7.15 minutes). Completed user2 at 2 and 5 minutes: test CERs were 23.25% and 19.91% (runtimes 34.82 and 13.91 minutes). Both newly observed adjacent budget pairs improved. User2’s 10-minute run is currently in progress; it is not included as a completed measurement. Next: record that run when complete, continue user2’s remaining budgets, then run the user5 full-data sentinel and generate the M7 plot and inversion summary.
