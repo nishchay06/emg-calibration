@@ -176,3 +176,7 @@ Completed user2’s 60-minute full-method curve point (seed 1501; frozen profile
 ## M7 measurement — 2026-10-24 (full budget)
 
 Completed user2’s full-budget full-method curve point (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX 4090. Final-checkpoint test CER was 9.28% in 6.85 minutes; loss and gradients were finite and the run exited successfully. CER improved 1.81 pp over user2’s 60-minute point (11.09%); the earlier 5-to-10-minute inversion remains. Next: user5’s full-data sentinel (running), then the M7 plot/inversion summary.
+
+## M7 measurement — 2026-10-24 (user5 full-data sentinel)
+
+Completed user5’s full-data comparison (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX 4090. Final-checkpoint test CER was 5.81% in 6.92 minutes; loss and gradients were finite and the run exited successfully. User5’s M7 CER is 0.32 pp below M5b’s 6.13%, despite the frozen profile’s 3,000-update cap versus upstream’s 14,550; this point is report-only. Next: generate the CER-versus-minutes plot and list the curve inversions.
