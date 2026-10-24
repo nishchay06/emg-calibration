@@ -17,7 +17,9 @@ with publication-ready figures, evidence and reproducibility instructions.
 | M4: eight-user generic baseline (55.38% ± 4.38 test CER, greedy) | Done 2026-10-04 |
 | M5a: released personalized checkpoints (both families, all users) | Done 2026-10-04 |
 | M5b: own full-data training (user0/user5, within 1.0 pp) | Done 2026-10-05 |
-| M6: local sampler and fixed-update protocol | Done 2026-10-05; real-data preflight pending |
+| M6: local sampler and fixed-update protocol | Done 2026-10-05 |
+| M7: first curve (full method, users 0–2, 7 budgets; profile frozen at 3,000 steps, lr 3e-4) | Done 2026-10-24 |
+| Session-spread experiment: one sitting vs 5 sessions at equal minutes ([pre-registration](docs/preregistration-session-spread.md)) | Next; M8 onward postponed until it is written up |
 
 The eight-user subset contains 100 sessions and occupies 28.42 GB (26.47 GiB)
 after selective extraction. Dataset and checkpoints are obtained from upstream

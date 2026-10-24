@@ -53,3 +53,7 @@ Pin upstream versions and checkpoint hashes. Preserve unsuccessful attempts.
 Distinguish measured CER from projections and settled costs from estimates.
 Keep credentials, account balances and session access details in ignored local
 records. Follow upstream data/model licensing; never commit participant data.
+
+Pre-register each new experiment in `docs/` and commit it before its first run.
+After that, change only the pre-registration's *Deviations* section, with the
+reason. Report every pre-registered analysis, whatever its result.
