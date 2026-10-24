@@ -58,6 +58,8 @@ def arguments(argv=None):
     parser.add_argument("--seed", type=int, default=1501)
     parser.add_argument("--steps", type=int)
     parser.add_argument("--select", choices=["upstream", "fixed"], default="upstream")
+    parser.add_argument("--allocation", choices=["contiguous", "spread"], default="contiguous",
+                        help="Calibration sampler: one contiguous window, or the budget split across 5 sessions")
     parser.add_argument("--upstream-dir", type=Path, required=True)
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path)
@@ -84,6 +86,8 @@ def arguments(argv=None):
         parser.error("M5b uses the unchanged 150-epoch upstream recipe")
     if args.select == "fixed" and args.protocol is None:
         parser.error("Fixed calibration requires --protocol")
+    if args.allocation == "spread" and (args.select != "fixed" or args.budget_minutes == "full" or args.tune):
+        parser.error("Spread allocation is for fixed-step minute budgets, not full data or tuning")
     if args.tune and (args.select != "fixed" or args.user not in ("user0", "user1")):
         parser.error("Tuning is restricted to user0/user1 fixed-step validation")
     if args.select == "upstream" and args.run and args.user not in ("user0", "user5"):

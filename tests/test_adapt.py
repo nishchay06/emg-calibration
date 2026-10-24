@@ -44,6 +44,23 @@ class AdaptGuardsTest(unittest.TestCase):
                     with self.assertRaises(SystemExit):
                         adapt.arguments(self.args(Path(directory), *mode, *options))
 
+    def test_spread_allocation_only_for_fixed_minute_budgets(self):
+        fixed = ("--select", "fixed", "--protocol", "configs/m7-frozen-protocol.json")
+        rejected = [("--allocation", "spread", "--budget-minutes", "5"),
+                    ("--allocation", "spread", *fixed),
+                    ("--allocation", "spread", *fixed, "--budget-minutes", "5", "--tune"),
+                    ("--allocation", "nested", *fixed, "--budget-minutes", "5")]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for options in rejected:
+                with self.subTest(options=options), contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit):
+                        adapt.arguments(self.args(root, "--dry-run", *options))
+            accepted = adapt.arguments(self.args(root, "--dry-run", "--allocation", "spread", *fixed,
+                                                 "--budget-minutes", "10"))
+            self.assertEqual(accepted.allocation, "spread")
+            self.assertEqual(adapt.arguments(self.args(root, "--dry-run")).allocation, "contiguous")
+
     def test_refuses_existing_output_before_any_mutation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

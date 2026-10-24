@@ -33,6 +33,10 @@ def verify_m5b_gate():
         raise ValueError("M5b user5 accuracy/provenance gate failed")
 
 
+def allocation(args):
+    return getattr(args, "allocation", "contiguous")
+
+
 def indexed_lengths(index, manifest):
     if index.get("upstream_commit") != UPSTREAM_COMMIT:
         raise ValueError("Session-index upstream mismatch")
@@ -59,7 +63,8 @@ def plan_fixed(args):
     if args.session_index:
         manifest = parse_user_config(args.upstream_dir / "config/user" / f"{args.user}.yaml", args.user)
         index = json.loads(args.session_index.read_text())
-        selection = select_calibration(manifest, indexed_lengths(index, manifest), args.budget_minutes, args.seed)
+        selection = select_calibration(manifest, indexed_lengths(index, manifest), args.budget_minutes, args.seed,
+                                       allocation(args))
     return {"schema_version": 1, "pipeline": "fixed-step-calibration", "implemented_in": "M6",
             "phase": "tuning" if args.tune else "adaptation",
             "user": args.user, "budget_minutes": args.budget_minutes, "method": args.method,
@@ -173,7 +178,7 @@ def run_fixed(args, record, config):
     manifest = parse_user_config(args.upstream_dir / "config/user" / f"{args.user}.yaml", args.user)
     index = index_sessions(args.upstream_dir, args.data_dir)
     lengths = indexed_lengths(index, manifest)
-    selection = select_calibration(manifest, lengths, args.budget_minutes, args.seed)
+    selection = select_calibration(manifest, lengths, args.budget_minutes, args.seed, allocation(args))
     if record["calibration_selection"] is not None:
         verify_selection(record["calibration_selection"], manifest, lengths)
     record.update(calibration_selection=selection, data_preflight="passed", session_index_digest=index["index_digest"],

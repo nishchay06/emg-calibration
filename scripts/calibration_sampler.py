@@ -12,6 +12,9 @@ from generate_test_user_manifests import UPSTREAM_COMMIT, UserManifest
 BUDGETS = ("1", "2", "5", "10", "30", "60", "full")
 SAMPLES_PER_MINUTE = 120_000
 ALGORITHM = "training-contiguous-v1"
+SPREAD_ALGORITHM = "training-spread-v1"
+SPREAD_SESSIONS = 5
+ALLOCATIONS = {"contiguous": ALGORITHM, "spread": SPREAD_ALGORITHM}
 
 
 def digest(value) -> str:
@@ -45,18 +48,34 @@ def chronological_key(session: str):
 
 
 def select_calibration(manifest: UserManifest, lengths: Mapping[str, int],
-                       budget: str, seed: int) -> dict:
+                       budget: str, seed: int, allocation: str = "contiguous") -> dict:
     validate_manifest(manifest, lengths)
     if budget not in BUDGETS:
         raise ValueError("Unsupported calibration budget")
     if type(seed) is not int or not 0 <= seed < 2**32:
         raise ValueError("Seed must be an unsigned 32-bit integer")
+    if allocation not in ALLOCATIONS:
+        raise ValueError("Unsupported calibration allocation")
+    if allocation == "spread" and budget == "full":
+        raise ValueError("Spread allocation requires a minute budget")
     training = manifest.splits["train"]
     total = sum(lengths[session] for session in training)
     target = total if budget == "full" else int(budget) * SAMPLES_PER_MINUTE
     if target > total:
         raise ValueError(f"Insufficient training data: need {target}, have {total}")
-    if budget == "full":
+    if allocation == "spread":
+        # Same budget as contiguous, split equally across distinct training sessions.
+        chunk = target // SPREAD_SESSIONS
+        rng = random.Random(int(digest([SPREAD_ALGORITHM, manifest.user, budget, seed, SPREAD_SESSIONS]), 16))
+        eligible = [s for s in sorted(training, key=chronological_key) if lengths[s] >= chunk]
+        if len(eligible) < SPREAD_SESSIONS:
+            raise ValueError(f"Spread allocation needs {SPREAD_SESSIONS} training sessions of {chunk} samples")
+        spans = []
+        for session in sorted(rng.sample(eligible, SPREAD_SESSIONS), key=chronological_key):
+            start = rng.randrange(lengths[session] - chunk + 1)
+            spans.append({"session": session, "start": start, "stop": start + chunk,
+                          "session_samples": lengths[session]})
+    elif budget == "full":
         spans = [{"session": session, "start": 0, "stop": lengths[session],
                   "session_samples": lengths[session]} for session in training]
     else:
@@ -84,7 +103,7 @@ def select_calibration(manifest: UserManifest, lengths: Mapping[str, int],
                 if remaining == 0:
                     break
     record = {
-        "schema_version": 1, "algorithm": ALGORITHM, "upstream_commit": UPSTREAM_COMMIT,
+        "schema_version": 1, "algorithm": ALLOCATIONS[allocation], "upstream_commit": UPSTREAM_COMMIT,
         "user": manifest.user, "budget_minutes": budget, "selection_seed": seed,
         "samples_per_minute": SAMPLES_PER_MINUTE, "requested_samples": target,
         "selected_samples": sum(s["stop"] - s["start"] for s in spans),
@@ -95,13 +114,23 @@ def select_calibration(manifest: UserManifest, lengths: Mapping[str, int],
         "session_order": "upstream" if budget == "full" else "chronological recording timestamps",
         "ranges": spans,
     }
+    if allocation == "spread":
+        record["spread_sessions"] = SPREAD_SESSIONS
     record["selection_digest"] = digest(record)
     return record
 
 
+def record_allocation(record: dict) -> str:
+    for allocation, algorithm in ALLOCATIONS.items():
+        if record.get("algorithm") == algorithm:
+            return allocation
+    raise ValueError("Unknown calibration allocation algorithm")
+
+
 def verify_selection(record: dict, manifest: UserManifest, lengths: Mapping[str, int]) -> None:
     """Reject forged, stale or out-of-budget records by replaying selection."""
-    if record != select_calibration(manifest, lengths, record["budget_minutes"], record["selection_seed"]):
+    if record != select_calibration(manifest, lengths, record["budget_minutes"], record["selection_seed"],
+                                    record_allocation(record)):
         raise ValueError("Calibration selection differs from its deterministic allocation")
 
 
