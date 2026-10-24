@@ -184,3 +184,7 @@ Completed user5’s full-data comparison (seed 1501; frozen profile, 3,000 steps
 ## M7 curve analysis — 2026-10-24
 
 The validated M7 report passed its scientific checks; the CER-versus-minutes plot and 21-point CSV are saved under results/. CER generally fell as calibration time increased (Spearman rho: user0 -0.64, user1 -0.96, user2 -0.96; median CER 37.16% at 1 minute versus 12.94% at 60 minutes). Adjacent inversions: user0 +37.83 pp from 5 to 10 minutes and +0.93 pp from 30 to 60; user1 +9.47 pp from 5 to 10; user2 +1.84 pp from 5 to 10. User5 full-data sentinel was 5.81%, 0.32 pp below M5b’s 6.13%; this remains report-only. M7 first curve is complete; next: M8 methods.
+
+## Session-spread preflight — 2026-10-24
+
+No session-spread runs began: Runpod’s Pod capacity read showed no RTX 4090 capacity in US-IL-1; Secure inventory listed 4090 locations only in Europe, and Community inventory showed none. No Pod was created and no project data changed. Next: resume the preregistered run sequence when the requested GPU is available in US-IL-1.
