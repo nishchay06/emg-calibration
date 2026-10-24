@@ -188,3 +188,7 @@ The validated M7 report passed its scientific checks; the CER-versus-minutes plo
 ## Session-spread preflight — 2026-10-24
 
 No session-spread runs began: Runpod’s Pod capacity read showed no RTX 4090 capacity in US-IL-1; Secure inventory listed 4090 locations only in Europe, and Community inventory showed none. No Pod was created and no project data changed. Next: resume the preregistered run sequence when the requested GPU is available in US-IL-1.
+
+## Session-spread preflight update — 2026-10-24
+
+No session-spread runs began. A manually deployed RTX 4090 in US-IL-1 was available with the established data mount, but the account balance did not meet the required session-plus-storage reserve. Next: restore the required balance and resume with user0, 10 minutes, contiguous allocation, seed 1502.
