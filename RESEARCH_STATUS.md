@@ -168,3 +168,7 @@ Completed user1’s 30-minute, 60-minute and full-budget points on an RTX 4090: 
 ## M7 measurement — 2026-10-24
 
 Completed user2’s 30-minute full-method curve point (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX 4090. Final-checkpoint test CER was 14.87% in 7.05 minutes; loss and gradients were finite and the run exited successfully. CER improved 6.88 pp from user2’s 10-minute point (21.75%); the earlier 5-to-10-minute inversion remains. Next: user2 at 60 and full budgets, then user5’s full-data sentinel and the M7 plot/inversion summary.
+
+## M7 measurement — 2026-10-24 (continued)
+
+Completed user2’s 60-minute full-method curve point (seed 1501; frozen profile, 3,000 steps at lr 3e-4) on an RTX 4090. Final-checkpoint test CER was 11.09% in 7.89 minutes; loss and gradients were finite and the run exited successfully. CER improved 3.78 pp over user2’s 30-minute point (14.87%). Next: user2 at the full-data budget (running), then user5’s full-data sentinel and the M7 plot/inversion summary.
