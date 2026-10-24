@@ -68,7 +68,7 @@
 
  ## 5. What to run, in order
 
- ### M7: first curve (deadline Oct 15)
+ ### M7: first curve (done 2026-10-24)
 
  The tuning matrix in `configs/m7-proposed-matrix.json` is **approved as is**.
  Ignore its `"status": "proposed_not_approved"` field. Do not edit the matrix.
@@ -104,7 +104,36 @@
  is done, delete the Pod, and continue in the next session. **Never shrink the
  protocol** (steps, budgets, candidates) to make it fit.
 
- ### M8 onward
+ ### Session-spread experiment (current)
+
+ Run exactly what `docs/preregistration-session-spread.md` specifies. Its
+ conditions, budgets, seeds, users and analysis are approved research decisions
+ (§3.3): do not change them. Record any unavoidable deviation in that file's
+ *Deviations* section.
+
+ 1. **Pre-flight** (§4 definition).
+ 2. **Runs:** 62 runs with the frozen profile, `method=full`, in this order:
+    1. Users 0, 1, 2 at 10 minutes, `contiguous`, seed 1502 (the 10-minute inversion check).
+    2. All remaining runs for users 0–7 × budgets 5 and 10 × allocations
+       `contiguous` and `spread` × seeds 1501 and 1502, user by user. Skip the
+       6 runs M7 already has (users 0–2, `contiguous`, seed 1501).
+    3. Full budget, seed 1501, for users 3, 4, 6 and 7.
+
+    Command per run:
+    `python scripts/adapt.py --run --select fixed --protocol configs/m7-frozen-protocol.json --accelerator gpu --user userN --budget-minutes 5 --allocation spread --seed 1501 --upstream-dir <upstream> --data-dir /workspace/data --output-dir <fresh dir>`
+ 3. **Result files:** `results/ss-<user>-<budget>-<contiguous|spread>-s<seed>.json`,
+    with the §7 fields plus `allocation`, and the run's `calibration_selection`.
+    Full-data runs: `results/ss-<user>-full-s1501.json`.
+ 4. **Covariates (exploratory):** after the runs, on the Pod, write
+    `results/ss-covariates.json` with, per run, the mean days between its
+    calibration sessions and the user's test sessions, and the keystroke count
+    inside its calibration ranges.
+ 5. **Analysis:** once all 62 runs exist, write one script,
+    `scripts/analyze_session_spread.py`, that computes the pre-registered primary
+    and secondary analyses. Save `results/ss-summary.json` and one figure. Report
+    the primary result exactly as the pre-registration's interpretation rules say.
+
+ ### M8 onward (postponed until the session-spread experiment is written up)
 
  Follow `ROADMAP.md` (M8 methods → M9 grid → M10 stretch → M11 LM → M12
  write-up) under these same rules. Before M9, compute
