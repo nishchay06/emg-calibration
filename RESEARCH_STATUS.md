@@ -196,3 +196,5 @@ No session-spread runs began. A manually deployed RTX 4090 in US-IL-1 was availa
 ## Session-spread measurement — 2026-10-28
 
 Completed user0 at 10 minutes, contiguous allocation, seed 1502, using the frozen full-method profile (3,000 steps; learning rate 3e-4). Final test CER was 35.17% after 9.89 minutes; losses and gradients were finite. Validation CER was not measured for this test-only run; estimated run cost was $0.147 on an RTX 4090. No further runs will start under the current A5000-only instruction; resume at user0/10-minute contiguous seed 1502 when an RTX A5000 is available in US-IL-1.
+
+Completed user1 at 10 minutes, contiguous allocation, seed 1502, using the frozen full-method profile (3,000 steps; learning rate 3e-4) on an RTX 4090. Final test CER was 21.12% after 9.78 minutes; losses and gradients were finite. Validation CER was not measured for this test-only run; estimated run cost was $0.145. Next: user2 at 10 minutes, contiguous allocation, seed 1502.
